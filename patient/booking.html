@@ -1,0 +1,1199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Appointment — BookMyDoctor</title>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <style>
+        :root {
+            --green-dark   : #1a6b3c;
+            --green-mid    : #2d9e5f;
+            --green-light  : #e8f5ee;
+            --green-pale   : #f4fbf7;
+            --white        : #ffffff;
+            --gray-100     : #f8f9fa;
+            --gray-200     : #e9ecef;
+            --gray-400     : #ced4da;
+            --gray-600     : #6c757d;
+            --gray-800     : #343a40;
+            --red          : #dc3545;
+            --shadow-sm    : 0 2px 8px rgba(0,0,0,0.08);
+            --shadow-md    : 0 4px 20px rgba(0,0,0,0.12);
+            --radius       : 12px;
+            --radius-sm    : 8px;
+            --font         : 'Segoe UI', Arial, sans-serif;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family : var(--font);
+            background  : var(--gray-100);
+            color       : var(--gray-800);
+        }
+
+        /* ── Navbar ──────────────────────────────────── */
+        .navbar {
+            background  : var(--white);
+            padding     : 0 24px;
+            height      : 60px;
+            display     : flex;
+            align-items : center;
+            justify-content: space-between;
+            box-shadow  : 0 1px 4px rgba(0,0,0,0.08);
+            position    : sticky;
+            top         : 0;
+            z-index     : 100;
+        }
+
+        .nav-brand {
+            display         : flex;
+            align-items     : center;
+            gap             : 9px;
+            text-decoration : none;
+        }
+
+        .nav-brand-icon {
+            width           : 34px;
+            height          : 34px;
+            background      : var(--green-mid);
+            border-radius   : 8px;
+            display         : flex;
+            align-items     : center;
+            justify-content : center;
+            font-size       : 18px;
+        }
+
+        .nav-brand-name {
+            font-size   : 18px;
+            font-weight : 700;
+            color       : var(--green-dark);
+        }
+
+        .nav-back {
+            display         : flex;
+            align-items     : center;
+            gap             : 6px;
+            font-size       : 13px;
+            color           : var(--gray-600);
+            text-decoration : none;
+            padding         : 6px 12px;
+            border-radius   : 6px;
+            transition      : background 0.2s;
+        }
+
+        .nav-back:hover { background: var(--gray-100); }
+
+        /* ── Layout ──────────────────────────────────── */
+        .page-wrap {
+            max-width : 1000px;
+            margin    : 0 auto;
+            padding   : 28px 24px 48px;
+            display   : grid;
+            grid-template-columns: 1fr 340px;
+            gap       : 24px;
+            align-items: start;
+        }
+
+        /* ── Cards ───────────────────────────────────── */
+        .card {
+            background    : var(--white);
+            border-radius : var(--radius);
+            box-shadow    : var(--shadow-sm);
+            overflow      : hidden;
+            margin-bottom : 20px;
+        }
+
+        .card-head {
+            padding       : 16px 20px;
+            border-bottom : 1px solid var(--gray-200);
+            display       : flex;
+            align-items   : center;
+            gap           : 10px;
+        }
+
+        .card-head-icon {
+            width           : 32px;
+            height          : 32px;
+            background      : var(--green-light);
+            border-radius   : 8px;
+            display         : flex;
+            align-items     : center;
+            justify-content : center;
+            font-size       : 16px;
+        }
+
+        .card-head-title {
+            font-size   : 15px;
+            font-weight : 700;
+            color       : var(--gray-800);
+        }
+
+        .card-body { padding: 20px; }
+
+        /* ── Doctor Profile ──────────────────────────── */
+        .doctor-profile {
+            display     : flex;
+            gap         : 16px;
+            align-items : flex-start;
+        }
+
+        .doctor-avatar {
+            width           : 72px;
+            height          : 72px;
+            background      : var(--green-light);
+            border-radius   : 14px;
+            display         : flex;
+            align-items     : center;
+            justify-content : center;
+            font-size       : 34px;
+            flex-shrink     : 0;
+        }
+
+        .doctor-details { flex: 1; }
+
+        .doctor-name {
+            font-size    : 18px;
+            font-weight  : 700;
+            color        : var(--gray-800);
+            margin-bottom: 4px;
+        }
+
+        .doctor-spec {
+            font-size    : 13px;
+            color        : var(--green-mid);
+            font-weight  : 600;
+            margin-bottom: 4px;
+        }
+
+        .doctor-qual {
+            font-size    : 12px;
+            color        : var(--gray-600);
+            margin-bottom: 10px;
+        }
+
+        .doctor-tags {
+            display   : flex;
+            gap       : 8px;
+            flex-wrap : wrap;
+        }
+
+        .dtag {
+            display       : flex;
+            align-items   : center;
+            gap           : 4px;
+            font-size     : 12px;
+            color         : var(--gray-600);
+            background    : var(--gray-100);
+            padding       : 4px 10px;
+            border-radius : 6px;
+        }
+
+        .rating-badge {
+            display       : flex;
+            align-items   : center;
+            gap           : 4px;
+            font-size     : 13px;
+            font-weight   : 600;
+            color         : #f59e0b;
+            padding       : 4px 10px;
+            background    : #fff8e1;
+            border-radius : 6px;
+        }
+
+        .bio-text {
+            font-size   : 13px;
+            color       : var(--gray-600);
+            line-height : 1.6;
+            margin-top  : 12px;
+            padding-top : 12px;
+            border-top  : 1px solid var(--gray-200);
+        }
+
+        /* ── Date Strip ──────────────────────────────── */
+        .date-strip {
+            display    : flex;
+            gap        : 8px;
+            overflow-x : auto;
+            padding-bottom: 4px;
+            scrollbar-width: thin;
+        }
+
+        .date-strip::-webkit-scrollbar { height: 3px; }
+        .date-strip::-webkit-scrollbar-thumb { background: var(--gray-200); border-radius: 2px; }
+
+        .date-chip {
+            min-width       : 64px;
+            padding         : 10px 8px;
+            border          : 1.5px solid var(--gray-200);
+            border-radius   : var(--radius-sm);
+            text-align      : center;
+            cursor          : pointer;
+            transition      : all 0.2s;
+            flex-shrink     : 0;
+        }
+
+        .date-chip:hover    { border-color: var(--green-mid); background: var(--green-pale); }
+        .date-chip.active   { border-color: var(--green-mid); background: var(--green-mid); color: var(--white); }
+        .date-chip.disabled { opacity: 0.4; cursor: not-allowed; pointer-events: none; }
+
+        .date-chip-day  { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+        .date-chip-date { font-size: 18px; font-weight: 700; line-height: 1.2; }
+        .date-chip-mon  { font-size: 10px; }
+
+        /* ── Slot Grid ───────────────────────────────── */
+        .slots-grid {
+            display               : grid;
+            grid-template-columns : repeat(auto-fill, minmax(90px, 1fr));
+            gap                   : 8px;
+        }
+
+        .slot-chip {
+            padding         : 8px 4px;
+            border          : 1.5px solid var(--gray-200);
+            border-radius   : var(--radius-sm);
+            text-align      : center;
+            cursor          : pointer;
+            font-size       : 13px;
+            font-weight     : 500;
+            transition      : all 0.2s;
+            color           : var(--gray-800);
+        }
+
+        .slot-chip:hover    { border-color: var(--green-mid); background: var(--green-pale); color: var(--green-dark); }
+        .slot-chip.selected { border-color: var(--green-mid); background: var(--green-mid);  color: var(--white); font-weight: 600; }
+        .slot-chip.booked   { background: var(--gray-100); color: var(--gray-400); cursor: not-allowed; text-decoration: line-through; }
+        .slot-chip.blocked  { background: var(--gray-100); color: var(--gray-400); cursor: not-allowed; }
+
+        .slots-empty {
+            text-align  : center;
+            padding     : 28px;
+            color       : var(--gray-600);
+            font-size   : 14px;
+        }
+
+        .slots-loading {
+            text-align  : center;
+            padding     : 28px;
+            color       : var(--gray-600);
+            font-size   : 14px;
+        }
+
+        /* ── Consultation Type ───────────────────────── */
+        .consult-options {
+            display : flex;
+            gap     : 12px;
+        }
+
+        .consult-option {
+            flex            : 1;
+            padding         : 12px;
+            border          : 1.5px solid var(--gray-200);
+            border-radius   : var(--radius-sm);
+            cursor          : pointer;
+            text-align      : center;
+            transition      : all 0.2s;
+        }
+
+        .consult-option:hover    { border-color: var(--green-mid); background: var(--green-pale); }
+        .consult-option.selected { border-color: var(--green-mid); background: var(--green-light); }
+
+        .consult-icon  { font-size: 22px; margin-bottom: 4px; }
+        .consult-label { font-size: 13px; font-weight: 600; color: var(--gray-800); }
+        .consult-sub   { font-size: 11px; color: var(--gray-600); }
+
+        /* ── Notes ───────────────────────────────────── */
+        .form-textarea {
+            width         : 100%;
+            padding       : 10px 14px;
+            border        : 1.5px solid var(--gray-200);
+            border-radius : var(--radius-sm);
+            font-size     : 14px;
+            color         : var(--gray-800);
+            font-family   : var(--font);
+            outline       : none;
+            resize        : vertical;
+            min-height    : 80px;
+            transition    : border-color 0.2s;
+        }
+
+        .form-textarea:focus { border-color: var(--green-mid); }
+
+        /* ── Sidebar — Summary ───────────────────────── */
+        .summary-card {
+            background    : var(--white);
+            border-radius : var(--radius);
+            box-shadow    : var(--shadow-sm);
+            position      : sticky;
+            top           : 80px;
+        }
+
+        .summary-head {
+            background    : linear-gradient(135deg, var(--green-dark), var(--green-mid));
+            padding       : 16px 20px;
+            border-radius : var(--radius) var(--radius) 0 0;
+        }
+
+        .summary-head-title {
+            font-size   : 15px;
+            font-weight : 700;
+            color       : var(--white);
+        }
+
+        .summary-body { padding: 20px; }
+
+        .summary-row {
+            display         : flex;
+            justify-content : space-between;
+            align-items     : center;
+            padding         : 8px 0;
+            font-size       : 13px;
+            border-bottom   : 1px dashed var(--gray-200);
+        }
+
+        .summary-row:last-child { border-bottom: none; }
+
+        .summary-label { color: var(--gray-600); }
+        .summary-value { font-weight: 600; color: var(--gray-800); }
+
+        .summary-total {
+            display         : flex;
+            justify-content : space-between;
+            align-items     : center;
+            padding         : 14px 0 0;
+            margin-top      : 4px;
+            border-top      : 2px solid var(--green-light);
+        }
+
+        .summary-total-label { font-size: 14px; font-weight: 700; color: var(--gray-800); }
+        .summary-total-value { font-size: 22px; font-weight: 800; color: var(--green-dark); }
+
+        .placeholder-text {
+            font-size   : 12px;
+            color       : var(--gray-400);
+            font-style  : italic;
+        }
+
+        /* ── Book Button ─────────────────────────────── */
+        .btn-book-now {
+            width         : 100%;
+            padding       : 14px;
+            background    : linear-gradient(135deg, var(--green-dark), var(--green-mid));
+            color         : var(--white);
+            border        : none;
+            border-radius : var(--radius-sm);
+            font-size     : 15px;
+            font-weight   : 700;
+            cursor        : pointer;
+            font-family   : var(--font);
+            margin-top    : 20px;
+            transition    : opacity 0.2s;
+            letter-spacing: 0.3px;
+        }
+
+        .btn-book-now:hover    { opacity: 0.92; }
+        .btn-book-now:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .secure-note {
+            text-align  : center;
+            font-size   : 11px;
+            color       : var(--gray-600);
+            margin-top  : 10px;
+        }
+
+        /* ── Reviews ─────────────────────────────────── */
+        .review-item {
+            padding     : 14px 0;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .review-item:last-child { border-bottom: none; }
+
+        .review-top {
+            display         : flex;
+            justify-content : space-between;
+            margin-bottom   : 6px;
+        }
+
+        .reviewer-name { font-size: 13px; font-weight: 600; color: var(--gray-800); }
+        .review-date   { font-size: 11px; color: var(--gray-600); }
+        .review-stars  { font-size: 12px; color: #f59e0b; margin-bottom: 4px; }
+        .review-text   { font-size: 13px; color: var(--gray-600); line-height: 1.5; }
+        .review-tags   { font-size: 11px; color: var(--green-mid); margin-top: 4px; }
+
+        /* ── Success Screen ──────────────────────────── */
+        .booking-success {
+            display        : none;
+            flex-direction : column;
+            align-items    : center;
+            text-align     : center;
+            padding        : 40px 20px;
+        }
+
+        .booking-success.show { display: flex; }
+
+        .success-icon {
+            width           : 80px;
+            height          : 80px;
+            background      : var(--green-light);
+            border-radius   : 50%;
+            display         : flex;
+            align-items     : center;
+            justify-content : center;
+            font-size       : 40px;
+            margin-bottom   : 20px;
+        }
+
+        .success-title { font-size: 22px; font-weight: 700; color: var(--green-dark); margin-bottom: 8px; }
+        .success-sub   { font-size: 14px; color: var(--gray-600); line-height: 1.6; margin-bottom: 24px; }
+
+        .booking-ref {
+            background    : var(--green-pale);
+            border        : 1.5px dashed var(--green-mid);
+            border-radius : var(--radius-sm);
+            padding       : 12px 20px;
+            font-size     : 16px;
+            font-weight   : 700;
+            color         : var(--green-dark);
+            margin-bottom : 24px;
+            letter-spacing: 1px;
+        }
+
+        .success-actions {
+            display  : flex;
+            gap      : 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn-action {
+            padding       : 10px 24px;
+            border-radius : var(--radius-sm);
+            font-size     : 14px;
+            font-weight   : 600;
+            cursor        : pointer;
+            font-family   : var(--font);
+            text-decoration: none;
+            border        : none;
+            transition    : all 0.2s;
+        }
+
+        .btn-action-solid   { background: var(--green-mid); color: var(--white); }
+        .btn-action-outline { background: var(--white); color: var(--green-dark); border: 1.5px solid var(--green-mid) !important; }
+
+        /* ── Loader ──────────────────────────────────── */
+        #bmd-loader {
+            display         : none;
+            position        : fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background      : rgba(255,255,255,0.8);
+            z-index         : 9999;
+            align-items     : center;
+            justify-content : center;
+            flex-direction  : column;
+            gap             : 12px;
+        }
+
+        .spinner {
+            width         : 40px;
+            height        : 40px;
+            border        : 4px solid var(--gray-200);
+            border-top    : 4px solid var(--green-mid);
+            border-radius : 50%;
+            animation     : spin 0.8s linear infinite;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        #bmd-toast {
+            position      : fixed;
+            bottom        : 24px;
+            right         : 24px;
+            padding       : 12px 20px;
+            border-radius : 8px;
+            font-size     : 14px;
+            font-family   : var(--font);
+            color         : var(--white);
+            box-shadow    : var(--shadow-md);
+            z-index       : 99999;
+            display       : none;
+            max-width     : 320px;
+        }
+
+        /* ── Responsive ──────────────────────────────── */
+        @media (max-width: 768px) {
+            .page-wrap { grid-template-columns: 1fr; }
+            .summary-card { position: static; }
+        }
+
+        @media (max-width: 480px) {
+            .page-wrap { padding: 16px; }
+            .consult-options { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Loader -->
+<div id="bmd-loader">
+    <div class="spinner"></div>
+    <span style="color:var(--green-mid);font-size:14px;" id="loader-text">Loading...</span>
+</div>
+
+<!-- Toast -->
+<div id="bmd-toast"></div>
+
+<!-- Navbar -->
+<nav class="navbar">
+    <a href="../index.html" class="nav-brand">
+        <div class="nav-brand-icon">🏥</div>
+        <span class="nav-brand-name">BookMyDoctor</span>
+    </a>
+    <a href="../index.html" class="nav-back">← Back to Doctors</a>
+</nav>
+
+<!-- Page -->
+<div class="page-wrap">
+
+    <!-- LEFT COLUMN -->
+    <div id="main-content">
+
+        <!-- Doctor Profile Card -->
+        <div class="card" id="doctor-card">
+            <div class="card-head">
+                <div class="card-head-icon">👨‍⚕️</div>
+                <div class="card-head-title">Doctor Profile</div>
+            </div>
+            <div class="card-body">
+                <div class="doctor-profile" id="doctor-profile">
+                    <!-- Injected by JS -->
+                    <div style="width:72px;height:72px;border-radius:14px;background:var(--gray-200);animation:shimmer 1.2s infinite;"></div>
+                    <div style="flex:1;">
+                        <div style="height:20px;background:var(--gray-200);border-radius:4px;width:60%;margin-bottom:8px;"></div>
+                        <div style="height:14px;background:var(--gray-200);border-radius:4px;width:40%;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Date Picker -->
+        <div class="card">
+            <div class="card-head">
+                <div class="card-head-icon">📅</div>
+                <div class="card-head-title">Select Date</div>
+            </div>
+            <div class="card-body">
+                <div class="date-strip" id="date-strip">
+                    <!-- Injected by JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Slot Picker -->
+        <div class="card">
+            <div class="card-head">
+                <div class="card-head-icon">⏰</div>
+                <div class="card-head-title">Select Time Slot</div>
+            </div>
+            <div class="card-body">
+                <div id="slots-container">
+                    <div class="slots-loading">📅 Select a date to see available slots</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Consultation Type -->
+        <div class="card">
+            <div class="card-head">
+                <div class="card-head-icon">🏥</div>
+                <div class="card-head-title">Consultation Type</div>
+            </div>
+            <div class="card-body">
+                <div class="consult-options">
+                    <div class="consult-option selected" onclick="selectConsultType('IN_PERSON', this)">
+                        <div class="consult-icon">🏥</div>
+                        <div class="consult-label">In Person</div>
+                        <div class="consult-sub">Visit the clinic</div>
+                    </div>
+                    <div class="consult-option" onclick="selectConsultType('ONLINE', this)">
+                        <div class="consult-icon">💻</div>
+                        <div class="consult-label">Online</div>
+                        <div class="consult-sub">Video consultation</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notes -->
+        <div class="card">
+            <div class="card-head">
+                <div class="card-head-icon">📝</div>
+                <div class="card-head-title">Symptoms / Notes <span style="font-size:12px;font-weight:400;color:var(--gray-600);">(optional)</span></div>
+            </div>
+            <div class="card-body">
+                <textarea id="patient-notes" class="form-textarea"
+                    placeholder="Describe your symptoms or reason for visit..."></textarea>
+            </div>
+        </div>
+
+        <!-- Reviews -->
+        <div class="card" id="reviews-card" style="display:none;">
+            <div class="card-head">
+                <div class="card-head-icon">⭐</div>
+                <div class="card-head-title">Patient Reviews</div>
+            </div>
+            <div class="card-body" id="reviews-body">
+                <!-- Injected by JS -->
+            </div>
+        </div>
+
+    </div>
+
+    <!-- RIGHT COLUMN — Summary -->
+    <div>
+        <div class="summary-card">
+            <div class="summary-head">
+                <div class="summary-head-title">📋 Booking Summary</div>
+            </div>
+            <div class="summary-body">
+
+                <div class="summary-row">
+                    <span class="summary-label">Doctor</span>
+                    <span class="summary-value" id="sum-doctor"><span class="placeholder-text">—</span></span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Specialization</span>
+                    <span class="summary-value" id="sum-spec"><span class="placeholder-text">—</span></span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Hospital</span>
+                    <span class="summary-value" id="sum-hospital"><span class="placeholder-text">—</span></span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Date</span>
+                    <span class="summary-value" id="sum-date"><span class="placeholder-text">Select date</span></span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Time</span>
+                    <span class="summary-value" id="sum-time"><span class="placeholder-text">Select slot</span></span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Type</span>
+                    <span class="summary-value" id="sum-type">In Person</span>
+                </div>
+
+                <div class="summary-total">
+                    <span class="summary-total-label">Consultation Fee</span>
+                    <span class="summary-total-value" id="sum-fee">₹—</span>
+                </div>
+
+                <button class="btn-book-now" id="book-btn" disabled onclick="handleBooking()">
+                    🔒 Select Date & Slot
+                </button>
+
+                <div class="secure-note">🔐 Secured by Razorpay · 100% refund on cancellation</div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Booking Success Overlay -->
+<div id="success-overlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(255,255,255,0.95);z-index:9998;align-items:center;justify-content:center;">
+    <div class="booking-success show" style="max-width:480px;width:90%;">
+        <div class="success-icon">🎉</div>
+        <div class="success-title">Appointment Confirmed!</div>
+        <div class="success-sub" id="success-details">
+            Your appointment has been booked successfully.
+        </div>
+        <div class="booking-ref" id="success-ref">BMD-2026-00001</div>
+        <div style="font-size:13px;color:var(--gray-600);margin-bottom:20px;" id="success-token"></div>
+        <div class="success-actions">
+            <a href="appointments.html" class="btn-action btn-action-solid">View My Appointments</a>
+            <a href="../index.html"     class="btn-action btn-action-outline">Find More Doctors</a>
+        </div>
+    </div>
+</div>
+
+<script>
+// ─────────────────────────────────────────────────────
+//  Config
+// ─────────────────────────────────────────────────────
+const BASE_URL     = 'https://oracleapex.com/ords/praveen_9898/BMD_APP/';
+const RAZORPAY_KEY = 'rzp_test_T0D2rGD0MsFXyZ';
+
+// State
+let doctorData      = null;
+let selectedDate    = null;
+let selectedSlot    = null;
+let selectedSlotId  = null;
+let consultType     = 'IN_PERSON';
+let doctorId        = null;
+
+// ─────────────────────────────────────────────────────
+//  Helpers
+// ─────────────────────────────────────────────────────
+function showLoader(msg) {
+    document.getElementById('loader-text').textContent = msg || 'Loading...';
+    document.getElementById('bmd-loader').style.display = 'flex';
+}
+function hideLoader() { document.getElementById('bmd-loader').style.display = 'none'; }
+
+function showToast(msg, color) {
+    const t = document.getElementById('bmd-toast');
+    t.textContent      = msg;
+    t.style.background = color || '#2d9e5f';
+    t.style.display    = 'block';
+    setTimeout(() => t.style.display = 'none', 4000);
+}
+
+function getSession() {
+    return {
+        token   : localStorage.getItem('bmd_token'),
+        userType: localStorage.getItem('bmd_user_type'),
+        userId  : localStorage.getItem('bmd_user_id'),
+        name    : localStorage.getItem('bmd_name')
+    };
+}
+
+async function callBMD(endpoint, payload) {
+    const res  = await fetch(BASE_URL + endpoint, {
+        method  : 'POST',
+        headers : { 'Content-Type': 'application/json' },
+        body    : JSON.stringify(payload)
+    });
+    const raw  = await res.json();
+    return JSON.parse(raw.p_message || raw.p_result);
+}
+
+function formatTime(t) {
+    if (!t) return '';
+    const [h, m] = t.split(':');
+    const hr = parseInt(h);
+    return `${hr % 12 || 12}:${m} ${hr >= 12 ? 'PM' : 'AM'}`;
+}
+
+// ─────────────────────────────────────────────────────
+//  Check login
+// ─────────────────────────────────────────────────────
+function checkLogin() {
+    const s = getSession();
+    if (!s.token || s.userType !== 'PATIENT') {
+        window.location.href = 'login.html';
+        return false;
+    }
+    return true;
+}
+
+// ─────────────────────────────────────────────────────
+//  Get doctor_id from URL
+// ─────────────────────────────────────────────────────
+function getDoctorIdFromURL() {
+    const params = new URLSearchParams(window.location.search);
+    return params.get('doctor_id');
+}
+
+// ─────────────────────────────────────────────────────
+//  Load Doctor
+// ─────────────────────────────────────────────────────
+async function loadDoctor(id) {
+    const s    = getSession();
+    const data = await callBMD('get-doctor', {
+        session_token : s.token,
+        doctor_id     : id
+    });
+
+    if (data.status !== 'SUCCESS' || !data.doctor) {
+        showToast('Doctor not found', '#dc3545');
+        return;
+    }
+
+    doctorData = data.doctor;
+    renderDoctorProfile(doctorData);
+    updateSummary();
+    loadReviews(id);
+}
+
+function renderDoctorProfile(d) {
+    document.getElementById('doctor-profile').innerHTML = `
+        <div class="doctor-avatar">👨‍⚕️</div>
+        <div class="doctor-details">
+            <div class="doctor-name">${d.full_name}</div>
+            <div class="doctor-spec">${d.specialization}</div>
+            <div class="doctor-qual">${d.qualification || ''}</div>
+            <div class="doctor-tags">
+                <span class="dtag">🏥 ${d.hospital_name || ''}</span>
+                <span class="dtag">🏬 ${d.dept_name || ''}</span>
+                ${d.experience_years ? `<span class="dtag">📅 ${d.experience_years} yrs</span>` : ''}
+                <span class="rating-badge">⭐ ${parseFloat(d.avg_rating || 0).toFixed(1)} (${d.total_reviews || 0} reviews)</span>
+            </div>
+            ${d.bio ? `<div class="bio-text">${d.bio}</div>` : ''}
+        </div>
+    `;
+
+    document.title = `Book ${d.full_name} — BookMyDoctor`;
+}
+
+// ─────────────────────────────────────────────────────
+//  Build Date Strip — next 14 days
+// ─────────────────────────────────────────────────────
+function buildDateStrip() {
+    const strip  = document.getElementById('date-strip');
+    const days   = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+    const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+    strip.innerHTML = '';
+
+    for (let i = 0; i < 14; i++) {
+        const d    = new Date();
+        d.setDate(d.getDate() + i);
+
+        const chip = document.createElement('div');
+        chip.className = 'date-chip' + (i === 0 ? ' active' : '');
+
+        const dateStr = d.toISOString().split('T')[0]; // YYYY-MM-DD
+        chip.dataset.date = dateStr;
+
+        chip.innerHTML = `
+            <div class="date-chip-day">${days[d.getDay()]}</div>
+            <div class="date-chip-date">${d.getDate()}</div>
+            <div class="date-chip-mon">${months[d.getMonth()]}</div>
+        `;
+
+        chip.onclick = () => selectDate(chip, dateStr);
+        strip.appendChild(chip);
+    }
+
+    // Auto select today
+    const today = new Date().toISOString().split('T')[0];
+    selectDate(strip.firstChild, today);
+}
+
+// ─────────────────────────────────────────────────────
+//  Select Date
+// ─────────────────────────────────────────────────────
+function selectDate(chipEl, dateStr) {
+    document.querySelectorAll('.date-chip').forEach(c => c.classList.remove('active'));
+    chipEl.classList.add('active');
+    selectedDate = dateStr;
+    selectedSlot = null;
+    selectedSlotId = null;
+
+    // Update summary
+    const d = new Date(dateStr + 'T00:00:00');
+    const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    document.getElementById('sum-date').textContent =
+        d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear();
+    document.getElementById('sum-time').innerHTML = '<span style="color:var(--gray-400);font-style:italic;">Select slot</span>';
+
+    updateBookBtn();
+    loadSlots(dateStr);
+}
+
+// ─────────────────────────────────────────────────────
+//  Load Slots
+// ─────────────────────────────────────────────────────
+async function loadSlots(dateStr) {
+    document.getElementById('slots-container').innerHTML =
+        '<div class="slots-loading">⏳ Loading slots...</div>';
+
+    const s    = getSession();
+    const data = await callBMD('get-available-slots', {
+        session_token : s.token,
+        doctor_id     : doctorId,
+        slot_date     : dateStr
+    });
+
+    if (data.status !== 'SUCCESS') {
+        document.getElementById('slots-container').innerHTML =
+            `<div class="slots-empty">⚠️ ${data.message}</div>`;
+        return;
+    }
+
+    const slots = data.slots || [];
+
+    if (slots.length === 0) {
+        document.getElementById('slots-container').innerHTML =
+            '<div class="slots-empty">😔 No slots available on this date.<br>Please try another date.</div>';
+        return;
+    }
+
+    const grid = document.createElement('div');
+    grid.className = 'slots-grid';
+
+    slots.forEach(slot => {
+        const chip = document.createElement('div');
+        const isAvailable = slot.status === 'AVAILABLE';
+
+        chip.className = 'slot-chip' + (!isAvailable ? ' booked' : '');
+        chip.textContent = formatTime(slot.start_time);
+        chip.title = isAvailable ? `${formatTime(slot.start_time)} - ${formatTime(slot.end_time)}` : 'Not available';
+
+        if (isAvailable) {
+            chip.onclick = () => selectSlot(chip, slot);
+        }
+
+        grid.appendChild(chip);
+    });
+
+    document.getElementById('slots-container').innerHTML = '';
+    document.getElementById('slots-container').appendChild(grid);
+
+    // Legend
+    const legend = document.createElement('div');
+    legend.style.cssText = 'display:flex;gap:16px;margin-top:12px;font-size:11px;color:var(--gray-600);';
+    legend.innerHTML = `
+        <span>🟢 Available (${slots.filter(s=>s.status==='AVAILABLE').length})</span>
+        <span>🔴 Booked (${slots.filter(s=>s.status!=='AVAILABLE').length})</span>
+    `;
+    document.getElementById('slots-container').appendChild(legend);
+}
+
+// ─────────────────────────────────────────────────────
+//  Select Slot
+// ─────────────────────────────────────────────────────
+function selectSlot(chipEl, slot) {
+    document.querySelectorAll('.slot-chip').forEach(c => c.classList.remove('selected'));
+    chipEl.classList.add('selected');
+    selectedSlot   = slot;
+    selectedSlotId = slot.slot_id;
+
+    document.getElementById('sum-time').textContent =
+        formatTime(slot.start_time) + ' – ' + formatTime(slot.end_time);
+
+    updateBookBtn();
+}
+
+// ─────────────────────────────────────────────────────
+//  Select Consultation Type
+// ─────────────────────────────────────────────────────
+function selectConsultType(type, el) {
+    consultType = type;
+    document.querySelectorAll('.consult-option').forEach(o => o.classList.remove('selected'));
+    el.classList.add('selected');
+    document.getElementById('sum-type').textContent = type === 'IN_PERSON' ? 'In Person' : 'Online';
+}
+
+// ─────────────────────────────────────────────────────
+//  Update Summary
+// ─────────────────────────────────────────────────────
+function updateSummary() {
+    if (!doctorData) return;
+    document.getElementById('sum-doctor').textContent   = doctorData.full_name;
+    document.getElementById('sum-spec').textContent     = doctorData.specialization;
+    document.getElementById('sum-hospital').textContent = doctorData.hospital_name || '—';
+    document.getElementById('sum-fee').textContent      = '₹' + (doctorData.consultation_fee || 0);
+}
+
+function updateBookBtn() {
+    const btn = document.getElementById('book-btn');
+    if (selectedDate && selectedSlotId) {
+        btn.disabled    = false;
+        btn.textContent = '💳 Book & Pay ₹' + (doctorData?.consultation_fee || '—');
+    } else if (selectedDate) {
+        btn.disabled    = true;
+        btn.textContent = '⏰ Select a Time Slot';
+    } else {
+        btn.disabled    = true;
+        btn.textContent = '🔒 Select Date & Slot';
+    }
+}
+
+// ─────────────────────────────────────────────────────
+//  Load Reviews
+// ─────────────────────────────────────────────────────
+async function loadReviews(doctorId) {
+    const s    = getSession();
+    const data = await callBMD('get-doctor-reviews', {
+        session_token : s.token,
+        doctor_id     : doctorId
+    });
+
+    if (data.status === 'SUCCESS' && data.reviews && data.reviews.length > 0) {
+        const card = document.getElementById('reviews-card');
+        const body = document.getElementById('reviews-body');
+        card.style.display = 'block';
+
+        body.innerHTML = `
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--gray-200);">
+                <div style="font-size:36px;font-weight:800;color:var(--green-dark);">${parseFloat(data.avg_rating || 0).toFixed(1)}</div>
+                <div>
+                    <div style="font-size:20px;color:#f59e0b;">${'⭐'.repeat(Math.round(data.avg_rating || 0))}</div>
+                    <div style="font-size:12px;color:var(--gray-600);">${data.total_reviews} review${data.total_reviews !== 1 ? 's' : ''}</div>
+                </div>
+            </div>
+            ${data.reviews.slice(0, 5).map(r => `
+                <div class="review-item">
+                    <div class="review-top">
+                        <span class="reviewer-name">👤 ${r.patient_name}</span>
+                        <span class="review-date">${r.review_date}</span>
+                    </div>
+                    <div class="review-stars">${'⭐'.repeat(r.star_rating)}</div>
+                    ${r.review_text ? `<div class="review-text">${r.review_text}</div>` : ''}
+                    ${r.tags ? `<div class="review-tags">🏷️ ${r.tags.split(',').join(' · ')}</div>` : ''}
+                </div>
+            `).join('')}
+        `;
+    }
+}
+
+// ─────────────────────────────────────────────────────
+//  Handle Booking + Payment
+// ─────────────────────────────────────────────────────
+async function handleBooking() {
+    if (!selectedDate || !selectedSlotId) {
+        showToast('Please select a date and time slot', '#dc3545');
+        return;
+    }
+
+    const s = getSession();
+    const notes = document.getElementById('patient-notes').value.trim();
+
+    showLoader('Booking your appointment...');
+
+    // Step 1 -- Book appointment
+    const bookRes = await callBMD('book-appointment', {
+        session_token     : s.token,
+        doctor_id         : doctorId,
+        slot_id           : selectedSlotId,
+        hospital_id       : doctorData.hospital_id,
+        appointment_date  : selectedDate,
+        consultation_type : consultType,
+        patient_notes     : notes || null
+    });
+
+    hideLoader();
+
+    if (bookRes.status !== 'SUCCESS') {
+        showToast(bookRes.message || 'Booking failed', '#dc3545');
+        return;
+    }
+
+    const appointmentId = bookRes.appointment_id;
+    const bookingRef    = bookRes.booking_reference;
+    const tokenDisplay  = bookRes.token_display;
+
+    // Step 2 -- Create payment + open Razorpay
+    showLoader('Initialising payment...');
+
+    const payRes = await callBMD('create-payment', {
+        session_token  : s.token,
+        appointment_id : appointmentId,
+        payment_mode   : 'UPI',
+        gateway_name   : 'RAZORPAY'
+    });
+
+    hideLoader();
+
+    if (payRes.status !== 'SUCCESS') {
+        // Appointment booked but payment init failed — still show success
+        showBookingSuccess(bookingRef, tokenDisplay, appointmentId);
+        return;
+    }
+
+    const paymentId = payRes.payment_id;
+    const amount    = payRes.amount;
+
+    // Step 3 -- Razorpay
+    const options = {
+        key         : RAZORPAY_KEY,
+        amount      : amount * 100,
+        currency    : 'INR',
+        name        : 'BookMyDoctor',
+        description : `Consultation with ${doctorData.full_name}`,
+
+        prefill : { name: s.name },
+        theme   : { color: '#2d9e5f' },
+
+        handler : async function(response) {
+            showLoader('Confirming payment...');
+
+            // Update payment status
+            await callBMD('update-payment-status', {
+                session_token   : s.token,
+                payment_id      : paymentId,
+                payment_status  : 'SUCCESS',
+                gateway_txn_id  : response.razorpay_payment_id,
+                payment_mode    : 'UPI'
+            });
+
+            // Create settlement
+            await callBMD('create-settlement', {
+                session_token : s.token,
+                payment_id    : paymentId
+            });
+
+            // Send booking confirmation notification
+            await callBMD('send-booking-confirmation', {
+                session_token  : s.token,
+                appointment_id : appointmentId,
+                patient_id     : parseInt(s.userId),
+                doctor_id      : doctorId
+            });
+
+            hideLoader();
+            showBookingSuccess(bookingRef, tokenDisplay, appointmentId);
+        },
+
+        modal : {
+            ondismiss : async function() {
+                await callBMD('update-payment-status', {
+                    session_token  : s.token,
+                    payment_id     : paymentId,
+                    payment_status : 'FAILED',
+                    gateway_txn_id : 'DISMISSED'
+                });
+                showToast('Payment cancelled. Appointment held for 30 mins.', '#fd7e14');
+            }
+        }
+    };
+
+    const rzp = new Razorpay(options);
+    rzp.open();
+}
+
+// ─────────────────────────────────────────────────────
+//  Show Booking Success
+// ─────────────────────────────────────────────────────
+function showBookingSuccess(ref, token, apptId) {
+    const d = new Date(selectedDate + 'T00:00:00');
+    const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    const dateStr = d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear();
+
+    document.getElementById('success-details').innerHTML = `
+        Your appointment with <strong>${doctorData.full_name}</strong><br>
+        is confirmed for <strong>${dateStr}</strong> at <strong>${formatTime(selectedSlot?.start_time)}</strong>
+    `;
+    document.getElementById('success-ref').textContent   = ref;
+    document.getElementById('success-token').innerHTML   = `🎫 Queue Token: <strong>${token}</strong>`;
+
+    const overlay = document.getElementById('success-overlay');
+    overlay.style.display = 'flex';
+}
+
+// ─────────────────────────────────────────────────────
+//  Init
+// ─────────────────────────────────────────────────────
+async function init() {
+    if (!checkLogin()) return;
+
+    doctorId = getDoctorIdFromURL();
+    if (!doctorId) {
+        window.location.href = '../index.html';
+        return;
+    }
+
+    showLoader('Loading doctor details...');
+    buildDateStrip();
+    await loadDoctor(doctorId);
+    hideLoader();
+}
+
+init();
+</script>
+
+</body>
+</html>
