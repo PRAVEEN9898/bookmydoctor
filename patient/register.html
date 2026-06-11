@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account — BookMyDoctor</title>
+    <style>
+        :root {
+            --green-dark   : #1a6b3c;
+            --green-mid    : #2d9e5f;
+            --green-light  : #e8f5ee;
+            --green-pale   : #f4fbf7;
+            --white        : #ffffff;
+            --gray-100     : #f8f9fa;
+            --gray-200     : #e9ecef;
+            --gray-400     : #ced4da;
+            --gray-600     : #6c757d;
+            --gray-800     : #343a40;
+            --red          : #dc3545;
+            --shadow-sm    : 0 2px 8px rgba(0,0,0,0.08);
+            --shadow-md    : 0 4px 20px rgba(0,0,0,0.12);
+            --radius       : 12px;
+            --radius-sm    : 8px;
+            --font         : 'Segoe UI', Arial, sans-serif;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family : var(--font);
+            background  : var(--green-pale);
+            min-height  : 100vh;
+            display     : flex;
+            align-items : center;
+            justify-content: center;
+            padding     : 24px 20px;
+        }
+
+        /* ── Card ──────────────────────────────────────── */
+        .register-card {
+            background    : var(--white);
+            border-radius : var(--radius);
+            box-shadow    : var(--shadow-md);
+            width         : 100%;
+            max-width     : 560px;
+            overflow      : hidden;
+        }
+
+        /* ── Card Header ───────────────────────────────── */
+        .card-header {
+            background  : linear-gradient(135deg, var(--green-dark), var(--green-mid));
+            padding     : 32px 40px;
+            text-align  : center;
+        }
+
+        .card-header-logo {
+            display         : inline-flex;
+            align-items     : center;
+            gap             : 10px;
+            margin-bottom   : 16px;
+        }
+
+        .header-icon {
+            width           : 40px;
+            height          : 40px;
+            background      : rgba(255,255,255,0.2);
+            border-radius   : 9px;
+            display         : flex;
+            align-items     : center;
+            justify-content : center;
+            font-size       : 20px;
+        }
+
+        .header-brand {
+            font-size   : 20px;
+            font-weight : 700;
+            color       : var(--white);
+        }
+
+        .card-title {
+            font-size   : 22px;
+            font-weight : 700;
+            color       : var(--white);
+            margin-bottom: 4px;
+        }
+
+        .card-sub {
+            font-size : 13px;
+            color     : rgba(255,255,255,0.8);
+        }
+
+        /* ── Card Body ─────────────────────────────────── */
+        .card-body {
+            padding : 36px 40px;
+        }
+
+        /* ── Progress Steps ────────────────────────────── */
+        .steps {
+            display         : flex;
+            align-items     : center;
+            justify-content : center;
+            margin-bottom   : 32px;
+            gap             : 0;
+        }
+
+        .step {
+            display         : flex;
+            flex-direction  : column;
+            align-items     : center;
+            gap             : 6px;
+        }
+
+        .step-circle {
+            width           : 32px;
+            height          : 32px;
+            border-radius   : 50%;
+            background      : var(--gray-200);
+            color           : var(--gray-600);
+            font-size       : 13px;
+            font-weight     : 600;
+            display         : flex;
+            align-items     : center;
+            justify-content : center;
+            transition      : all 0.3s;
+        }
+
+        .step.active  .step-circle { background: var(--green-mid);  color: var(--white); }
+        .step.done    .step-circle { background: var(--green-dark); color: var(--white); }
+
+        .step-label {
+            font-size  : 11px;
+            color      : var(--gray-600);
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .step.active .step-label { color: var(--green-dark); font-weight: 600; }
+
+        .step-line {
+            flex        : 1;
+            height      : 2px;
+            background  : var(--gray-200);
+            margin      : 0 8px;
+            margin-bottom: 20px;
+            transition  : background 0.3s;
+            min-width   : 40px;
+        }
+
+        .step-line.done { background: var(--green-mid); }
+
+        /* ── Form ──────────────────────────────────────── */
+        .form-step { display: none; }
+        .form-step.active { display: block; }
+
+        .form-row {
+            display : grid;
+            grid-template-columns: 1fr 1fr;
+            gap     : 16px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-label {
+            display     : block;
+            font-size   : 12px;
+            font-weight : 600;
+            color       : var(--gray-800);
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+
+        .form-label span {
+            color       : var(--red);
+            margin-left : 2px;
+        }
+
+        .input-wrapper { position: relative; }
+
+        .input-icon {
+            position      : absolute;
+            left          : 12px;
+            top           : 50%;
+            transform     : translateY(-50%);
+            font-size     : 15px;
+            pointer-events: none;
+        }
+
+        .form-input, .form-select {
+            width         : 100%;
+            padding       : 10px 12px 10px 38px;
+            border        : 1.5px solid var(--gray-200);
+            border-radius : var(--radius-sm);
+            font-size     : 14px;
+            color         : var(--gray-800);
+            font-family   : var(--font);
+            outline       : none;
+            background    : var(--white);
+            transition    : border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .form-select { cursor: pointer; }
+
+        .form-input:focus, .form-select:focus {
+            border-color : var(--green-mid);
+            box-shadow   : 0 0 0 3px rgba(45,158,95,0.12);
+        }
+
+        .form-input.error { border-color: var(--red); }
+
+        .pwd-toggle {
+            position    : absolute;
+            right       : 12px;
+            top         : 50%;
+            transform   : translateY(-50%);
+            background  : none;
+            border      : none;
+            cursor      : pointer;
+            font-size   : 15px;
+            padding     : 0;
+            color       : var(--gray-600);
+        }
+
+        /* Password strength */
+        .pwd-strength {
+            margin-top  : 6px;
+            display     : none;
+        }
+
+        .pwd-strength.show { display: block; }
+
+        .pwd-bar {
+            height        : 4px;
+            border-radius : 2px;
+            background    : var(--gray-200);
+            overflow      : hidden;
+            margin-bottom : 4px;
+        }
+
+        .pwd-bar-fill {
+            height     : 100%;
+            border-radius: 2px;
+            transition : width 0.3s, background 0.3s;
+            width      : 0%;
+        }
+
+        .pwd-hint {
+            font-size : 11px;
+            color     : var(--gray-600);
+        }
+
+        /* ── Error Box ─────────────────────────────────── */
+        .form-error {
+            background    : #fdecea;
+            border        : 1px solid #f5c6cb;
+            border-radius : var(--radius-sm);
+            padding       : 10px 14px;
+            font-size     : 13px;
+            color         : var(--red);
+            margin-bottom : 20px;
+            display       : none;
+        }
+
+        .form-error.show { display: block; }
+
+        /* ── Buttons ───────────────────────────────────── */
+        .btn-row {
+            display    : flex;
+            gap        : 12px;
+            margin-top : 8px;
+        }
+
+        .btn {
+            flex          : 1;
+            padding       : 12px;
+            border-radius : var(--radius-sm);
+            font-size     : 14px;
+            font-weight   : 600;
+            cursor        : pointer;
+            font-family   : var(--font);
+            transition    : all 0.2s;
+            border        : none;
+        }
+
+        .btn-primary {
+            background : linear-gradient(135deg, var(--green-dark), var(--green-mid));
+            color      : var(--white);
+        }
+
+        .btn-primary:hover   { opacity: 0.92; }
+        .btn-primary:disabled{ opacity: 0.6; cursor: not-allowed; }
+
+        .btn-outline {
+            background   : var(--white);
+            color        : var(--green-dark);
+            border       : 1.5px solid var(--green-mid) !important;
+        }
+
+        .btn-outline:hover { background: var(--green-light); }
+
+        /* ── Success Screen ────────────────────────────── */
+        .success-screen {
+            display        : none;
+            flex-direction : column;
+            align-items    : center;
+            text-align     : center;
+            padding        : 20px 0;
+        }
+
+        .success-screen.show { display: flex; }
+
+        .success-icon {
+            width           : 72px;
+            height          : 72px;
+            background      : var(--green-light);
+            border-radius   : 50%;
+            display         : flex;
+            align-items     : center;
+            justify-content : center;
+            font-size       : 36px;
+            margin-bottom   : 20px;
+        }
+
+        .success-title {
+            font-size    : 22px;
+            font-weight  : 700;
+            color        : var(--green-dark);
+            margin-bottom: 8px;
+        }
+
+        .success-sub {
+            font-size    : 14px;
+            color        : var(--gray-600);
+            margin-bottom: 28px;
+            line-height  : 1.6;
+        }
+
+        /* ── Footer ────────────────────────────────────── */
+        .card-footer {
+            text-align  : center;
+            padding     : 0 40px 28px;
+            font-size   : 13px;
+            color       : var(--gray-600);
+        }
+
+        .card-footer a {
+            color           : var(--green-dark);
+            text-decoration : none;
+            font-weight     : 600;
+        }
+
+        .card-footer a:hover { text-decoration: underline; }
+
+        /* ── Loader ────────────────────────────────────── */
+        #bmd-loader {
+            display         : none;
+            position        : fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background      : rgba(255,255,255,0.75);
+            z-index         : 9999;
+            align-items     : center;
+            justify-content : center;
+            flex-direction  : column;
+            gap             : 12px;
+        }
+
+        .spinner {
+            width         : 40px;
+            height        : 40px;
+            border        : 4px solid var(--gray-200);
+            border-top    : 4px solid var(--green-mid);
+            border-radius : 50%;
+            animation     : spin 0.8s linear infinite;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ── Responsive ────────────────────────────────── */
+        @media (max-width: 480px) {
+            .card-body   { padding: 28px 24px; }
+            .card-header { padding: 28px 24px; }
+            .card-footer { padding: 0 24px 24px; }
+            .form-row    { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Loader -->
+<div id="bmd-loader">
+    <div class="spinner"></div>
+    <span style="color:var(--green-mid);font-size:14px;">Creating your account...</span>
+</div>
+
+<div class="register-card">
+
+    <!-- Header -->
+    <div class="card-header">
+        <div class="card-header-logo">
+            <div class="header-icon">🏥</div>
+            <span class="header-brand">BookMyDoctor</span>
+        </div>
+        <div class="card-title">Create your account</div>
+        <div class="card-sub">Join thousands of patients booking smarter</div>
+    </div>
+
+    <!-- Body -->
+    <div class="card-body">
+
+        <!-- Steps -->
+        <div class="steps" id="steps-bar">
+            <div class="step active" id="step-1">
+                <div class="step-circle">1</div>
+                <span class="step-label">Basic Info</span>
+            </div>
+            <div class="step-line" id="line-1"></div>
+            <div class="step" id="step-2">
+                <div class="step-circle">2</div>
+                <span class="step-label">Contact</span>
+            </div>
+            <div class="step-line" id="line-2"></div>
+            <div class="step" id="step-3">
+                <div class="step-circle">3</div>
+                <span class="step-label">Security</span>
+            </div>
+        </div>
+
+        <!-- Error Box -->
+        <div class="form-error" id="reg-error"></div>
+
+        <!-- Step 1 — Basic Info -->
+        <div class="form-step active" id="form-step-1">
+
+            <div class="form-group">
+                <label class="form-label" for="full_name">Full Name <span>*</span></label>
+                <div class="input-wrapper">
+                    <span class="input-icon">👤</span>
+                    <input type="text" id="full_name" class="form-input"
+                        placeholder="Enter your full name" autocomplete="name">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label" for="gender">Gender</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">⚥</span>
+                        <select id="gender" class="form-select">
+                            <option value="">Select</option>
+                            <option value="M">Male</option>
+                            <option value="F">Female</option>
+                            <option value="O">Other</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="date_of_birth">Date of Birth</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">🎂</span>
+                        <input type="date" id="date_of_birth" class="form-input"
+                            style="padding-left:38px;">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label" for="blood_group">Blood Group</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">🩸</span>
+                        <select id="blood_group" class="form-select">
+                            <option value="">Select</option>
+                            <option value="A+">A+</option>
+                            <option value="A-">A-</option>
+                            <option value="B+">B+</option>
+                            <option value="B-">B-</option>
+                            <option value="O+">O+</option>
+                            <option value="O-">O-</option>
+                            <option value="AB+">AB+</option>
+                            <option value="AB-">AB-</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group" style="margin-bottom:0;">
+                    <!-- placeholder -->
+                </div>
+            </div>
+
+            <div class="btn-row">
+                <button class="btn btn-primary" onclick="goToStep(2)">
+                    Continue →
+                </button>
+            </div>
+
+        </div>
+
+        <!-- Step 2 — Contact -->
+        <div class="form-step" id="form-step-2">
+
+            <div class="form-group">
+                <label class="form-label" for="email">Email Address <span>*</span></label>
+                <div class="input-wrapper">
+                    <span class="input-icon">✉️</span>
+                    <input type="email" id="email" class="form-input"
+                        placeholder="Enter your email" autocomplete="email">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="mobile">Mobile Number <span>*</span></label>
+                <div class="input-wrapper">
+                    <span class="input-icon">📱</span>
+                    <input type="tel" id="mobile" class="form-input"
+                        placeholder="10-digit mobile number" maxlength="10"
+                        autocomplete="tel">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="address">Address</label>
+                <div class="input-wrapper">
+                    <span class="input-icon">📍</span>
+                    <input type="text" id="address" class="form-input"
+                        placeholder="Your address (optional)">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="emergency_contact">Emergency Contact</label>
+                <div class="input-wrapper">
+                    <span class="input-icon">🆘</span>
+                    <input type="tel" id="emergency_contact" class="form-input"
+                        placeholder="Emergency contact number (optional)"
+                        maxlength="10">
+                </div>
+            </div>
+
+            <div class="btn-row">
+                <button class="btn btn-outline" onclick="goToStep(1)">
+                    ← Back
+                </button>
+                <button class="btn btn-primary" onclick="goToStep(3)">
+                    Continue →
+                </button>
+            </div>
+
+        </div>
+
+        <!-- Step 3 — Security -->
+        <div class="form-step" id="form-step-3">
+
+            <div class="form-group">
+                <label class="form-label" for="password">Password <span>*</span></label>
+                <div class="input-wrapper">
+                    <span class="input-icon">🔑</span>
+                    <input type="password" id="password" class="form-input"
+                        placeholder="Create a strong password"
+                        oninput="checkPasswordStrength(this.value)"
+                        style="padding-right:40px;">
+                    <button type="button" class="pwd-toggle"
+                        onclick="togglePwd('password', this)">👁️</button>
+                </div>
+                <div class="pwd-strength" id="pwd-strength">
+                    <div class="pwd-bar">
+                        <div class="pwd-bar-fill" id="pwd-bar-fill"></div>
+                    </div>
+                    <span class="pwd-hint" id="pwd-hint"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="confirm_password">Confirm Password <span>*</span></label>
+                <div class="input-wrapper">
+                    <span class="input-icon">🔒</span>
+                    <input type="password" id="confirm_password" class="form-input"
+                        placeholder="Re-enter your password"
+                        style="padding-right:40px;">
+                    <button type="button" class="pwd-toggle"
+                        onclick="togglePwd('confirm_password', this)">👁️</button>
+                </div>
+            </div>
+
+            <!-- Terms -->
+            <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:20px;">
+                <input type="checkbox" id="terms" style="margin-top:3px;accent-color:var(--green-mid);">
+                <label for="terms" style="font-size:13px;color:var(--gray-600);cursor:pointer;line-height:1.5;">
+                    I agree to the <a href="#" style="color:var(--green-dark);">Terms of Service</a>
+                    and <a href="#" style="color:var(--green-dark);">Privacy Policy</a>
+                </label>
+            </div>
+
+            <div class="btn-row">
+                <button class="btn btn-outline" onclick="goToStep(2)">
+                    ← Back
+                </button>
+                <button class="btn btn-primary" id="register-btn" onclick="handleRegister()">
+                    Create Account
+                </button>
+            </div>
+
+        </div>
+
+        <!-- Success Screen -->
+        <div class="success-screen" id="success-screen">
+            <div class="success-icon">✅</div>
+            <div class="success-title">Account Created!</div>
+            <div class="success-sub">
+                Welcome to BookMyDoctor, <strong id="success-name"></strong>!<br>
+                Your account is ready. Let's find you a doctor.
+            </div>
+            <button class="btn btn-primary" style="width:100%;max-width:260px;"
+                onclick="window.location.href='../index.html'">
+                Find Doctors →
+            </button>
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <div class="card-footer" id="card-footer">
+        Already have an account? <a href="login.html">Sign in</a>
+    </div>
+
+</div>
+
+<script>
+const BASE_URL = 'https://oracleapex.com/ords/praveen_9898/BMD_APP/';
+let currentStep = 1;
+
+// ─── Step Navigation ──────────────────────────────────
+function goToStep(step) {
+    hideError();
+
+    // Validate before moving forward
+    if (step > currentStep) {
+        if (!validateStep(currentStep)) return;
+    }
+
+    // Update UI
+    document.getElementById('form-step-' + currentStep).classList.remove('active');
+    document.getElementById('form-step-' + step).classList.add('active');
+
+    // Update step indicators
+    for (let i = 1; i <= 3; i++) {
+        const el = document.getElementById('step-' + i);
+        el.classList.remove('active', 'done');
+        if (i < step)  el.classList.add('done');
+        if (i === step) el.classList.add('active');
+    }
+
+    // Update lines
+    for (let i = 1; i <= 2; i++) {
+        const line = document.getElementById('line-' + i);
+        line.classList.toggle('done', i < step);
+    }
+
+    currentStep = step;
+}
+
+// ─── Validation ───────────────────────────────────────
+function validateStep(step) {
+    if (step === 1) {
+        const name = document.getElementById('full_name').value.trim();
+        if (!name) {
+            showError('Please enter your full name.');
+            document.getElementById('full_name').focus();
+            return false;
+        }
+        if (name.length < 3) {
+            showError('Full name must be at least 3 characters.');
+            return false;
+        }
+    }
+
+    if (step === 2) {
+        const email  = document.getElementById('email').value.trim();
+        const mobile = document.getElementById('mobile').value.trim();
+
+        if (!email) {
+            showError('Please enter your email address.');
+            document.getElementById('email').focus();
+            return false;
+        }
+
+        if (!email.includes('@') || !email.includes('.')) {
+            showError('Please enter a valid email address.');
+            return false;
+        }
+
+        if (!mobile) {
+            showError('Please enter your mobile number.');
+            document.getElementById('mobile').focus();
+            return false;
+        }
+
+        if (mobile.length !== 10 || !/^\d+$/.test(mobile)) {
+            showError('Please enter a valid 10-digit mobile number.');
+            return false;
+        }
+    }
+
+    return true;
+}
+
+// ─── Password Strength ────────────────────────────────
+function checkPasswordStrength(pwd) {
+    const bar    = document.getElementById('pwd-bar-fill');
+    const hint   = document.getElementById('pwd-hint');
+    const widget = document.getElementById('pwd-strength');
+
+    if (!pwd) { widget.classList.remove('show'); return; }
+    widget.classList.add('show');
+
+    let score = 0;
+    if (pwd.length >= 8)          score++;
+    if (/[A-Z]/.test(pwd))        score++;
+    if (/[0-9]/.test(pwd))        score++;
+    if (/[^A-Za-z0-9]/.test(pwd)) score++;
+
+    const levels = [
+        { pct: '25%',  color: '#dc3545', text: 'Too weak'  },
+        { pct: '50%',  color: '#fd7e14', text: 'Weak'      },
+        { pct: '75%',  color: '#ffc107', text: 'Good'      },
+        { pct: '100%', color: '#28a745', text: 'Strong ✓'  },
+    ];
+
+    const l = levels[score - 1] || levels[0];
+    bar.style.width      = l.pct;
+    bar.style.background = l.color;
+    hint.textContent     = l.text;
+    hint.style.color     = l.color;
+}
+
+// ─── Password Toggle ──────────────────────────────────
+function togglePwd(fieldId, btn) {
+    const f = document.getElementById(fieldId);
+    if (f.type === 'password') {
+        f.type = 'text';
+        btn.textContent = '🙈';
+    } else {
+        f.type = 'password';
+        btn.textContent = '👁️';
+    }
+}
+
+// ─── Error Helpers ────────────────────────────────────
+function showError(msg) {
+    const el = document.getElementById('reg-error');
+    el.textContent = msg;
+    el.classList.add('show');
+    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function hideError() {
+    document.getElementById('reg-error').classList.remove('show');
+}
+
+// ─── Loader ───────────────────────────────────────────
+function showLoader() { document.getElementById('bmd-loader').style.display = 'flex'; }
+function hideLoader() { document.getElementById('bmd-loader').style.display = 'none'; }
+
+// ─── Handle Register ──────────────────────────────────
+async function handleRegister() {
+    hideError();
+
+    const password = document.getElementById('password').value;
+    const confirm  = document.getElementById('confirm_password').value;
+    const terms    = document.getElementById('terms').checked;
+
+    if (!password) {
+        showError('Please create a password.');
+        return;
+    }
+
+    if (password.length < 6) {
+        showError('Password must be at least 6 characters.');
+        return;
+    }
+
+    if (password !== confirm) {
+        showError('Passwords do not match.');
+        document.getElementById('confirm_password').focus();
+        return;
+    }
+
+    if (!terms) {
+        showError('Please accept the Terms of Service to continue.');
+        return;
+    }
+
+    // Build payload
+    const dob = document.getElementById('date_of_birth').value;
+
+    const payload = {
+        full_name         : document.getElementById('full_name').value.trim(),
+        email             : document.getElementById('email').value.trim().toLowerCase(),
+        mobile            : document.getElementById('mobile').value.trim(),
+        password          : password,
+        gender            : document.getElementById('gender').value     || null,
+        blood_group       : document.getElementById('blood_group').value || null,
+        address           : document.getElementById('address').value.trim() || null,
+        emergency_contact : document.getElementById('emergency_contact').value.trim() || null,
+        date_of_birth     : dob ? dob.split('-').join('-') : null
+    };
+
+    const btn = document.getElementById('register-btn');
+    btn.disabled    = true;
+    btn.textContent = 'Creating...';
+    showLoader();
+
+    try {
+        const res = await fetch(BASE_URL + 'register-patient', {
+            method  : 'POST',
+            headers : { 'Content-Type': 'application/json' },
+            body    : JSON.stringify(payload)
+        });
+
+        const raw  = await res.json();
+        const data = JSON.parse(raw.p_message || raw.p_result);
+        hideLoader();
+
+        if (data.status === 'SUCCESS') {
+            // Auto login
+            const loginRes = await fetch(BASE_URL + 'login', {
+                method  : 'POST',
+                headers : { 'Content-Type': 'application/json' },
+                body    : JSON.stringify({
+                    email    : payload.email,
+                    password : payload.password
+                })
+            });
+
+            const loginRaw  = await loginRes.json();
+            const loginData = JSON.parse(loginRaw.p_message || loginRaw.p_result);
+
+            if (loginData.status === 'SUCCESS') {
+                localStorage.setItem('bmd_token',     loginData.session_token);
+                localStorage.setItem('bmd_user_type', loginData.user_type);
+                localStorage.setItem('bmd_user_id',   loginData.user_id);
+                localStorage.setItem('bmd_name',      loginData.full_name);
+            }
+
+            // Show success screen
+            document.getElementById('steps-bar').style.display   = 'none';
+            document.getElementById('form-step-3').classList.remove('active');
+            document.getElementById('success-name').textContent  = payload.full_name.split(' ')[0];
+            document.getElementById('success-screen').classList.add('show');
+            document.getElementById('card-footer').style.display = 'none';
+            document.getElementById('reg-error').classList.remove('show');
+
+        } else {
+            showError(data.message || 'Registration failed. Please try again.');
+            btn.disabled    = false;
+            btn.textContent = 'Create Account';
+        }
+
+    } catch (err) {
+        hideLoader();
+        showError('Network error. Please check your connection and try again.');
+        btn.disabled    = false;
+        btn.textContent = 'Create Account';
+    }
+}
+</script>
+
+</body>
+</html>
