@@ -737,7 +737,7 @@
 // ─────────────────────────────────────────────────────
 //  Config
 // ─────────────────────────────────────────────────────
-const BASE_URL = 'https://api.allorigins.win/raw?url=https://oracleapex.com/ords/praveen_9898/BMD_APP/';
+const BASE_URL = 'https://oracleapex.com/ords/praveen_9898/BMD_APP/';
 let allDoctors     = [];
 let selectedSpec   = '';
 
@@ -759,13 +759,27 @@ function showToast(msg, color) {
 //  API helper
 // ─────────────────────────────────────────────────────
 async function callBMD(endpoint, payload) {
-    const res  = await fetch(BASE_URL + endpoint, {
-        method  : 'POST',
-        headers : { 'Content-Type': 'application/json' },
-        body    : JSON.stringify(payload)
-    });
-    const raw  = await res.json();
-    return JSON.parse(raw.p_message || raw.p_result);
+    try {
+        const targetUrl = 'https://oracleapex.com/ords/praveen_9898/BMD_APP/' + endpoint;
+        const proxyUrl  = 'https://corsproxy.io/?' + encodeURIComponent(targetUrl);
+
+        const res = await fetch(proxyUrl, {
+            method  : 'POST',
+            headers : {
+                'Content-Type'  : 'application/json',
+                'x-requested-with' : 'XMLHttpRequest'
+            },
+            body    : JSON.stringify(payload)
+        });
+
+        const text = await res.text();
+        const raw  = JSON.parse(text);
+        return JSON.parse(raw.p_message || raw.p_result || '{}');
+
+    } catch (err) {
+        console.error('callBMD error:', err);
+        return { status: 'ERROR', message: err.message };
+    }
 }
 
 // ─────────────────────────────────────────────────────
