@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BookMyDoctor — Find & Book Doctors in Hyderabad</title>
-    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <!-- <script src="https://checkout.razorpay.com/v1/checkout.js"></script> -->
     <style>
         :root {
             --green-dark   : #1a6b3c;
@@ -794,7 +794,7 @@ async function handleLogout() {
 async function loadAnalytics() {
     const s    = getSession();
     const data = await callBMD('get-analytics', {
-        session_token: s.token || 'PUBLIC'
+        session_token: s.token || ''
     });
 
     if (data.status === 'SUCCESS') {
@@ -840,7 +840,7 @@ async function loadSpecializations() {
 async function loadDoctors() {
     const s    = getSession();
     const data = await callBMD('get-doctors', {
-        session_token: s.token || 'PUBLIC'
+        session_token: s.token || ''
     });
 
     if (data.status === 'SUCCESS') {
