@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BookMyDoctor — Find & Book Doctors in Hyderabad</title>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <style>
+        :root {
+            --green-dark   : #1a6b3c;
+            --green-mid    : #2d9e5f;
+            --green-light  : #e8f5ee;
+            --green-pale   : #f4fbf7;
+            --white        : #ffffff;
+            --gray-100     : #f8f9fa;
+            --gray-200     : #e9ecef;
+            --gray-400     : #ced4da;
+            --gray-600     : #6c757d;
+            --gray-800     : #343a40;
+            --red          : #dc3545;
+            --shadow-sm    : 0 2px 8px rgba(0,0,0,0.08);
+            --shadow-md    : 0 8px 24px rgba(0,0,0,0.10);
+            --shadow-card  : 0 2px 12px rgba(0,0,0,0.08);
+            --radius       : 12px;
+            --radius-sm    : 8px;
+            --font         : 'Segoe UI', Arial, sans-serif;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family : var(--font);
+            background  : var(--gray-100);
+            color       : var(--gray-800);
+        }
+
+        /* ══════════════════════════════════════════════
+           NAV
+        ══════════════════════════════════════════════ */
+        .navbar {
+            background    : var(--white);
+            padding       : 0 24px;
+            height        : 60px;
+            display       : flex;
+            align-items   : center;
+            justify-content: space-between;
+            box-shadow    : 0 1px 4px rgba(0,0,0,0.08);
+            position      : sticky;
+            top           : 0;
+            z-index       : 100;
+        }
+
+        .nav-brand {
+            display     : flex;
+            align-items : center;
+            gap         : 9px;
+            text-decoration: none;
+        }
+
+        .nav-brand-icon {
+            width           : 34px;
+            height          : 34px;
+            background      : var(--green-mid);
+            border-radius   : 8px;
+            display         : flex;
+            align-items     : center;
+            justify-content : center;
+            font-size       : 18px;
+        }
+
+        .nav-brand-name {
+            font-size   : 18px;
+            font-weight : 700;
+            color       : var(--green-dark);
+        }
+
+        .nav-links {
+            display     : flex;
+            align-items : center;
+            gap         : 8px;
+        }
+
+        .nav-user {
+            display     : flex;
+            align-items : center;
+            gap         : 6px;
+            padding     : 6px 14px;
+            background  : var(--green-light);
+            border-radius: 20px;
+            font-size   : 13px;
+            color       : var(--green-dark);
+            font-weight : 600;
+            cursor      : pointer;
+            text-decoration: none;
+        }
+
+        .btn-nav {
+            padding       : 7px 16px;
+            border-radius : 20px;
+            font-size     : 13px;
+            font-weight   : 600;
+            cursor        : pointer;
+            font-family   : var(--font);
+            text-decoration: none;
+            border        : none;
+            transition    : all 0.2s;
+        }
+
+        .btn-nav-outline {
+            background : var(--white);
+            color      : var(--green-dark);
+            border     : 1.5px solid var(--green-mid) !important;
+        }
+
+        .btn-nav-outline:hover { background: var(--green-light); }
+
+        .btn-nav-solid {
+            background : var(--green-mid);
+            color      : var(--white);
+        }
+
+        .btn-nav-solid:hover { background: var(--green-dark); }
+
+        /* ══════════════════════════════════════════════
+           HERO
+        ══════════════════════════════════════════════ */
+        .hero {
+            background  : linear-gradient(135deg, var(--green-dark) 0%, var(--green-mid) 60%, #4db87a 100%);
+            padding     : 56px 24px 80px;
+            text-align  : center;
+            position    : relative;
+            overflow    : hidden;
+        }
+
+        .hero::before {
+            content       : '';
+            position      : absolute;
+            top           : -100px;
+            right         : -100px;
+            width         : 400px;
+            height        : 400px;
+            background    : rgba(255,255,255,0.05);
+            border-radius : 50%;
+        }
+
+        .hero::after {
+            content       : '';
+            position      : absolute;
+            bottom        : -120px;
+            left          : -80px;
+            width         : 350px;
+            height        : 350px;
+            background    : rgba(255,255,255,0.04);
+            border-radius : 50%;
+        }
+
+        .hero-content { position: relative; z-index: 1; }
+
+        .hero-badge {
+            display         : inline-flex;
+            align-items     : center;
+            gap             : 6px;
+            background      : rgba(255,255,255,0.15);
+            color           : var(--white);
+            padding         : 5px 14px;
+            border-radius   : 20px;
+            font-size       : 12px;
+            font-weight     : 600;
+            margin-bottom   : 20px;
+            backdrop-filter : blur(4px);
+        }
+
+        .hero-title {
+            font-size   : 40px;
+            font-weight : 800;
+            color       : var(--white);
+            line-height : 1.15;
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
+        }
+
+        .hero-title span {
+            color : #a8f0c6;
+        }
+
+        .hero-sub {
+            font-size    : 16px;
+            color        : rgba(255,255,255,0.85);
+            margin-bottom: 36px;
+        }
+
+        /* Search Box */
+        .search-box {
+            background    : var(--white);
+            border-radius : var(--radius);
+            padding       : 8px;
+            max-width     : 700px;
+            margin        : 0 auto 20px;
+            display       : flex;
+            gap           : 8px;
+            box-shadow    : var(--shadow-md);
+        }
+
+        .search-input-wrap {
+            flex     : 1;
+            position : relative;
+        }
+
+        .search-icon {
+            position      : absolute;
+            left          : 14px;
+            top           : 50%;
+            transform     : translateY(-50%);
+            font-size     : 16px;
+            pointer-events: none;
+        }
+
+        .search-input {
+            width         : 100%;
+            padding       : 11px 14px 11px 42px;
+            border        : 1.5px solid var(--gray-200);
+            border-radius : var(--radius-sm);
+            font-size     : 14px;
+            color         : var(--gray-800);
+            font-family   : var(--font);
+            outline       : none;
+            transition    : border-color 0.2s;
+        }
+
+        .search-input:focus { border-color: var(--green-mid); }
+
+        .search-select {
+            padding       : 11px 14px;
+            border        : 1.5px solid var(--gray-200);
+            border-radius : var(--radius-sm);
+            font-size     : 14px;
+            color         : var(--gray-800);
+            font-family   : var(--font);
+            outline       : none;
+            background    : var(--white);
+            min-width     : 160px;
+            cursor        : pointer;
+        }
+
+        .search-select:focus { border-color: var(--green-mid); }
+
+        .btn-search {
+            padding       : 11px 24px;
+            background    : var(--green-mid);
+            color         : var(--white);
+            border        : none;
+            border-radius : var(--radius-sm);
+            font-size     : 14px;
+            font-weight   : 600;
+            cursor        : pointer;
+            font-family   : var(--font);
+            white-space   : nowrap;
+            transition    : background 0.2s;
+        }
+
+        .btn-search:hover { background: var(--green-dark); }
+
+        /* Stats */
+        .hero-stats {
+            display         : flex;
+            justify-content : center;
+            gap             : 32px;
+            flex-wrap       : wrap;
+        }
+
+        .stat-item {
+            color     : var(--white);
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size   : 24px;
+            font-weight : 800;
+            display     : block;
+        }
+
+        .stat-label {
+            font-size : 12px;
+            color     : rgba(255,255,255,0.75);
+        }
+
+        /* ══════════════════════════════════════════════
+           SPECIALIZATION PILLS
+        ══════════════════════════════════════════════ */
+        .section {
+            max-width : 1100px;
+            margin    : 0 auto;
+            padding   : 0 24px;
+        }
+
+        .section-title {
+            font-size    : 20px;
+            font-weight  : 700;
+            color        : var(--gray-800);
+            margin-bottom: 16px;
+        }
+
+        .spec-section {
+            background : var(--white);
+            padding    : 28px 0;
+            margin-top : -24px;
+            position   : relative;
+            z-index    : 2;
+        }
+
+        .spec-pills {
+            display   : flex;
+            gap       : 10px;
+            flex-wrap : wrap;
+        }
+
+        .spec-pill {
+            padding       : 8px 18px;
+            background    : var(--green-pale);
+            border        : 1.5px solid var(--green-light);
+            border-radius : 20px;
+            font-size     : 13px;
+            font-weight   : 500;
+            color         : var(--green-dark);
+            cursor        : pointer;
+            transition    : all 0.2s;
+            white-space   : nowrap;
+        }
+
+        .spec-pill:hover,
+        .spec-pill.active {
+            background   : var(--green-mid);
+            color        : var(--white);
+            border-color : var(--green-mid);
+        }
+
+        /* ══════════════════════════════════════════════
+           DOCTORS GRID
+        ══════════════════════════════════════════════ */
+        .doctors-section {
+            padding : 32px 0 48px;
+        }
+
+        .filter-row {
+            display         : flex;
+            justify-content : space-between;
+            align-items     : center;
+            margin-bottom   : 20px;
+            flex-wrap       : wrap;
+            gap             : 12px;
+        }
+
+        .results-count {
+            font-size : 14px;
+            color     : var(--gray-600);
+        }
+
+        .results-count strong {
+            color       : var(--gray-800);
+            font-weight : 600;
+        }
+
+        .doctors-grid {
+            display               : grid;
+            grid-template-columns : repeat(auto-fill, minmax(300px, 1fr));
+            gap                   : 20px;
+        }
+
+        /* Doctor Card */
+        .doctor-card {
+            background    : var(--white);
+            border-radius : var(--radius);
+            padding       : 20px;
+            box-shadow    : var(--shadow-card);
+            transition    : transform 0.2s, box-shadow 0.2s;
+            cursor        : pointer;
+            border        : 1.5px solid transparent;
+        }
+
+        .doctor-card:hover {
+            transform    : translateY(-2px);
+            box-shadow   : var(--shadow-md);
+            border-color : var(--green-light);
+        }
+
+        .doctor-card-top {
+            display     : flex;
+            gap         : 14px;
+            margin-bottom: 14px;
+        }
+
+        .doctor-avatar {
+            width           : 56px;
+            height          : 56px;
+            border-radius   : 12px;
+            background      : var(--green-light);
+            display         : flex;
+            align-items     : center;
+            justify-content : center;
+            font-size       : 26px;
+            flex-shrink     : 0;
+        }
+
+        .doctor-info { flex: 1; }
+
+        .doctor-name {
+            font-size    : 15px;
+            font-weight  : 700;
+            color        : var(--gray-800);
+            margin-bottom: 3px;
+        }
+
+        .doctor-spec {
+            font-size    : 12px;
+            color        : var(--green-mid);
+            font-weight  : 600;
+            margin-bottom: 4px;
+        }
+
+        .doctor-qual {
+            font-size : 11px;
+            color     : var(--gray-600);
+        }
+
+        .doctor-rating {
+            display     : flex;
+            align-items : center;
+            gap         : 4px;
+            font-size   : 13px;
+            font-weight : 600;
+            color       : #f59e0b;
+        }
+
+        .doctor-rating span {
+            color     : var(--gray-600);
+            font-size : 11px;
+            font-weight: 400;
+        }
+
+        .doctor-card-mid {
+            display       : flex;
+            gap           : 8px;
+            margin-bottom : 14px;
+            flex-wrap     : wrap;
+        }
+
+        .doctor-tag {
+            display     : flex;
+            align-items : center;
+            gap         : 4px;
+            font-size   : 12px;
+            color       : var(--gray-600);
+            background  : var(--gray-100);
+            padding     : 4px 10px;
+            border-radius: 6px;
+        }
+
+        .avail-badge {
+            display       : inline-flex;
+            align-items   : center;
+            gap           : 4px;
+            font-size     : 11px;
+            font-weight   : 600;
+            padding       : 3px 9px;
+            border-radius : 20px;
+        }
+
+        .avail-badge.yes {
+            background : #e8f5e9;
+            color      : #2e7d32;
+        }
+
+        .avail-badge.no {
+            background : #fdecea;
+            color      : #c62828;
+        }
+
+        .doctor-card-bot {
+            display         : flex;
+            align-items     : center;
+            justify-content : space-between;
+            padding-top     : 14px;
+            border-top      : 1px solid var(--gray-200);
+        }
+
+        .doctor-fee {
+            font-size   : 18px;
+            font-weight : 700;
+            color       : var(--green-dark);
+        }
+
+        .doctor-fee small {
+            font-size   : 11px;
+            font-weight : 400;
+            color       : var(--gray-600);
+        }
+
+        .btn-book {
+            padding       : 8px 20px;
+            background    : var(--green-mid);
+            color         : var(--white);
+            border        : none;
+            border-radius : var(--radius-sm);
+            font-size     : 13px;
+            font-weight   : 600;
+            cursor        : pointer;
+            font-family   : var(--font);
+            transition    : background 0.2s;
+        }
+
+        .btn-book:hover { background: var(--green-dark); }
+
+        /* Empty State */
+        .empty-state {
+            text-align  : center;
+            padding     : 60px 20px;
+            color       : var(--gray-600);
+        }
+
+        .empty-state-icon { font-size: 48px; margin-bottom: 16px; }
+        .empty-state-title { font-size: 18px; font-weight: 600; margin-bottom: 8px; color: var(--gray-800); }
+        .empty-state-sub   { font-size: 14px; }
+
+        /* Skeleton Loader */
+        .skeleton {
+            background    : linear-gradient(90deg, var(--gray-200) 25%, var(--gray-100) 50%, var(--gray-200) 75%);
+            background-size: 200% 100%;
+            animation     : skeleton-shimmer 1.2s infinite;
+            border-radius : 6px;
+        }
+
+        @keyframes skeleton-shimmer {
+            0%   { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* ══════════════════════════════════════════════
+           LOADER
+        ══════════════════════════════════════════════ */
+        #bmd-loader {
+            display         : none;
+            position        : fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background      : rgba(255,255,255,0.75);
+            z-index         : 9999;
+            align-items     : center;
+            justify-content : center;
+            flex-direction  : column;
+            gap             : 12px;
+        }
+
+        .spinner {
+            width         : 40px;
+            height        : 40px;
+            border        : 4px solid var(--gray-200);
+            border-top    : 4px solid var(--green-mid);
+            border-radius : 50%;
+            animation     : spin 0.8s linear infinite;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Toast */
+        #bmd-toast {
+            position      : fixed;
+            bottom        : 24px;
+            right         : 24px;
+            padding       : 12px 20px;
+            border-radius : 8px;
+            font-size     : 14px;
+            font-family   : var(--font);
+            color         : var(--white);
+            box-shadow    : var(--shadow-md);
+            z-index       : 99999;
+            display       : none;
+        }
+
+        /* ══════════════════════════════════════════════
+           RESPONSIVE
+        ══════════════════════════════════════════════ */
+        @media (max-width: 600px) {
+            .hero-title     { font-size: 28px; }
+            .search-box     { flex-direction: column; }
+            .search-select  { min-width: unset; }
+            .hero-stats     { gap: 20px; }
+            .stat-number    { font-size: 20px; }
+            .doctors-grid   { grid-template-columns: 1fr; }
+            .filter-row     { flex-direction: column; align-items: flex-start; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Loader -->
+<div id="bmd-loader">
+    <div class="spinner"></div>
+    <span style="color:var(--green-mid);font-size:14px;">Loading...</span>
+</div>
+
+<!-- Toast -->
+<div id="bmd-toast"></div>
+
+<!-- ═══════════════════════════════════════════════════
+     NAVBAR
+═══════════════════════════════════════════════════ -->
+<nav class="navbar">
+    <a href="index.html" class="nav-brand">
+        <div class="nav-brand-icon">🏥</div>
+        <span class="nav-brand-name">BookMyDoctor</span>
+    </a>
+
+    <div class="nav-links" id="nav-links">
+        <!-- Injected by JS -->
+    </div>
+</nav>
+
+<!-- ═══════════════════════════════════════════════════
+     HERO
+═══════════════════════════════════════════════════ -->
+<section class="hero">
+    <div class="hero-content">
+        <div class="hero-badge">🌿 Hyderabad's Trusted Health Platform</div>
+        <h1 class="hero-title">
+            Book a Doctor,<br>
+            <span>Skip the Wait.</span>
+        </h1>
+        <p class="hero-sub">Instant appointments with top specialists — online or in-person.</p>
+
+        <!-- Search Box -->
+        <div class="search-box">
+            <div class="search-input-wrap">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="search-input" class="search-input"
+                    placeholder="Search doctor name..."
+                    oninput="filterDoctors()">
+            </div>
+            <select id="spec-filter" class="search-select" onchange="filterDoctors()">
+                <option value="">All Specializations</option>
+            </select>
+            <button class="btn-search" onclick="filterDoctors()">Search</button>
+        </div>
+
+        <!-- Stats -->
+        <div class="hero-stats" id="hero-stats">
+            <div class="stat-item">
+                <span class="stat-number" id="stat-doctors">—</span>
+                <span class="stat-label">Doctors</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number" id="stat-patients">—</span>
+                <span class="stat-label">Patients</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number" id="stat-appointments">—</span>
+                <span class="stat-label">Appointments</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number" id="stat-rating">—</span>
+                <span class="stat-label">Avg Rating</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════
+     SPECIALIZATION PILLS
+═══════════════════════════════════════════════════ -->
+<div class="spec-section">
+    <div class="section">
+        <div class="spec-pills" id="spec-pills">
+            <div class="spec-pill active" onclick="selectSpec('')">All</div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     DOCTORS GRID
+═══════════════════════════════════════════════════ -->
+<div class="doctors-section">
+    <div class="section">
+        <div class="filter-row">
+            <div class="section-title">Available Doctors</div>
+            <div class="results-count" id="results-count"></div>
+        </div>
+        <div class="doctors-grid" id="doctors-grid">
+            <!-- Skeleton placeholders -->
+            ${[1,2,3,4,5,6].map(() => `
+            <div class="doctor-card">
+                <div class="doctor-card-top">
+                    <div class="skeleton" style="width:56px;height:56px;border-radius:12px;flex-shrink:0;"></div>
+                    <div style="flex:1;">
+                        <div class="skeleton" style="height:16px;width:70%;margin-bottom:8px;"></div>
+                        <div class="skeleton" style="height:12px;width:50%;margin-bottom:6px;"></div>
+                        <div class="skeleton" style="height:12px;width:40%;"></div>
+                    </div>
+                </div>
+                <div class="skeleton" style="height:12px;width:60%;margin-bottom:14px;"></div>
+                <div style="display:flex;justify-content:space-between;align-items:center;padding-top:14px;border-top:1px solid var(--gray-200);">
+                    <div class="skeleton" style="height:20px;width:60px;"></div>
+                    <div class="skeleton" style="height:32px;width:80px;border-radius:8px;"></div>
+                </div>
+            </div>`).join('')}
+        </div>
+    </div>
+</div>
+
+<script>
+// ─────────────────────────────────────────────────────
+//  Config
+// ─────────────────────────────────────────────────────
+const BASE_URL = 'https://oracleapex.com/ords/praveen_9898/BMD_APP/';
+let allDoctors     = [];
+let selectedSpec   = '';
+
+// ─────────────────────────────────────────────────────
+//  Loader & Toast
+// ─────────────────────────────────────────────────────
+function showLoader() { document.getElementById('bmd-loader').style.display = 'flex'; }
+function hideLoader() { document.getElementById('bmd-loader').style.display = 'none'; }
+
+function showToast(msg, color) {
+    const t = document.getElementById('bmd-toast');
+    t.textContent      = msg;
+    t.style.background = color || '#2d9e5f';
+    t.style.display    = 'block';
+    setTimeout(() => t.style.display = 'none', 3000);
+}
+
+// ─────────────────────────────────────────────────────
+//  API helper
+// ─────────────────────────────────────────────────────
+async function callBMD(endpoint, payload) {
+    const res  = await fetch(BASE_URL + endpoint, {
+        method  : 'POST',
+        headers : { 'Content-Type': 'application/json' },
+        body    : JSON.stringify(payload)
+    });
+    const raw  = await res.json();
+    return JSON.parse(raw.p_message || raw.p_result);
+}
+
+// ─────────────────────────────────────────────────────
+//  Session
+// ─────────────────────────────────────────────────────
+function getSession() {
+    return {
+        token     : localStorage.getItem('bmd_token'),
+        user_type : localStorage.getItem('bmd_user_type'),
+        user_id   : localStorage.getItem('bmd_user_id'),
+        name      : localStorage.getItem('bmd_name')
+    };
+}
+
+// ─────────────────────────────────────────────────────
+//  Render Navbar
+// ─────────────────────────────────────────────────────
+function renderNav() {
+    const s   = getSession();
+    const nav = document.getElementById('nav-links');
+
+    if (s.token && s.user_type === 'PATIENT') {
+        nav.innerHTML = `
+            <a href="patient/appointments.html" class="btn-nav btn-nav-outline">My Appointments</a>
+            <a href="#" class="nav-user" onclick="handleLogout()">
+                👤 ${s.name ? s.name.split(' ')[0] : 'Account'} ▾
+            </a>
+        `;
+    } else if (s.token && s.user_type === 'DOCTOR') {
+        nav.innerHTML = `
+            <a href="doctor/dashboard.html" class="btn-nav btn-nav-solid">Doctor Dashboard</a>
+        `;
+    } else {
+        nav.innerHTML = `
+            <a href="patient/login.html"    class="btn-nav btn-nav-outline">Sign In</a>
+            <a href="patient/register.html" class="btn-nav btn-nav-solid">Get Started</a>
+        `;
+    }
+}
+
+async function handleLogout() {
+    const s = getSession();
+    if (s.token) {
+        await callBMD('logout', { session_token: s.token });
+    }
+    localStorage.clear();
+    renderNav();
+    showToast('Logged out successfully');
+}
+
+// ─────────────────────────────────────────────────────
+//  Load Analytics
+// ─────────────────────────────────────────────────────
+async function loadAnalytics() {
+    const s    = getSession();
+    const data = await callBMD('get-analytics', {
+        session_token: s.token || 'PUBLIC'
+    });
+
+    if (data.status === 'SUCCESS') {
+        document.getElementById('stat-doctors').textContent      = data.total_doctors       || '0';
+        document.getElementById('stat-patients').textContent     = data.total_patients      || '0';
+        document.getElementById('stat-appointments').textContent = data.total_appointments  || '0';
+        document.getElementById('stat-rating').textContent       = data.avg_rating
+            ? '⭐ ' + parseFloat(data.avg_rating).toFixed(1)
+            : '⭐ New';
+    }
+}
+
+// ─────────────────────────────────────────────────────
+//  Load Specializations into pills + dropdown
+// ─────────────────────────────────────────────────────
+async function loadSpecializations() {
+    const data = await callBMD('get-lookups', { lookup_type: 'BMD_SPECIALIZATION' });
+
+    if (data.status === 'SUCCESS') {
+        const pills   = document.getElementById('spec-pills');
+        const select  = document.getElementById('spec-filter');
+
+        data.lookups.forEach(l => {
+            // Pill
+            const pill = document.createElement('div');
+            pill.className   = 'spec-pill';
+            pill.textContent = l.meaning;
+            pill.onclick     = () => selectSpec(l.code, pill);
+            pills.appendChild(pill);
+
+            // Dropdown
+            const opt   = document.createElement('option');
+            opt.value   = l.code;
+            opt.textContent = l.meaning;
+            select.appendChild(opt);
+        });
+    }
+}
+
+// ─────────────────────────────────────────────────────
+//  Load Doctors
+// ─────────────────────────────────────────────────────
+async function loadDoctors() {
+    const s    = getSession();
+    const data = await callBMD('get-doctors', {
+        session_token: s.token || 'PUBLIC'
+    });
+
+    if (data.status === 'SUCCESS') {
+        allDoctors = data.doctors || [];
+        renderDoctors(allDoctors);
+    } else {
+        document.getElementById('doctors-grid').innerHTML = `
+            <div class="empty-state" style="grid-column:1/-1;">
+                <div class="empty-state-icon">⚠️</div>
+                <div class="empty-state-title">Could not load doctors</div>
+                <div class="empty-state-sub">${data.message}</div>
+            </div>`;
+    }
+}
+
+// ─────────────────────────────────────────────────────
+//  Render Doctor Cards
+// ─────────────────────────────────────────────────────
+function renderDoctors(doctors) {
+    const grid  = document.getElementById('doctors-grid');
+    const count = document.getElementById('results-count');
+
+    count.innerHTML = `Showing <strong>${doctors.length}</strong> doctor${doctors.length !== 1 ? 's' : ''}`;
+
+    if (doctors.length === 0) {
+        grid.innerHTML = `
+            <div class="empty-state" style="grid-column:1/-1;">
+                <div class="empty-state-icon">🔍</div>
+                <div class="empty-state-title">No doctors found</div>
+                <div class="empty-state-sub">Try a different search or specialization.</div>
+            </div>`;
+        return;
+    }
+
+    grid.innerHTML = doctors.map(d => `
+        <div class="doctor-card" onclick="goToDoctor(${d.doctor_id})">
+            <div class="doctor-card-top">
+                <div class="doctor-avatar">👨‍⚕️</div>
+                <div class="doctor-info">
+                    <div class="doctor-name">${d.full_name}</div>
+                    <div class="doctor-spec">${d.specialization}</div>
+                    <div class="doctor-qual">${d.qualification || ''}</div>
+                </div>
+                <div>
+                    <div class="doctor-rating">
+                        ⭐ ${parseFloat(d.avg_rating || 0).toFixed(1)}
+                        <span>(${d.total_reviews || 0})</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="doctor-card-mid">
+                <div class="doctor-tag">🏥 ${d.hospital_name || ''}</div>
+                <div class="doctor-tag">🏬 ${d.dept_name || ''}</div>
+                ${d.experience_years ? `<div class="doctor-tag">📅 ${d.experience_years} yrs exp</div>` : ''}
+                <span class="avail-badge ${d.is_available_today === 'Y' ? 'yes' : 'no'}">
+                    ${d.is_available_today === 'Y' ? '🟢 Available Today' : '🔴 Not Today'}
+                </span>
+            </div>
+
+            <div class="doctor-card-bot">
+                <div class="doctor-fee">
+                    ₹${d.consultation_fee || 0}
+                    <small>/ visit</small>
+                </div>
+                <button class="btn-book" onclick="event.stopPropagation(); bookDoctor(${d.doctor_id}, '${d.full_name}')">
+                    Book Now
+                </button>
+            </div>
+        </div>
+    `).join('');
+}
+
+// ─────────────────────────────────────────────────────
+//  Filter Doctors
+// ─────────────────────────────────────────────────────
+function filterDoctors() {
+    const search = document.getElementById('search-input').value.trim().toLowerCase();
+    const spec   = document.getElementById('spec-filter').value;
+
+    // Sync pill selection
+    selectedSpec = spec;
+    document.querySelectorAll('.spec-pill').forEach(p => {
+        p.classList.remove('active');
+        if (!spec && p.textContent === 'All') p.classList.add('active');
+    });
+
+    const filtered = allDoctors.filter(d => {
+        const matchSearch = !search ||
+            d.full_name.toLowerCase().includes(search) ||
+            (d.specialization || '').toLowerCase().includes(search) ||
+            (d.hospital_name  || '').toLowerCase().includes(search);
+
+        const matchSpec = !spec || d.specialization === spec;
+        return matchSearch && matchSpec;
+    });
+
+    renderDoctors(filtered);
+}
+
+// ─────────────────────────────────────────────────────
+//  Select Specialization Pill
+// ─────────────────────────────────────────────────────
+function selectSpec(code, pillEl) {
+    selectedSpec = code;
+
+    // Update pills
+    document.querySelectorAll('.spec-pill').forEach(p => p.classList.remove('active'));
+    if (pillEl) {
+        pillEl.classList.add('active');
+    } else {
+        // "All" pill
+        document.querySelector('.spec-pill').classList.add('active');
+    }
+
+    // Sync dropdown
+    document.getElementById('spec-filter').value = code;
+
+    // Filter
+    filterDoctors();
+}
+
+// ─────────────────────────────────────────────────────
+//  Navigate to doctor detail / booking
+// ─────────────────────────────────────────────────────
+function goToDoctor(doctor_id) {
+    window.location.href = 'patient/booking.html?doctor_id=' + doctor_id;
+}
+
+function bookDoctor(doctor_id, name) {
+    const s = getSession();
+    if (!s.token || s.user_type !== 'PATIENT') {
+        showToast('Please login as a patient to book', '#dc3545');
+        setTimeout(() => window.location.href = 'patient/login.html', 1500);
+        return;
+    }
+    window.location.href = 'patient/booking.html?doctor_id=' + doctor_id;
+}
+
+// ─────────────────────────────────────────────────────
+//  Init
+// ─────────────────────────────────────────────────────
+async function init() {
+    showLoader();
+    renderNav();
+    await Promise.all([
+        loadAnalytics(),
+        loadSpecializations(),
+        loadDoctors()
+    ]);
+    hideLoader();
+}
+
+init();
+</script>
+
+</body>
+</html>
