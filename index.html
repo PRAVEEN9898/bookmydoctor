@@ -761,23 +761,22 @@ function showToast(msg, color) {
 async function callBMD(endpoint, payload) {
     try {
         const targetUrl = 'https://oracleapex.com/ords/praveen_9898/BMD_APP/' + endpoint;
-        const proxyUrl  = 'https://corsproxy.io/?' + encodeURIComponent(targetUrl);
 
-        const res = await fetch(proxyUrl, {
+        const res = await fetch(targetUrl, {
             method  : 'POST',
             headers : {
-                'Content-Type'  : 'application/json',
-                'x-requested-with' : 'XMLHttpRequest'
+                'Content-Type' : 'application/json',
+                'Accept'       : 'application/json'
             },
-            body    : JSON.stringify(payload)
+            mode : 'cors',
+            body : JSON.stringify(payload)
         });
 
-        const text = await res.text();
-        const raw  = JSON.parse(text);
+        const raw  = await res.json();
         return JSON.parse(raw.p_message || raw.p_result || '{}');
 
     } catch (err) {
-        console.error('callBMD error:', err);
+        console.error('API Error:', err);
         return { status: 'ERROR', message: err.message };
     }
 }
