@@ -760,21 +760,20 @@ function showToast(msg, color) {
 // ─────────────────────────────────────────────────────
 async function callBMD(endpoint, payload) {
     try {
-        const targetUrl = 'https://oracleapex.com/ords/praveen_9898/BMD_APP/' + endpoint;
-
-        const res = await fetch(targetUrl, {
-            method  : 'POST',
-            headers : {
-                'Content-Type' : 'application/json',
-                'Accept'       : 'application/json'
-            },
-            mode : 'cors',
-            body : JSON.stringify(payload)
-        });
-
+        const res = await fetch(
+            'https://oracleapex.com/ords/praveen_9898/BMD_APP/' + endpoint,
+            {
+                method      : 'POST',
+                headers     : {
+                    'Content-Type' : 'application/json',
+                    'Accept'       : 'application/json',
+                    'Origin'       : 'https://praveen9898.github.io'
+                },
+                body        : JSON.stringify(payload)
+            }
+        );
         const raw  = await res.json();
         return JSON.parse(raw.p_message || raw.p_result || '{}');
-
     } catch (err) {
         console.error('API Error:', err);
         return { status: 'ERROR', message: err.message };
