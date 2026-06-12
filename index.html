@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BookMyDoctor — Find & Book Doctors in Hyderabad</title>
-    <!-- <script src="https://checkout.razorpay.com/v1/checkout.js"></script> -->
     <style>
         :root {
             --green-dark   : #1a6b3c;
@@ -34,9 +33,6 @@
             color       : var(--gray-800);
         }
 
-        /* ══════════════════════════════════════════════
-           NAV
-        ══════════════════════════════════════════════ */
         .navbar {
             background    : var(--white);
             padding       : 0 24px;
@@ -121,9 +117,6 @@
 
         .btn-nav-solid:hover { background: var(--green-dark); }
 
-        /* ══════════════════════════════════════════════
-           HERO
-        ══════════════════════════════════════════════ */
         .hero {
             background  : linear-gradient(135deg, var(--green-dark) 0%, var(--green-mid) 60%, #4db87a 100%);
             padding     : 56px 24px 80px;
@@ -179,9 +172,7 @@
             letter-spacing: -0.5px;
         }
 
-        .hero-title span {
-            color : #a8f0c6;
-        }
+        .hero-title span { color: #a8f0c6; }
 
         .hero-sub {
             font-size    : 16px;
@@ -189,7 +180,6 @@
             margin-bottom: 36px;
         }
 
-        /* Search Box */
         .search-box {
             background    : var(--white);
             border-radius : var(--radius);
@@ -260,7 +250,6 @@
 
         .btn-search:hover { background: var(--green-dark); }
 
-        /* Stats */
         .hero-stats {
             display         : flex;
             justify-content : center;
@@ -284,9 +273,6 @@
             color     : rgba(255,255,255,0.75);
         }
 
-        /* ══════════════════════════════════════════════
-           SPECIALIZATION PILLS
-        ══════════════════════════════════════════════ */
         .section {
             max-width : 1100px;
             margin    : 0 auto;
@@ -334,12 +320,7 @@
             border-color : var(--green-mid);
         }
 
-        /* ══════════════════════════════════════════════
-           DOCTORS GRID
-        ══════════════════════════════════════════════ */
-        .doctors-section {
-            padding : 32px 0 48px;
-        }
+        .doctors-section { padding: 32px 0 48px; }
 
         .filter-row {
             display         : flex;
@@ -350,15 +331,8 @@
             gap             : 12px;
         }
 
-        .results-count {
-            font-size : 14px;
-            color     : var(--gray-600);
-        }
-
-        .results-count strong {
-            color       : var(--gray-800);
-            font-weight : 600;
-        }
+        .results-count { font-size: 14px; color: var(--gray-600); }
+        .results-count strong { color: var(--gray-800); font-weight: 600; }
 
         .doctors-grid {
             display               : grid;
@@ -366,7 +340,6 @@
             gap                   : 20px;
         }
 
-        /* Doctor Card */
         .doctor-card {
             background    : var(--white);
             border-radius : var(--radius);
@@ -383,11 +356,7 @@
             border-color : var(--green-light);
         }
 
-        .doctor-card-top {
-            display     : flex;
-            gap         : 14px;
-            margin-bottom: 14px;
-        }
+        .doctor-card-top { display: flex; gap: 14px; margin-bottom: 14px; }
 
         .doctor-avatar {
             width           : 56px;
@@ -402,25 +371,9 @@
         }
 
         .doctor-info { flex: 1; }
-
-        .doctor-name {
-            font-size    : 15px;
-            font-weight  : 700;
-            color        : var(--gray-800);
-            margin-bottom: 3px;
-        }
-
-        .doctor-spec {
-            font-size    : 12px;
-            color        : var(--green-mid);
-            font-weight  : 600;
-            margin-bottom: 4px;
-        }
-
-        .doctor-qual {
-            font-size : 11px;
-            color     : var(--gray-600);
-        }
+        .doctor-name { font-size: 15px; font-weight: 700; color: var(--gray-800); margin-bottom: 3px; }
+        .doctor-spec { font-size: 12px; color: var(--green-mid); font-weight: 600; margin-bottom: 4px; }
+        .doctor-qual { font-size: 11px; color: var(--gray-600); }
 
         .doctor-rating {
             display     : flex;
@@ -431,18 +384,9 @@
             color       : #f59e0b;
         }
 
-        .doctor-rating span {
-            color     : var(--gray-600);
-            font-size : 11px;
-            font-weight: 400;
-        }
+        .doctor-rating span { color: var(--gray-600); font-size: 11px; font-weight: 400; }
 
-        .doctor-card-mid {
-            display       : flex;
-            gap           : 8px;
-            margin-bottom : 14px;
-            flex-wrap     : wrap;
-        }
+        .doctor-card-mid { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
 
         .doctor-tag {
             display     : flex;
@@ -465,15 +409,8 @@
             border-radius : 20px;
         }
 
-        .avail-badge.yes {
-            background : #e8f5e9;
-            color      : #2e7d32;
-        }
-
-        .avail-badge.no {
-            background : #fdecea;
-            color      : #c62828;
-        }
+        .avail-badge.yes { background: #e8f5e9; color: #2e7d32; }
+        .avail-badge.no  { background: #fdecea; color: #c62828; }
 
         .doctor-card-bot {
             display         : flex;
@@ -483,17 +420,8 @@
             border-top      : 1px solid var(--gray-200);
         }
 
-        .doctor-fee {
-            font-size   : 18px;
-            font-weight : 700;
-            color       : var(--green-dark);
-        }
-
-        .doctor-fee small {
-            font-size   : 11px;
-            font-weight : 400;
-            color       : var(--gray-600);
-        }
+        .doctor-fee { font-size: 18px; font-weight: 700; color: var(--green-dark); }
+        .doctor-fee small { font-size: 11px; font-weight: 400; color: var(--gray-600); }
 
         .btn-book {
             padding       : 8px 20px;
@@ -510,18 +438,11 @@
 
         .btn-book:hover { background: var(--green-dark); }
 
-        /* Empty State */
-        .empty-state {
-            text-align  : center;
-            padding     : 60px 20px;
-            color       : var(--gray-600);
-        }
-
-        .empty-state-icon { font-size: 48px; margin-bottom: 16px; }
+        .empty-state { text-align: center; padding: 60px 20px; color: var(--gray-600); }
+        .empty-state-icon  { font-size: 48px; margin-bottom: 16px; }
         .empty-state-title { font-size: 18px; font-weight: 600; margin-bottom: 8px; color: var(--gray-800); }
         .empty-state-sub   { font-size: 14px; }
 
-        /* Skeleton Loader */
         .skeleton {
             background    : linear-gradient(90deg, var(--gray-200) 25%, var(--gray-100) 50%, var(--gray-200) 75%);
             background-size: 200% 100%;
@@ -534,9 +455,6 @@
             100% { background-position: -200% 0; }
         }
 
-        /* ══════════════════════════════════════════════
-           LOADER
-        ══════════════════════════════════════════════ */
         #bmd-loader {
             display         : none;
             position        : fixed;
@@ -561,7 +479,6 @@
 
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* Toast */
         #bmd-toast {
             position      : fixed;
             bottom        : 24px;
@@ -576,9 +493,6 @@
             display       : none;
         }
 
-        /* ══════════════════════════════════════════════
-           RESPONSIVE
-        ══════════════════════════════════════════════ */
         @media (max-width: 600px) {
             .hero-title     { font-size: 28px; }
             .search-box     { flex-direction: column; }
@@ -592,32 +506,21 @@
 </head>
 <body>
 
-<!-- Loader -->
 <div id="bmd-loader">
     <div class="spinner"></div>
     <span style="color:var(--green-mid);font-size:14px;">Loading...</span>
 </div>
 
-<!-- Toast -->
 <div id="bmd-toast"></div>
 
-<!-- ═══════════════════════════════════════════════════
-     NAVBAR
-═══════════════════════════════════════════════════ -->
 <nav class="navbar">
     <a href="index.html" class="nav-brand">
         <div class="nav-brand-icon">🏥</div>
         <span class="nav-brand-name">BookMyDoctor</span>
     </a>
-
-    <div class="nav-links" id="nav-links">
-        <!-- Injected by JS -->
-    </div>
+    <div class="nav-links" id="nav-links"></div>
 </nav>
 
-<!-- ═══════════════════════════════════════════════════
-     HERO
-═══════════════════════════════════════════════════ -->
 <section class="hero">
     <div class="hero-content">
         <div class="hero-badge">🌿 Hyderabad's Trusted Health Platform</div>
@@ -627,7 +530,6 @@
         </h1>
         <p class="hero-sub">Instant appointments with top specialists — online or in-person.</p>
 
-        <!-- Search Box -->
         <div class="search-box">
             <div class="search-input-wrap">
                 <span class="search-icon">🔍</span>
@@ -641,8 +543,7 @@
             <button class="btn-search" onclick="filterDoctors()">Search</button>
         </div>
 
-        <!-- Stats -->
-        <div class="hero-stats" id="hero-stats">
+        <div class="hero-stats">
             <div class="stat-item">
                 <span class="stat-number" id="stat-doctors">—</span>
                 <span class="stat-label">Doctors</span>
@@ -663,9 +564,6 @@
     </div>
 </section>
 
-<!-- ═══════════════════════════════════════════════════
-     SPECIALIZATION PILLS
-═══════════════════════════════════════════════════ -->
 <div class="spec-section">
     <div class="section">
         <div class="spec-pills" id="spec-pills">
@@ -674,72 +572,69 @@
     </div>
 </div>
 
-<!-- ═══════════════════════════════════════════════════
-     DOCTORS GRID
-═══════════════════════════════════════════════════ -->
 <div class="doctors-section">
     <div class="section">
         <div class="filter-row">
             <div class="section-title">Available Doctors</div>
             <div class="results-count" id="results-count"></div>
         </div>
-       <div class="doctors-grid" id="doctors-grid">
-        <div class="doctor-card">
-            <div class="doctor-card-top">
-                <div class="skeleton" style="width:56px;height:56px;border-radius:12px;flex-shrink:0;"></div>
-                <div style="flex:1;">
-                    <div class="skeleton" style="height:16px;width:70%;margin-bottom:8px;"></div>
-                    <div class="skeleton" style="height:12px;width:50%;margin-bottom:6px;"></div>
-                    <div class="skeleton" style="height:12px;width:40%;"></div>
+        <div class="doctors-grid" id="doctors-grid">
+            <div class="doctor-card">
+                <div class="doctor-card-top">
+                    <div class="skeleton" style="width:56px;height:56px;border-radius:12px;flex-shrink:0;"></div>
+                    <div style="flex:1;">
+                        <div class="skeleton" style="height:16px;width:70%;margin-bottom:8px;"></div>
+                        <div class="skeleton" style="height:12px;width:50%;margin-bottom:6px;"></div>
+                        <div class="skeleton" style="height:12px;width:40%;"></div>
+                    </div>
+                </div>
+                <div class="skeleton" style="height:12px;width:60%;margin-bottom:14px;"></div>
+                <div style="display:flex;justify-content:space-between;padding-top:14px;border-top:1px solid var(--gray-200);">
+                    <div class="skeleton" style="height:20px;width:60px;"></div>
+                    <div class="skeleton" style="height:32px;width:80px;border-radius:8px;"></div>
                 </div>
             </div>
-            <div class="skeleton" style="height:12px;width:60%;margin-bottom:14px;"></div>
-            <div style="display:flex;justify-content:space-between;padding-top:14px;border-top:1px solid var(--gray-200);">
-                <div class="skeleton" style="height:20px;width:60px;"></div>
-                <div class="skeleton" style="height:32px;width:80px;border-radius:8px;"></div>
-            </div>
-        </div>
-        <div class="doctor-card">
-            <div class="doctor-card-top">
-                <div class="skeleton" style="width:56px;height:56px;border-radius:12px;flex-shrink:0;"></div>
-                <div style="flex:1;">
-                    <div class="skeleton" style="height:16px;width:70%;margin-bottom:8px;"></div>
-                    <div class="skeleton" style="height:12px;width:50%;margin-bottom:6px;"></div>
-                    <div class="skeleton" style="height:12px;width:40%;"></div>
+            <div class="doctor-card">
+                <div class="doctor-card-top">
+                    <div class="skeleton" style="width:56px;height:56px;border-radius:12px;flex-shrink:0;"></div>
+                    <div style="flex:1;">
+                        <div class="skeleton" style="height:16px;width:70%;margin-bottom:8px;"></div>
+                        <div class="skeleton" style="height:12px;width:50%;margin-bottom:6px;"></div>
+                        <div class="skeleton" style="height:12px;width:40%;"></div>
+                    </div>
+                </div>
+                <div class="skeleton" style="height:12px;width:60%;margin-bottom:14px;"></div>
+                <div style="display:flex;justify-content:space-between;padding-top:14px;border-top:1px solid var(--gray-200);">
+                    <div class="skeleton" style="height:20px;width:60px;"></div>
+                    <div class="skeleton" style="height:32px;width:80px;border-radius:8px;"></div>
                 </div>
             </div>
-            <div class="skeleton" style="height:12px;width:60%;margin-bottom:14px;"></div>
-            <div style="display:flex;justify-content:space-between;padding-top:14px;border-top:1px solid var(--gray-200);">
-                <div class="skeleton" style="height:20px;width:60px;"></div>
-                <div class="skeleton" style="height:32px;width:80px;border-radius:8px;"></div>
-            </div>
-        </div>
-        <div class="doctor-card">
-            <div class="doctor-card-top">
-                <div class="skeleton" style="width:56px;height:56px;border-radius:12px;flex-shrink:0;"></div>
-                <div style="flex:1;">
-                    <div class="skeleton" style="height:16px;width:70%;margin-bottom:8px;"></div>
-                    <div class="skeleton" style="height:12px;width:50%;margin-bottom:6px;"></div>
-                    <div class="skeleton" style="height:12px;width:40%;"></div>
+            <div class="doctor-card">
+                <div class="doctor-card-top">
+                    <div class="skeleton" style="width:56px;height:56px;border-radius:12px;flex-shrink:0;"></div>
+                    <div style="flex:1;">
+                        <div class="skeleton" style="height:16px;width:70%;margin-bottom:8px;"></div>
+                        <div class="skeleton" style="height:12px;width:50%;margin-bottom:6px;"></div>
+                        <div class="skeleton" style="height:12px;width:40%;"></div>
+                    </div>
+                </div>
+                <div class="skeleton" style="height:12px;width:60%;margin-bottom:14px;"></div>
+                <div style="display:flex;justify-content:space-between;padding-top:14px;border-top:1px solid var(--gray-200);">
+                    <div class="skeleton" style="height:20px;width:60px;"></div>
+                    <div class="skeleton" style="height:32px;width:80px;border-radius:8px;"></div>
                 </div>
             </div>
-            <div class="skeleton" style="height:12px;width:60%;margin-bottom:14px;"></div>
-            <div style="display:flex;justify-content:space-between;padding-top:14px;border-top:1px solid var(--gray-200);">
-                <div class="skeleton" style="height:20px;width:60px;"></div>
-                <div class="skeleton" style="height:32px;width:80px;border-radius:8px;"></div>
-            </div>
         </div>
-    </div>
     </div>
 </div>
 
 <script>
 // ─────────────────────────────────────────────────────
-//  Config
+//  Config — NEW OCI URL
 // ─────────────────────────────────────────────────────
-const BASE_URL = 'https://g251e1caeeef060-bookmydoctor.adb.ap-hyderabad-1.oraclecloudapps.com/ords/wksp_praveen9898/BMD_APP/';
-let allDoctors     = [];
-let selectedSpec   = '';
+const BASE_URL = 'https://g251e1caeeef060-bookmydoctor.adb.ap-hyderabad-1.oraclecloudapps.com/ords/praveen9898/BMD_APP/';
+let allDoctors   = [];
+let selectedSpec = '';
 
 // ─────────────────────────────────────────────────────
 //  Loader & Toast
@@ -756,23 +651,19 @@ function showToast(msg, color) {
 }
 
 // ─────────────────────────────────────────────────────
-//  API helper
+//  API helper — uses BASE_URL
 // ─────────────────────────────────────────────────────
 async function callBMD(endpoint, payload) {
     try {
-        const res = await fetch(
-            'https://oracleapex.com/ords/praveen_9898/BMD_APP/' + endpoint,
-            {
-                method      : 'POST',
-                headers     : {
-                    'Content-Type' : 'application/json',
-                    'Accept'       : 'application/json',
-                    'Origin'       : 'https://praveen9898.github.io'
-                },
-                body        : JSON.stringify(payload)
-            }
-        );
-        const raw  = await res.json();
+        const res = await fetch(BASE_URL + endpoint, {
+            method  : 'POST',
+            headers : {
+                'Content-Type' : 'application/json',
+                'Accept'       : 'application/json'
+            },
+            body : JSON.stringify(payload)
+        });
+        const raw = await res.json();
         return JSON.parse(raw.p_message || raw.p_result || '{}');
     } catch (err) {
         console.error('API Error:', err);
@@ -804,17 +695,14 @@ function renderNav() {
             <a href="patient/appointments.html" class="btn-nav btn-nav-outline">My Appointments</a>
             <a href="#" class="nav-user" onclick="handleLogout()">
                 👤 ${s.name ? s.name.split(' ')[0] : 'Account'} ▾
-            </a>
-        `;
+            </a>`;
     } else if (s.token && s.user_type === 'DOCTOR') {
         nav.innerHTML = `
-            <a href="doctor/dashboard.html" class="btn-nav btn-nav-solid">Doctor Dashboard</a>
-        `;
+            <a href="doctor/dashboard.html" class="btn-nav btn-nav-solid">Doctor Dashboard</a>`;
     } else {
         nav.innerHTML = `
             <a href="patient/login.html"    class="btn-nav btn-nav-outline">Sign In</a>
-            <a href="patient/register.html" class="btn-nav btn-nav-solid">Get Started</a>
-        `;
+            <a href="patient/register.html" class="btn-nav btn-nav-solid">Get Started</a>`;
     }
 }
 
@@ -838,9 +726,9 @@ async function loadAnalytics() {
     });
 
     if (data.status === 'SUCCESS') {
-        document.getElementById('stat-doctors').textContent      = data.total_doctors       || '0';
-        document.getElementById('stat-patients').textContent     = data.total_patients      || '0';
-        document.getElementById('stat-appointments').textContent = data.total_appointments  || '0';
+        document.getElementById('stat-doctors').textContent      = data.total_doctors      || '0';
+        document.getElementById('stat-patients').textContent     = data.total_patients     || '0';
+        document.getElementById('stat-appointments').textContent = data.total_appointments || '0';
         document.getElementById('stat-rating').textContent       = data.avg_rating
             ? '⭐ ' + parseFloat(data.avg_rating).toFixed(1)
             : '⭐ New';
@@ -848,27 +736,25 @@ async function loadAnalytics() {
 }
 
 // ─────────────────────────────────────────────────────
-//  Load Specializations into pills + dropdown
+//  Load Specializations
 // ─────────────────────────────────────────────────────
 async function loadSpecializations() {
     const data = await callBMD('get-lookups', { lookup_type: 'BMD_SPECIALIZATION' });
 
     if (data.status === 'SUCCESS') {
-        const pills   = document.getElementById('spec-pills');
-        const select  = document.getElementById('spec-filter');
+        const pills  = document.getElementById('spec-pills');
+        const select = document.getElementById('spec-filter');
 
         data.lookups.forEach(l => {
-            // Pill
-            const pill = document.createElement('div');
+            const pill       = document.createElement('div');
             pill.className   = 'spec-pill';
             pill.textContent = l.meaning;
             pill.onclick     = () => selectSpec(l.code, pill);
             pills.appendChild(pill);
 
-            // Dropdown
-            const opt   = document.createElement('option');
-            opt.value   = l.code;
-            opt.textContent = l.meaning;
+            const opt        = document.createElement('option');
+            opt.value        = l.code;
+            opt.textContent  = l.meaning;
             select.appendChild(opt);
         });
     }
@@ -931,7 +817,6 @@ function renderDoctors(doctors) {
                     </div>
                 </div>
             </div>
-
             <div class="doctor-card-mid">
                 <div class="doctor-tag">🏥 ${d.hospital_name || ''}</div>
                 <div class="doctor-tag">🏬 ${d.dept_name || ''}</div>
@@ -940,7 +825,6 @@ function renderDoctors(doctors) {
                     ${d.is_available_today === 'Y' ? '🟢 Available Today' : '🔴 Not Today'}
                 </span>
             </div>
-
             <div class="doctor-card-bot">
                 <div class="doctor-fee">
                     ₹${d.consultation_fee || 0}
@@ -961,7 +845,6 @@ function filterDoctors() {
     const search = document.getElementById('search-input').value.trim().toLowerCase();
     const spec   = document.getElementById('spec-filter').value;
 
-    // Sync pill selection
     selectedSpec = spec;
     document.querySelectorAll('.spec-pill').forEach(p => {
         p.classList.remove('active');
@@ -973,7 +856,6 @@ function filterDoctors() {
             d.full_name.toLowerCase().includes(search) ||
             (d.specialization || '').toLowerCase().includes(search) ||
             (d.hospital_name  || '').toLowerCase().includes(search);
-
         const matchSpec = !spec || d.specialization === spec;
         return matchSearch && matchSpec;
     });
@@ -986,25 +868,18 @@ function filterDoctors() {
 // ─────────────────────────────────────────────────────
 function selectSpec(code, pillEl) {
     selectedSpec = code;
-
-    // Update pills
     document.querySelectorAll('.spec-pill').forEach(p => p.classList.remove('active'));
     if (pillEl) {
         pillEl.classList.add('active');
     } else {
-        // "All" pill
         document.querySelector('.spec-pill').classList.add('active');
     }
-
-    // Sync dropdown
     document.getElementById('spec-filter').value = code;
-
-    // Filter
     filterDoctors();
 }
 
 // ─────────────────────────────────────────────────────
-//  Navigate to doctor detail / booking
+//  Navigate
 // ─────────────────────────────────────────────────────
 function goToDoctor(doctor_id) {
     window.location.href = 'patient/booking.html?doctor_id=' + doctor_id;
