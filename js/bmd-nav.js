@@ -191,7 +191,7 @@
                 }
 
                 .bmd-logout-btn {
-                    padding       : 6px 14px;
+                    padding       : 6px 16px;
                     background    : #ffffff;
                     color         : #dc3545;
                     border        : 1.5px solid #dc3545;
@@ -202,8 +202,8 @@
                     font-family   : 'Segoe UI', Arial, sans-serif;
                     transition    : all 0.2s;
                     white-space   : nowrap;
+                    flex-shrink   : 0;
                 }
-
                 .bmd-logout-btn:hover { background: #fdecea; }
 
                 @media (max-width: 768px) {
