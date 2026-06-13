@@ -663,8 +663,14 @@ async function callBMD(endpoint, payload) {
             },
             body : JSON.stringify(payload)
         });
-        const raw = await res.json();
-        return JSON.parse(raw.p_message || raw.p_result || '{}');
+
+        const data = await res.json();
+
+        // Worker now unwraps p_message — but handle both cases
+        if (data.p_message) return JSON.parse(data.p_message);
+        if (data.p_result)  return JSON.parse(data.p_result);
+        return data;
+
     } catch (err) {
         console.error('API Error:', err);
         return { status: 'ERROR', message: err.message };
