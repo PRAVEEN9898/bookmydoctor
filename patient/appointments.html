@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Appointments — BookMyDoctor</title>
+    <style>
+        :root {
+            --green-dark  : #1a6b3c;
+            --green-mid   : #2d9e5f;
+            --green-light : #e8f5ee;
+            --green-pale  : #f4fbf7;
+            --white       : #ffffff;
+            --gray-100    : #f8f9fa;
+            --gray-200    : #e9ecef;
+            --gray-400    : #ced4da;
+            --gray-600    : #6c757d;
+            --gray-800    : #343a40;
+            --red         : #dc3545;
+            --orange      : #fd7e14;
+            --shadow-sm   : 0 2px 8px rgba(0,0,0,0.08);
+            --shadow-md   : 0 4px 20px rgba(0,0,0,0.12);
+            --radius      : 12px;
+            --radius-sm   : 8px;
+            --font        : 'Segoe UI', Arial, sans-serif;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body { font-family: var(--font); background: var(--gray-100); color: var(--gray-800); }
+
+        /* ── Navbar ── */
+        .navbar {
+            background: var(--white); padding: 0 24px; height: 60px;
+            display: flex; align-items: center; justify-content: space-between;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.08); position: sticky; top: 0; z-index: 100;
+        }
+
+        .nav-brand { display: flex; align-items: center; gap: 9px; text-decoration: none; }
+
+        .nav-brand-icon {
+            width: 34px; height: 34px; background: var(--green-mid);
+            border-radius: 8px; display: flex; align-items: center;
+            justify-content: center; font-size: 18px;
+        }
+
+        .nav-brand-name { font-size: 18px; font-weight: 700; color: var(--green-dark); }
+
+        .nav-right { display: flex; align-items: center; gap: 12px; }
+
+        /* WHO IS LOGGED IN BADGE */
+        .user-badge {
+            display: flex; align-items: center; gap: 8px;
+            background: var(--green-light); border-radius: 20px;
+            padding: 6px 14px; font-size: 13px;
+        }
+
+        .user-badge-role {
+            font-size: 10px; font-weight: 700; color: var(--white);
+            background: var(--green-dark); padding: 2px 7px;
+            border-radius: 10px; text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .user-badge-name { font-weight: 600; color: var(--green-dark); font-size: 13px; }
+
+        .btn-nav {
+            padding: 7px 16px; border-radius: 20px; font-size: 13px;
+            font-weight: 600; cursor: pointer; font-family: var(--font);
+            text-decoration: none; border: none; transition: all 0.2s;
+        }
+
+        .btn-logout {
+            background: var(--white); color: var(--red);
+            border: 1.5px solid var(--red) !important;
+        }
+
+        .btn-logout:hover { background: #fdecea; }
+
+        /* ── Hero ── */
+        .page-hero {
+            background: linear-gradient(135deg, var(--green-dark), var(--green-mid));
+            padding: 32px 24px 48px;
+        }
+
+        .page-hero-inner { max-width: 700px; margin: 0 auto; }
+
+        .page-hero h1 { font-size: 26px; font-weight: 800; color: var(--white); margin-bottom: 6px; }
+
+        .page-hero p { font-size: 14px; color: rgba(255,255,255,0.8); }
+
+        /* ── Summary Cards ── */
+        .summary-bar {
+            max-width: 700px; margin: -24px auto 0;
+            display: grid; grid-template-columns: repeat(3, 1fr);
+            gap: 12px; padding: 0 24px;
+            position: relative; z-index: 2;
+        }
+
+        .summary-card {
+            background: var(--white); border-radius: var(--radius);
+            padding: 16px; box-shadow: var(--shadow-sm);
+            text-align: center;
+        }
+
+        .summary-card-num  { font-size: 26px; font-weight: 800; color: var(--green-dark); }
+        .summary-card-label{ font-size: 12px; color: var(--gray-600); margin-top: 2px; }
+
+        /* ── Tabs ── */
+        .tabs-wrap { max-width: 700px; margin: 24px auto 0; padding: 0 24px; }
+
+        .tabs {
+            display: flex; background: var(--white);
+            border-radius: var(--radius); padding: 4px;
+            gap: 4px; box-shadow: var(--shadow-sm);
+        }
+
+        .tab-btn {
+            flex: 1; padding: 10px; border: none; background: transparent;
+            border-radius: var(--radius-sm); font-size: 13px; font-weight: 500;
+            color: var(--gray-600); cursor: pointer; transition: all 0.2s;
+            font-family: var(--font);
+        }
+
+        .tab-btn.active {
+            background: var(--green-mid); color: var(--white); font-weight: 600;
+        }
+
+        /* ── Appointments List ── */
+        .appts-wrap { max-width: 700px; margin: 20px auto 48px; padding: 0 24px; }
+
+        /* ── Appointment Card ── */
+        .appt-card {
+            background: var(--white); border-radius: var(--radius);
+            box-shadow: var(--shadow-sm); margin-bottom: 16px;
+            overflow: hidden; border: 1.5px solid transparent;
+            transition: border-color 0.2s;
+        }
+
+        .appt-card:hover { border-color: var(--green-light); }
+
+        /* Card top coloured bar */
+        .appt-card-bar { height: 4px; }
+        .appt-card-bar.upcoming   { background: var(--green-mid); }
+        .appt-card-bar.completed  { background: #6c757d; }
+        .appt-card-bar.cancelled  { background: var(--red); }
+
+        .appt-card-body { padding: 18px 20px; }
+
+        /* Row 1 — hospital + token */
+        .appt-row1 {
+            display: flex; justify-content: space-between;
+            align-items: flex-start; margin-bottom: 12px;
+        }
+
+        .appt-hospital { font-size: 11px; font-weight: 600; color: var(--green-mid); text-transform: uppercase; letter-spacing: 0.5px; }
+
+        .token-badge {
+            background: var(--green-dark); color: var(--white);
+            border-radius: 10px; padding: 4px 12px;
+            text-align: center; min-width: 60px;
+        }
+
+        .token-badge-label { font-size: 9px; opacity: 0.8; }
+        .token-badge-num   { font-size: 18px; font-weight: 800; line-height: 1; }
+
+        /* Row 2 — doctor name + date */
+        .appt-doctor { font-size: 17px; font-weight: 700; color: var(--gray-800); margin-bottom: 3px; }
+        .appt-spec   { font-size: 12px; color: var(--green-mid); font-weight: 600; margin-bottom: 10px; }
+
+        .appt-meta { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 12px; }
+
+        .appt-meta-item {
+            display: flex; align-items: center; gap: 5px;
+            font-size: 12px; color: var(--gray-600);
+        }
+
+        /* Queue bar — upcoming only */
+        .queue-bar {
+            background: var(--gray-100); border-radius: var(--radius-sm);
+            padding: 12px 14px; margin-bottom: 12px;
+        }
+
+        .queue-bar-top {
+            display: flex; justify-content: space-between;
+            align-items: center; margin-bottom: 8px;
+        }
+
+        .queue-label  { font-size: 12px; font-weight: 600; color: var(--gray-800); }
+        .queue-live   { font-size: 11px; font-weight: 700; color: var(--green-mid); }
+
+        .queue-dots { display: flex; gap: 6px; }
+
+        .queue-dot {
+            width: 36px; height: 36px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 12px; font-weight: 700; color: var(--white);
+        }
+
+        .queue-dot.done    { background: var(--green-mid); }
+        .queue-dot.current { background: var(--orange); }
+        .queue-dot.mine    { background: var(--green-dark); border: 2px solid var(--green-mid); }
+        .queue-dot.waiting { background: var(--gray-200); color: var(--gray-600); }
+
+        .queue-est { font-size: 11px; color: var(--gray-600); margin-top: 6px; }
+
+        /* Payment row */
+        .payment-row {
+            display: flex; align-items: center; gap: 8px;
+            padding: 8px 12px; background: var(--gray-100);
+            border-radius: var(--radius-sm); margin-bottom: 12px;
+            font-size: 12px; color: var(--gray-600);
+        }
+
+        .payment-status {
+            font-size: 11px; font-weight: 700; padding: 2px 8px;
+            border-radius: 10px;
+        }
+
+        .payment-status.success  { background: #e8f5e9; color: #2e7d32; }
+        .payment-status.pending  { background: #fff3e0; color: #e65100; }
+        .payment-status.refunded { background: #e3f2fd; color: #1565c0; }
+        .payment-status.failed   { background: #fdecea; color: var(--red); }
+
+        /* Ref number */
+        .appt-ref { font-size: 11px; color: var(--gray-400); margin-bottom: 12px; font-family: monospace; }
+
+        /* Action buttons */
+        .appt-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+        .btn-action {
+            padding: 8px 16px; border-radius: var(--radius-sm);
+            font-size: 12px; font-weight: 600; cursor: pointer;
+            font-family: var(--font); border: none; transition: all 0.2s;
+        }
+
+        .btn-cancel  { background: #fdecea; color: var(--red); }
+        .btn-cancel:hover { background: #f5c6cb; }
+
+        .btn-review  { background: var(--green-light); color: var(--green-dark); }
+        .btn-review:hover { background: #c8e6c9; }
+
+        .btn-rebook  { background: var(--gray-100); color: var(--gray-800); }
+        .btn-rebook:hover { background: var(--gray-200); }
+
+        /* Status chip */
+        .status-chip {
+            display: inline-flex; align-items: center; gap: 4px;
+            padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600;
+        }
+
+        .status-chip.upcoming  { background: #e8f5e9; color: #2e7d32; }
+        .status-chip.completed { background: var(--gray-200); color: var(--gray-600); }
+        .status-chip.cancelled { background: #fdecea; color: var(--red); }
+
+        /* ── Empty State ── */
+        .empty-state {
+            text-align: center; padding: 60px 20px;
+            color: var(--gray-600);
+        }
+
+        .empty-icon  { font-size: 48px; margin-bottom: 16px; }
+        .empty-title { font-size: 18px; font-weight: 600; color: var(--gray-800); margin-bottom: 8px; }
+        .empty-sub   { font-size: 14px; margin-bottom: 24px; }
+
+        .btn-primary {
+            padding: 11px 28px; background: var(--green-mid); color: var(--white);
+            border: none; border-radius: var(--radius-sm); font-size: 14px;
+            font-weight: 600; cursor: pointer; font-family: var(--font);
+            text-decoration: none; display: inline-block;
+        }
+
+        .btn-primary:hover { background: var(--green-dark); }
+
+        /* ── Review Modal ── */
+        .modal-overlay {
+            display: none; position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%; background: rgba(0,0,0,0.5);
+            z-index: 9000; align-items: center; justify-content: center;
+        }
+
+        .modal-overlay.show { display: flex; }
+
+        .modal {
+            background: var(--white); border-radius: var(--radius);
+            padding: 28px; max-width: 440px; width: 90%;
+            box-shadow: var(--shadow-md);
+        }
+
+        .modal-title { font-size: 18px; font-weight: 700; color: var(--gray-800); margin-bottom: 6px; }
+        .modal-sub   { font-size: 13px; color: var(--gray-600); margin-bottom: 20px; }
+
+        .stars { display: flex; gap: 8px; margin-bottom: 16px; }
+
+        .star {
+            font-size: 32px; cursor: pointer; transition: transform 0.1s;
+            filter: grayscale(1); opacity: 0.4;
+        }
+
+        .star.active { filter: grayscale(0); opacity: 1; transform: scale(1.1); }
+
+        .review-textarea {
+            width: 100%; padding: 10px 14px; border: 1.5px solid var(--gray-200);
+            border-radius: var(--radius-sm); font-size: 14px; font-family: var(--font);
+            outline: none; resize: vertical; min-height: 90px; margin-bottom: 16px;
+        }
+
+        .review-textarea:focus { border-color: var(--green-mid); }
+
+        .modal-actions { display: flex; gap: 10px; }
+
+        .btn-modal-cancel {
+            flex: 1; padding: 11px; background: var(--gray-100); color: var(--gray-800);
+            border: none; border-radius: var(--radius-sm); font-size: 14px;
+            font-weight: 600; cursor: pointer; font-family: var(--font);
+        }
+
+        .btn-modal-submit {
+            flex: 2; padding: 11px; background: var(--green-mid); color: var(--white);
+            border: none; border-radius: var(--radius-sm); font-size: 14px;
+            font-weight: 600; cursor: pointer; font-family: var(--font);
+        }
+
+        .btn-modal-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+
+        /* ── Cancel Confirm Modal ── */
+        .cancel-modal {
+            background: var(--white); border-radius: var(--radius);
+            padding: 28px; max-width: 400px; width: 90%;
+        }
+
+        .cancel-modal-icon { font-size: 40px; margin-bottom: 12px; }
+        .cancel-modal-title{ font-size: 18px; font-weight: 700; color: var(--gray-800); margin-bottom: 8px; }
+        .cancel-modal-sub  { font-size: 13px; color: var(--gray-600); margin-bottom: 20px; line-height: 1.6; }
+
+        .cancel-reason {
+            width: 100%; padding: 10px 14px; border: 1.5px solid var(--gray-200);
+            border-radius: var(--radius-sm); font-size: 14px; font-family: var(--font);
+            outline: none; margin-bottom: 16px;
+        }
+
+        .cancel-reason:focus { border-color: var(--red); }
+
+        .btn-confirm-cancel {
+            flex: 2; padding: 11px; background: var(--red); color: var(--white);
+            border: none; border-radius: var(--radius-sm); font-size: 14px;
+            font-weight: 600; cursor: pointer; font-family: var(--font);
+        }
+
+        /* ── Loader ── */
+        #bmd-loader {
+            display: none; position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%; background: rgba(255,255,255,0.75);
+            z-index: 9999; align-items: center; justify-content: center;
+            flex-direction: column; gap: 12px;
+        }
+
+        .spinner {
+            width: 40px; height: 40px; border: 4px solid var(--gray-200);
+            border-top: 4px solid var(--green-mid); border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ── Toast ── */
+        #bmd-toast {
+            position: fixed; bottom: 24px; right: 24px;
+            padding: 12px 20px; border-radius: 8px; font-size: 14px;
+            font-family: var(--font); color: var(--white);
+            box-shadow: var(--shadow-md); z-index: 99999; display: none;
+            max-width: 320px; line-height: 1.5;
+        }
+
+        /* ── Skeleton ── */
+        .skeleton {
+            background: linear-gradient(90deg, var(--gray-200) 25%, var(--gray-100) 50%, var(--gray-200) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.2s infinite;
+            border-radius: 6px;
+        }
+
+        @keyframes shimmer {
+            0%   { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        @media (max-width: 480px) {
+            .summary-bar { grid-template-columns: repeat(3,1fr); gap: 8px; }
+            .appt-card-body { padding: 14px; }
+            .appt-meta { gap: 8px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Loader -->
+<div id="bmd-loader">
+    <div class="spinner"></div>
+    <span style="color:var(--green-mid);font-size:14px;" id="loader-text">Loading...</span>
+</div>
+
+<!-- Toast -->
+<div id="bmd-toast"></div>
+
+<!-- Review Modal -->
+<div class="modal-overlay" id="review-modal">
+    <div class="modal">
+        <div class="modal-title">⭐ Write a Review</div>
+        <div class="modal-sub" id="review-modal-sub">Share your experience with the doctor</div>
+
+        <div class="stars" id="star-row">
+            <span class="star" data-val="1" onclick="setRating(1)">⭐</span>
+            <span class="star" data-val="2" onclick="setRating(2)">⭐</span>
+            <span class="star" data-val="3" onclick="setRating(3)">⭐</span>
+            <span class="star" data-val="4" onclick="setRating(4)">⭐</span>
+            <span class="star" data-val="5" onclick="setRating(5)">⭐</span>
+        </div>
+
+        <textarea id="review-text" class="review-textarea"
+            placeholder="Describe your experience — was the doctor thorough? Did they explain clearly?"></textarea>
+
+        <div class="modal-actions">
+            <button class="btn-modal-cancel" onclick="closeReviewModal()">Cancel</button>
+            <button class="btn-modal-submit" id="submit-review-btn" onclick="submitReview()" disabled>
+                Submit Review
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Cancel Confirm Modal -->
+<div class="modal-overlay" id="cancel-modal">
+    <div class="cancel-modal">
+        <div class="cancel-modal-icon">⚠️</div>
+        <div class="cancel-modal-title">Cancel Appointment?</div>
+        <div class="cancel-modal-sub" id="cancel-modal-sub">
+            Are you sure you want to cancel this appointment?
+            A refund will be processed as per our cancellation policy.
+        </div>
+        <input type="text" id="cancel-reason" class="cancel-reason"
+            placeholder="Reason for cancellation (optional)">
+        <div class="modal-actions">
+            <button class="btn-modal-cancel" onclick="closeCancelModal()">Keep Appointment</button>
+            <button class="btn-confirm-cancel" onclick="confirmCancel()">Yes, Cancel</button>
+        </div>
+    </div>
+</div>
+
+<!-- Navbar -->
+<nav class="navbar">
+    <a href="../index.html" class="nav-brand">
+        <div class="nav-brand-icon">🏥</div>
+        <span class="nav-brand-name">BookMyDoctor</span>
+    </a>
+    <div class="nav-right">
+        <div class="user-badge" id="user-badge">
+            <span class="user-badge-role" id="badge-role">PATIENT</span>
+            <span class="user-badge-name" id="badge-name">—</span>
+        </div>
+        <button class="btn-nav btn-logout" onclick="handleLogout()">Logout</button>
+    </div>
+</nav>
+
+<!-- Hero -->
+<div class="page-hero">
+    <div class="page-hero-inner">
+        <h1>📋 My Appointments</h1>
+        <p>Track your bookings, queue position and payment status</p>
+    </div>
+</div>
+
+<!-- Summary -->
+<div class="summary-bar">
+    <div class="summary-card">
+        <div class="summary-card-num" id="sum-upcoming">—</div>
+        <div class="summary-card-label">Upcoming</div>
+    </div>
+    <div class="summary-card">
+        <div class="summary-card-num" id="sum-completed">—</div>
+        <div class="summary-card-label">Completed</div>
+    </div>
+    <div class="summary-card">
+        <div class="summary-card-num" id="sum-cancelled">—</div>
+        <div class="summary-card-label">Cancelled</div>
+    </div>
+</div>
+
+<!-- Tabs -->
+<div class="tabs-wrap">
+    <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('upcoming', this)">🗓️ Upcoming</button>
+        <button class="tab-btn"        onclick="switchTab('completed', this)">✅ Completed</button>
+        <button class="tab-btn"        onclick="switchTab('cancelled', this)">❌ Cancelled</button>
+    </div>
+</div>
+
+<!-- Appointments -->
+<div class="appts-wrap" id="appts-wrap">
+    <!-- Skeleton loader -->
+    <div id="skeleton-cards">
+        <div class="appt-card" style="margin-bottom:16px;">
+            <div class="appt-card-bar upcoming"></div>
+            <div class="appt-card-body">
+                <div class="skeleton" style="height:14px;width:40%;margin-bottom:12px;"></div>
+                <div class="skeleton" style="height:20px;width:60%;margin-bottom:8px;"></div>
+                <div class="skeleton" style="height:12px;width:80%;margin-bottom:12px;"></div>
+                <div class="skeleton" style="height:36px;width:100%;border-radius:8px;"></div>
+            </div>
+        </div>
+        <div class="appt-card">
+            <div class="appt-card-bar upcoming"></div>
+            <div class="appt-card-body">
+                <div class="skeleton" style="height:14px;width:40%;margin-bottom:12px;"></div>
+                <div class="skeleton" style="height:20px;width:60%;margin-bottom:8px;"></div>
+                <div class="skeleton" style="height:12px;width:80%;margin-bottom:12px;"></div>
+                <div class="skeleton" style="height:36px;width:100%;border-radius:8px;"></div>
+            </div>
+        </div>
+    </div>
+    <div id="appts-list"></div>
+</div>
+
+<script>
+// ─────────────────────────────────────────────────────
+//  Config
+// ─────────────────────────────────────────────────────
+const BASE_URL = 'https://bookmydoctor-proxy.pulipraveenkumar08.workers.dev/';
+
+let allAppointments = [];
+let currentTab      = 'upcoming';
+let selectedRating  = 0;
+let reviewApptId    = null;
+let reviewDoctorId  = null;
+let cancelApptId    = null;
+
+// ─────────────────────────────────────────────────────
+//  Helpers
+// ─────────────────────────────────────────────────────
+function showLoader(msg) {
+    document.getElementById('loader-text').textContent = msg || 'Loading...';
+    document.getElementById('bmd-loader').style.display = 'flex';
+}
+
+function hideLoader() { document.getElementById('bmd-loader').style.display = 'none'; }
+
+function showToast(msg, color) {
+    const t = document.getElementById('bmd-toast');
+    t.innerHTML        = msg;
+    t.style.background = color || '#2d9e5f';
+    t.style.display    = 'block';
+    setTimeout(() => t.style.display = 'none', 4000);
+}
+
+function getSession() {
+    return {
+        token    : localStorage.getItem('bmd_token'),
+        userType : localStorage.getItem('bmd_user_type'),
+        userId   : localStorage.getItem('bmd_user_id'),
+        name     : localStorage.getItem('bmd_name')
+    };
+}
+
+async function callBMD(endpoint, payload) {
+    try {
+        const res  = await fetch(BASE_URL + endpoint, {
+            method  : 'POST',
+            headers : { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+            body    : JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (data.p_message) return JSON.parse(data.p_message);
+        if (data.p_result)  return JSON.parse(data.p_result);
+        return data;
+    } catch (err) {
+        return { status: 'ERROR', message: err.message };
+    }
+}
+
+function formatTime(t) {
+    if (!t) return '';
+    const [h, m] = t.split(':');
+    const hr = parseInt(h);
+    return `${hr % 12 || 12}:${m} ${hr >= 12 ? 'PM' : 'AM'}`;
+}
+
+// ─────────────────────────────────────────────────────
+//  Navbar — who is logged in
+// ─────────────────────────────────────────────────────
+function renderNav() {
+    const s = getSession();
+    document.getElementById('badge-role').textContent = s.userType || 'PATIENT';
+    document.getElementById('badge-name').textContent = s.name     || '—';
+}
+
+async function handleLogout() {
+    const s = getSession();
+    if (s.token) await callBMD('logout', { session_token: s.token });
+    localStorage.clear();
+    window.location.href = '../patient/login.html';
+}
+
+// ─────────────────────────────────────────────────────
+//  Load appointments
+// ─────────────────────────────────────────────────────
+async function loadAppointments() {
+    const s = getSession();
+
+    const [apptRes, summaryRes] = await Promise.all([
+        callBMD('get-patient-appointments', {
+            session_token : s.token,
+            patient_id    : parseInt(s.userId)
+        }),
+        callBMD('get-records-summary', {
+            session_token : s.token,
+            patient_id    : parseInt(s.userId)
+        })
+    ]);
+
+    // Summary counts
+    if (summaryRes.status === 'SUCCESS') {
+        document.getElementById('sum-upcoming').textContent  = summaryRes.upcoming   || 0;
+        document.getElementById('sum-completed').textContent = summaryRes.completed  || 0;
+        document.getElementById('sum-cancelled').textContent = summaryRes.cancelled  || 0;
+    }
+
+    document.getElementById('skeleton-cards').style.display = 'none';
+
+    if (apptRes.status === 'SUCCESS') {
+        allAppointments = apptRes.appointments || [];
+        renderAppointments();
+    } else {
+        document.getElementById('appts-list').innerHTML = `
+            <div class="empty-state">
+                <div class="empty-icon">⚠️</div>
+                <div class="empty-title">Could not load appointments</div>
+                <div class="empty-sub">${apptRes.message}</div>
+            </div>`;
+    }
+}
+
+// ─────────────────────────────────────────────────────
+//  Render appointments by tab
+// ─────────────────────────────────────────────────────
+function renderAppointments() {
+    const list = document.getElementById('appts-list');
+
+    const tabMap = {
+        upcoming  : ['BOOKED', 'CONFIRMED', 'IN_CONSULTATION'],
+        completed : ['COMPLETED', 'DONE'],
+        cancelled : ['CANCELLED']
+    };
+
+    const statuses = tabMap[currentTab];
+    const filtered = allAppointments.filter(a =>
+        statuses.some(s => (a.appointment_status || '').toUpperCase().includes(s))
+    );
+
+    if (filtered.length === 0) {
+        const msgs = {
+            upcoming  : { icon: '📅', title: 'No upcoming appointments', sub: 'Book a doctor to get started!' },
+            completed : { icon: '✅', title: 'No completed appointments', sub: 'Your completed appointments will appear here.' },
+            cancelled : { icon: '❌', title: 'No cancelled appointments', sub: 'Good news — nothing cancelled!' }
+        };
+        const m = msgs[currentTab];
+        list.innerHTML = `
+            <div class="empty-state">
+                <div class="empty-icon">${m.icon}</div>
+                <div class="empty-title">${m.title}</div>
+                <div class="empty-sub">${m.sub}</div>
+                ${currentTab === 'upcoming'
+                    ? `<a href="../index.html" class="btn-primary" style="margin-top:16px;">Find a Doctor</a>`
+                    : ''}
+            </div>`;
+        return;
+    }
+
+    list.innerHTML = filtered.map(a => buildCard(a)).join('');
+}
+
+// ─────────────────────────────────────────────────────
+//  Build appointment card
+// ─────────────────────────────────────────────────────
+function buildCard(a) {
+    const status    = (a.appointment_status || 'BOOKED').toUpperCase();
+    const isUpcoming  = ['BOOKED','CONFIRMED','IN_CONSULTATION'].includes(status);
+    const isCompleted = ['COMPLETED','DONE'].includes(status);
+    const isCancelled = status === 'CANCELLED';
+
+    const barClass = isUpcoming ? 'upcoming' : isCompleted ? 'completed' : 'cancelled';
+
+    const statusChip = isUpcoming
+        ? `<span class="status-chip upcoming">🟢 ${status === 'IN_CONSULTATION' ? 'In Consultation' : 'Confirmed'}</span>`
+        : isCompleted
+        ? `<span class="status-chip completed">✅ Completed</span>`
+        : `<span class="status-chip cancelled">❌ Cancelled</span>`;
+
+    // Queue bar — only for today's upcoming appointments
+    const isToday   = a.appointment_date && a.appointment_date.includes(new Date().getDate());
+    const tokenNum  = parseInt(a.token_number || 1);
+
+    const queueBar = isUpcoming ? `
+        <div class="queue-bar">
+            <div class="queue-bar-top">
+                <span class="queue-label">Queue Position</span>
+                <span class="queue-live">● Live</span>
+            </div>
+            <div class="queue-dots">
+                ${[1,2,3,4].map(n => {
+                    let cls = 'waiting';
+                    if (n < tokenNum)  cls = 'done';
+                    if (n === tokenNum) cls = 'mine';
+                    return `<div class="queue-dot ${cls}">#${n}</div>`;
+                }).join('')}
+                ${tokenNum > 4 ? `<div style="font-size:12px;color:var(--gray-600);display:flex;align-items:center;padding-left:4px;">+${tokenNum-4} more</div>` : ''}
+            </div>
+            <div class="queue-est">🕐 Your token: <strong>${a.token_display || 'T' + String(tokenNum).padStart(3,'0')}</strong> · Est. call based on queue</div>
+        </div>` : '';
+
+    // Payment row
+    const paymentRow = a.payment_status ? `
+        <div class="payment-row">
+            💳 ₹${a.consultation_fee || '—'} &nbsp;•&nbsp; ${a.payment_mode || 'Online'}
+            <span class="payment-status ${(a.payment_status||'').toLowerCase()}">
+                ${a.payment_status || 'PENDING'}
+            </span>
+        </div>` : '';
+
+    // Action buttons
+    let actions = '';
+    if (isUpcoming) {
+        actions = `
+            <button class="btn-action btn-cancel"
+                onclick="openCancelModal(${a.appointment_id}, '${(a.doctor_name||'').replace(/'/g,'\\\'')}'  )">
+                ✕ Cancel
+            </button>`;
+    }
+    if (isCompleted && !a.has_review) {
+        actions += `
+            <button class="btn-action btn-review"
+                onclick="openReviewModal(${a.appointment_id}, ${a.doctor_id}, '${(a.doctor_name||'').replace(/'/g,'\\\'')}'  )">
+                ⭐ Write Review
+            </button>`;
+    }
+    if (isCompleted || isCancelled) {
+        actions += `
+            <button class="btn-action btn-rebook"
+                onclick="window.location.href='../patient/booking.html?doctor_id=${a.doctor_id}'">
+                🔄 Book Again
+            </button>`;
+    }
+
+    return `
+    <div class="appt-card" id="card-${a.appointment_id}">
+        <div class="appt-card-bar ${barClass}"></div>
+        <div class="appt-card-body">
+
+            <div class="appt-row1">
+                <div>
+                    <div class="appt-hospital">🏥 ${a.hospital_name || '—'}</div>
+                </div>
+                <div class="token-badge">
+                    <div class="token-badge-label">TOKEN</div>
+                    <div class="token-badge-num">${a.token_display || '#—'}</div>
+                </div>
+            </div>
+
+            <div class="appt-doctor">${a.doctor_name || '—'}</div>
+            <div class="appt-spec">${a.specialization || a.dept_name || ''}</div>
+
+            <div class="appt-meta">
+                <div class="appt-meta-item">📅 ${a.appointment_date || '—'}</div>
+                <div class="appt-meta-item">⏰ ${formatTime(a.start_time)} ${a.end_time ? '– ' + formatTime(a.end_time) : ''}</div>
+                <div class="appt-meta-item">🏬 ${a.dept_name || '—'}</div>
+                ${statusChip}
+            </div>
+
+            ${queueBar}
+            ${paymentRow}
+
+            <div class="appt-ref">Ref: ${a.booking_reference || '—'}</div>
+
+            ${actions ? `<div class="appt-actions">${actions}</div>` : ''}
+        </div>
+    </div>`;
+}
+
+// ─────────────────────────────────────────────────────
+//  Tab switch
+// ─────────────────────────────────────────────────────
+function switchTab(tab, el) {
+    currentTab = tab;
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    el.classList.add('active');
+    renderAppointments();
+}
+
+// ─────────────────────────────────────────────────────
+//  Cancel Modal
+// ─────────────────────────────────────────────────────
+function openCancelModal(apptId, doctorName) {
+    cancelApptId = apptId;
+    document.getElementById('cancel-modal-sub').innerHTML =
+        `Are you sure you want to cancel your appointment with <strong>${doctorName}</strong>?
+        <br><br>A refund will be processed within 5-7 business days as per our cancellation policy.`;
+    document.getElementById('cancel-reason').value = '';
+    document.getElementById('cancel-modal').classList.add('show');
+}
+
+function closeCancelModal() {
+    document.getElementById('cancel-modal').classList.remove('show');
+    cancelApptId = null;
+}
+
+async function confirmCancel() {
+    if (!cancelApptId) return;
+
+    const s      = getSession();
+    const reason = document.getElementById('cancel-reason').value.trim() || 'Cancelled by patient';
+
+    showLoader('Cancelling appointment...');
+    closeCancelModal();
+
+    const data = await callBMD('cancel-appointment', {
+        session_token       : s.token,
+        appointment_id      : cancelApptId,
+        cancellation_reason : reason,
+        cancelled_by        : 'PATIENT'
+    });
+
+    hideLoader();
+
+    if (data.status === 'SUCCESS') {
+        showToast('✅ Appointment cancelled successfully.<br>💰 Refund will be processed in 5-7 business days.', '#2d9e5f');
+        // Update locally
+        const appt = allAppointments.find(a => a.appointment_id === cancelApptId);
+        if (appt) appt.appointment_status = 'CANCELLED';
+        renderAppointments();
+    } else {
+        showToast('❌ ' + (data.message || 'Cancellation failed'), '#dc3545');
+    }
+
+    cancelApptId = null;
+}
+
+// ─────────────────────────────────────────────────────
+//  Review Modal
+// ─────────────────────────────────────────────────────
+function openReviewModal(apptId, doctorId, doctorName) {
+    reviewApptId    = apptId;
+    reviewDoctorId  = doctorId;
+    selectedRating  = 0;
+    document.getElementById('review-modal-sub').textContent = `Share your experience with ${doctorName}`;
+    document.getElementById('review-text').value = '';
+    document.querySelectorAll('.star').forEach(s => s.classList.remove('active'));
+    document.getElementById('submit-review-btn').disabled = true;
+    document.getElementById('review-modal').classList.add('show');
+}
+
+function closeReviewModal() {
+    document.getElementById('review-modal').classList.remove('show');
+    reviewApptId   = null;
+    reviewDoctorId = null;
+    selectedRating = 0;
+}
+
+function setRating(val) {
+    selectedRating = val;
+    document.querySelectorAll('.star').forEach((s, i) => {
+        s.classList.toggle('active', i < val);
+    });
+    document.getElementById('submit-review-btn').disabled = false;
+}
+
+async function submitReview() {
+    if (!selectedRating || !reviewApptId) return;
+
+    const s    = getSession();
+    const text = document.getElementById('review-text').value.trim();
+
+    const btn = document.getElementById('submit-review-btn');
+    btn.disabled    = true;
+    btn.textContent = 'Submitting...';
+
+    const data = await callBMD('submit-review', {
+        session_token  : s.token,
+        appointment_id : reviewApptId,
+        doctor_id      : reviewDoctorId,
+        patient_id     : parseInt(s.userId),
+        star_rating    : selectedRating,
+        review_text    : text || null
+    });
+
+    if (data.status === 'SUCCESS') {
+        closeReviewModal();
+        showToast('⭐ Review submitted! Thank you for your feedback.', '#2d9e5f');
+        // Mark as reviewed
+        const appt = allAppointments.find(a => a.appointment_id === reviewApptId);
+        if (appt) appt.has_review = true;
+        renderAppointments();
+    } else {
+        showToast('❌ ' + (data.message || 'Review submission failed'), '#dc3545');
+        btn.disabled    = false;
+        btn.textContent = 'Submit Review';
+    }
+}
+
+// ─────────────────────────────────────────────────────
+//  Init
+// ─────────────────────────────────────────────────────
+async function init() {
+    const s = getSession();
+
+    if (!s.token || s.userType !== 'PATIENT') {
+        window.location.href = '../patient/login.html';
+        return;
+    }
+
+    renderNav();
+    showLoader('Loading appointments...');
+    await loadAppointments();
+    hideLoader();
+}
+
+init();
+</script>
+
+</body>
+</html>
