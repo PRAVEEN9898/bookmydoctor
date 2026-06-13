@@ -76,19 +76,7 @@
             gap         : 8px;
         }
 
-        .nav-user {
-            display     : flex;
-            align-items : center;
-            gap         : 6px;
-            padding     : 6px 14px;
-            background  : var(--green-light);
-            border-radius: 20px;
-            font-size   : 13px;
-            color       : var(--green-dark);
-            font-weight : 600;
-            cursor      : pointer;
-            text-decoration: none;
-        }
+
 
         .btn-nav {
             padding       : 7px 16px;
@@ -102,20 +90,7 @@
             transition    : all 0.2s;
         }
 
-        .btn-nav-outline {
-            background : var(--white);
-            color      : var(--green-dark);
-            border     : 1.5px solid var(--green-mid) !important;
-        }
-
-        .btn-nav-outline:hover { background: var(--green-light); }
-
-        .btn-nav-solid {
-            background : var(--green-mid);
-            color      : var(--white);
-        }
-
-        .btn-nav-solid:hover { background: var(--green-dark); }
+       
 
         .hero {
             background  : linear-gradient(135deg, var(--green-dark) 0%, var(--green-mid) 60%, #4db87a 100%);
@@ -513,13 +488,8 @@
 
 <div id="bmd-toast"></div>
 
-<nav class="navbar">
-    <a href="index.html" class="nav-brand">
-        <div class="nav-brand-icon">🏥</div>
-        <span class="nav-brand-name">BookMyDoctor</span>
-    </a>
-    <div class="nav-links" id="nav-links"></div>
-</nav>
+<div id="bmd-navbar"></div>
+<script src="js/bmd-nav.js"></script>
 
 <section class="hero">
     <div class="hero-content">
@@ -689,38 +659,7 @@ function getSession() {
     };
 }
 
-// ─────────────────────────────────────────────────────
-//  Render Navbar
-// ─────────────────────────────────────────────────────
-function renderNav() {
-    const s   = getSession();
-    const nav = document.getElementById('nav-links');
 
-    if (s.token && s.user_type === 'PATIENT') {
-        nav.innerHTML = `
-            <a href="patient/appointments.html" class="btn-nav btn-nav-outline">My Appointments</a>
-            <a href="#" class="nav-user" onclick="handleLogout()">
-                👤 ${s.name ? s.name.split(' ')[0] : 'Account'} ▾
-            </a>`;
-    } else if (s.token && s.user_type === 'DOCTOR') {
-        nav.innerHTML = `
-            <a href="doctor/dashboard.html" class="btn-nav btn-nav-solid">Doctor Dashboard</a>`;
-    } else {
-        nav.innerHTML = `
-            <a href="patient/login.html"    class="btn-nav btn-nav-outline">Sign In</a>
-            <a href="patient/register.html" class="btn-nav btn-nav-solid">Get Started</a>`;
-    }
-}
-
-async function handleLogout() {
-    const s = getSession();
-    if (s.token) {
-        await callBMD('logout', { session_token: s.token });
-    }
-    localStorage.clear();
-    renderNav();
-    showToast('Logged out successfully');
-}
 
 // ─────────────────────────────────────────────────────
 //  Load Analytics
@@ -906,7 +845,6 @@ function bookDoctor(doctor_id, name) {
 // ─────────────────────────────────────────────────────
 async function init() {
     showLoader();
-    renderNav();
     await Promise.all([
         loadAnalytics(),
         loadSpecializations(),
