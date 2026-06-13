@@ -128,14 +128,16 @@
                     font-size   : 18px;
                     font-weight : 700;
                     color       : #1a6b3c;
+                    white-space : nowrap;
                 }
 
                 .bmd-nav-links {
                     display     : flex;
                     align-items : center;
                     gap         : 4px;
-                    flex        : 1;
                     justify-content: center;
+                    flex        : 1;
+                    overflow    : hidden;
                 }
 
                 .bmd-nav-link {
