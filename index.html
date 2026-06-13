@@ -632,7 +632,7 @@
 // ─────────────────────────────────────────────────────
 //  Config — NEW OCI URL
 // ─────────────────────────────────────────────────────
-const BASE_URL = 'https://bookmydoctor-proxy.pulipraveenkumar08.workers.dev/';
+const BASE_URL = 'https://bookmydoctor-proxy.pulipraveenkumar08.workers.dev/'; 
 let allDoctors   = [];
 let selectedSpec = '';
 
@@ -663,8 +663,14 @@ async function callBMD(endpoint, payload) {
             },
             body : JSON.stringify(payload)
         });
-        const raw = await res.json();
-        return JSON.parse(raw.p_message || raw.p_result || '{}');
+
+        const data = await res.json();
+
+        // Worker now unwraps p_message — but handle both cases
+        if (data.p_message) return JSON.parse(data.p_message);
+        if (data.p_result)  return JSON.parse(data.p_result);
+        return data;
+
     } catch (err) {
         console.error('API Error:', err);
         return { status: 'ERROR', message: err.message };
@@ -746,20 +752,15 @@ async function loadSpecializations() {
         const select = document.getElementById('spec-filter');
 
         data.lookups.forEach(l => {
-            // Handle both lowercase and uppercase field names from API
-            const code    = l.code    || l.CODE    || l.lookup_code || l.LOOKUP_CODE || '';
-            const meaning = l.meaning || l.MEANING || code;
-
             const pill       = document.createElement('div');
             pill.className   = 'spec-pill';
-            pill.textContent = meaning;
-            pill.dataset.code = code;
-            pill.onclick     = () => selectSpec(code, pill);
+            pill.textContent = l.meaning;
+            pill.onclick     = () => selectSpec(l.code, pill);
             pills.appendChild(pill);
 
             const opt        = document.createElement('option');
-            opt.value        = code;
-            opt.textContent  = meaning;
+            opt.value        = l.code;
+            opt.textContent  = l.meaning;
             select.appendChild(opt);
         });
     }
@@ -861,9 +862,7 @@ function filterDoctors() {
             d.full_name.toLowerCase().includes(search) ||
             (d.specialization || '').toLowerCase().includes(search) ||
             (d.hospital_name  || '').toLowerCase().includes(search);
-        const matchSpec = !spec || 
-            d.specialization === spec ||
-            (d.specialization || '').toUpperCase() === (spec || '').toUpperCase();
+        const matchSpec = !spec || d.specialization === spec;
         return matchSearch && matchSpec;
     });
 
