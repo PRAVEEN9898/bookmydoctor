@@ -298,7 +298,7 @@
             </div>
             <div class="card-body">
                 <div class="dept-pills" id="dept-pills">
-                    <div class="dept-pill active" onclick="filterByDept('', this)">All Departments</div>
+                    <div class="dept-pill active" onclick="filterByDept('', '', this)">All Departments</div>
                 </div>
             </div>
         </div>
@@ -579,16 +579,15 @@ async function loadDepartments() {
         hospital_id   : hospitalId
     });
 
-    if (data.status === 'SUCCESS' && data.departments.length > 0) {
-        const pills = document.getElementById('dept-pills');
-        data.departments.forEach(d => {
-            const pill = document.createElement('div');
-            pill.className   = 'dept-pill';
-            pill.dataset.deptId = d.dept_id;
-            pill.innerHTML   = `${d.dept_name} <span class="dept-count">${d.doctor_count}</span>`;
-            pill.onclick     = () => filterByDept(d.dept_id, pill);
-            pills.appendChild(pill);
-        });
+    data.departments.forEach(d => {
+    const pill = document.createElement('div');
+    pill.className       = 'dept-pill';
+    pill.dataset.deptId  = d.dept_id;
+    pill.dataset.deptName= d.dept_name;
+    pill.innerHTML       = `${d.dept_name} <span class="dept-count">${d.doctor_count}</span>`;
+    pill.onclick         = () => filterByDept(d.dept_id, d.dept_name, pill);
+    pills.appendChild(pill);
+});
     }
 }
 
@@ -666,13 +665,15 @@ function renderDoctors(doctors) {
 // ─────────────────────────────────────────────────────
 //  Filter by Department
 // ─────────────────────────────────────────────────────
-function filterByDept(deptId, pillEl) {
+function filterByDept(deptId, deptName, pillEl) {
     selectedDept = deptId;
     document.querySelectorAll('.dept-pill').forEach(p => p.classList.remove('active'));
     if (pillEl) pillEl.classList.add('active');
 
     const filtered = deptId
-        ? allDoctors.filter(d => d.dept_id == deptId)
+        ? allDoctors.filter(d =>
+            (d.dept_name || '').toLowerCase() === (deptName || '').toLowerCase()
+          )
         : allDoctors;
 
     renderDoctors(filtered);
