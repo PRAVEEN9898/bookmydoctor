@@ -565,12 +565,13 @@ function renderSummary(slots, dateStr) {
 
 // ── Toggle Slot (block/unblock) ──
 async function toggleSlot(slotId, currentStatus) {
-    const s       = getSession();
-    const block   = currentStatus === 'available';
-    const data    = await callBMD('block-slot', {
+    const s        = getSession();
+    const block    = currentStatus === 'available';
+    const endpoint = block ? 'block-slot' : 'unblock-slot';
+
+    const data = await callBMD(endpoint, {
         session_token : s.token,
-        slot_id       : slotId,
-        is_blocked    : block ? 'Y' : 'N'
+        slot_id       : slotId
     });
 
     if (data.status === 'SUCCESS') {
