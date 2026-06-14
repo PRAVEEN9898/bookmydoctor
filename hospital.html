@@ -600,9 +600,13 @@ async function loadDoctors() {
     const data = await callBMD('get-doctors', { session_token: s.token || '' });
 
     if (data.status === 'SUCCESS') {
-        // Filter to only this hospital's doctors
-        allDoctors = (data.doctors || []).filter(d => d.hospital_id == hospitalId);
-        renderDoctors(allDoctors);
+    // Filter by hospital_name since hospital_id not in response
+    allDoctors = (data.doctors || []).filter(d =>
+        hospitalData &&
+        (d.hospital_name || '').toLowerCase() ===
+        (hospitalData.hospital_name || '').toLowerCase()
+    );
+    renderDoctors(allDoctors);
     } else {
         document.getElementById('doctors-grid').innerHTML = `
             <div class="empty-state">
@@ -702,8 +706,8 @@ async function init() {
     renderNav();
     showLoader('Loading hospital...');
 
+    await loadHospital();
     await Promise.all([
-        loadHospital(),
         loadDepartments(),
         loadDoctors()
     ]);
