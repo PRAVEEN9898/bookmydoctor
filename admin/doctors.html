@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Doctors — BookMyDoctor Admin</title>
+    <style>
+        :root {
+            --green-dark  : #1a6b3c;
+            --green-mid   : #2d9e5f;
+            --green-light : #e8f5ee;
+            --purple-dark : #3c3489;
+            --purple-mid  : #534ab7;
+            --purple-light: #eeedfe;
+            --white       : #ffffff;
+            --gray-100    : #f8f9fa;
+            --gray-200    : #e9ecef;
+            --gray-600    : #6c757d;
+            --gray-800    : #343a40;
+            --red         : #dc3545;
+            --orange      : #fd7e14;
+            --shadow-sm   : 0 2px 8px rgba(0,0,0,0.08);
+            --shadow-md   : 0 4px 20px rgba(0,0,0,0.12);
+            --radius      : 12px;
+            --radius-sm   : 8px;
+            --font        : 'Segoe UI', Arial, sans-serif;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: var(--font); background: var(--gray-100); color: var(--gray-800); }
+
+        /* ── Navbar ── */
+        .navbar {
+            background: var(--white); padding: 0 24px; height: 60px;
+            display: flex; align-items: center; justify-content: space-between;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.08); position: sticky; top: 0; z-index: 100;
+        }
+        .nav-brand { display: flex; align-items: center; gap: 9px; text-decoration: none; }
+        .nav-brand-icon { width: 34px; height: 34px; background: var(--purple-mid); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+        .nav-brand-name { font-size: 18px; font-weight: 700; color: var(--purple-dark); }
+        .nav-right { display: flex; align-items: center; gap: 10px; }
+        .nav-links { display: flex; align-items: center; gap: 6px; }
+        .btn-nav { padding: 7px 14px; border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: var(--font); text-decoration: none; border: none; transition: all 0.2s; white-space: nowrap; }
+        .btn-nav-outline { background: var(--white); color: var(--purple-dark); border: 1.5px solid var(--purple-mid) !important; }
+        .btn-nav-outline:hover { background: var(--purple-light); }
+        .btn-nav-solid { background: var(--purple-mid); color: var(--white); }
+        .btn-nav-solid:hover { background: var(--purple-dark); }
+        .role-badge { display: flex; align-items: center; gap: 8px; background: var(--purple-light); border-radius: 20px; padding: 5px 14px 5px 5px; }
+        .role-pill { font-size: 10px; font-weight: 700; color: var(--white); background: var(--purple-mid); padding: 3px 9px; border-radius: 12px; text-transform: uppercase; }
+        .role-name { font-size: 13px; font-weight: 600; color: var(--purple-dark); }
+
+        /* ── Hero ── */
+        .page-hero { background: linear-gradient(135deg, var(--purple-dark), var(--purple-mid)); padding: 28px 24px 48px; }
+        .page-hero-inner { max-width: 1100px; margin: 0 auto; }
+        .hero-title { font-size: 24px; font-weight: 800; color: var(--white); margin-bottom: 4px; }
+        .hero-sub   { font-size: 13px; color: rgba(255,255,255,0.75); }
+
+        /* ── Page ── */
+        .page-wrap { max-width: 1100px; margin: -24px auto 48px; padding: 0 24px; }
+
+        /* ── Tabs ── */
+        .tabs-row {
+            display: flex; background: var(--white); border-radius: var(--radius);
+            padding: 4px; gap: 4px; box-shadow: var(--shadow-sm);
+            margin-bottom: 20px;
+        }
+        .tab-btn {
+            flex: 1; padding: 10px; border: none; background: transparent;
+            border-radius: var(--radius-sm); font-size: 13px; font-weight: 500;
+            color: var(--gray-600); cursor: pointer; transition: all 0.2s; font-family: var(--font);
+        }
+        .tab-btn.active { background: var(--purple-mid); color: var(--white); font-weight: 600; }
+
+        /* ── Filter Row ── */
+        .filter-row {
+            display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; align-items: center;
+        }
+        .search-wrap { flex: 1; position: relative; min-width: 200px; }
+        .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 15px; pointer-events: none; }
+        .search-input {
+            width: 100%; padding: 10px 12px 10px 36px;
+            border: 1.5px solid var(--gray-200); border-radius: var(--radius-sm);
+            font-size: 14px; font-family: var(--font); outline: none; background: var(--white);
+            transition: border-color 0.2s;
+        }
+        .search-input:focus { border-color: var(--purple-mid); }
+        .results-count { font-size: 13px; color: var(--gray-600); white-space: nowrap; }
+        .results-count strong { color: var(--gray-800); }
+
+        /* ── Doctor Card ── */
+        .doctor-card {
+            background: var(--white); border-radius: var(--radius);
+            box-shadow: var(--shadow-sm); padding: 18px 20px;
+            margin-bottom: 14px; display: flex; gap: 14px;
+            align-items: flex-start; border: 1.5px solid transparent;
+            transition: border-color 0.2s;
+        }
+        .doctor-card:hover { border-color: var(--purple-light); }
+
+        .doctor-avatar {
+            width: 52px; height: 52px; border-radius: 12px;
+            background: var(--purple-light); display: flex;
+            align-items: center; justify-content: center;
+            font-size: 24px; flex-shrink: 0;
+        }
+
+        .doctor-info { flex: 1; min-width: 0; }
+        .doctor-name { font-size: 15px; font-weight: 700; color: var(--gray-800); margin-bottom: 3px; }
+        .doctor-spec { font-size: 12px; color: var(--purple-mid); font-weight: 600; margin-bottom: 4px; }
+        .doctor-qual { font-size: 11px; color: var(--gray-600); margin-bottom: 8px; }
+
+        .doctor-meta { display: flex; gap: 8px; flex-wrap: wrap; }
+        .meta-tag {
+            font-size: 11px; color: var(--gray-600);
+            background: var(--gray-100); padding: 3px 8px; border-radius: 6px;
+        }
+
+        .status-badge {
+            font-size: 11px; font-weight: 700; padding: 3px 9px;
+            border-radius: 20px; white-space: nowrap;
+        }
+        .status-badge.pending  { background: #fff3e0; color: #e65100; }
+        .status-badge.approved { background: var(--green-light); color: var(--green-dark); }
+        .status-badge.disabled { background: #fdecea; color: var(--red); }
+
+        .doctor-actions { display: flex; flex-direction: column; gap: 6px; flex-shrink: 0; align-items: flex-end; }
+
+        .doctor-fee { font-size: 16px; font-weight: 700; color: var(--green-dark); margin-bottom: 4px; text-align: right; }
+
+        .btn-approve {
+            padding: 7px 16px; background: var(--green-mid); color: var(--white);
+            border: none; border-radius: var(--radius-sm); font-size: 12px;
+            font-weight: 600; cursor: pointer; font-family: var(--font);
+            transition: all 0.2s; white-space: nowrap; min-width: 90px;
+        }
+        .btn-approve:hover { background: var(--green-dark); }
+
+        .btn-disable {
+            padding: 7px 16px; background: #fdecea; color: var(--red);
+            border: none; border-radius: var(--radius-sm); font-size: 12px;
+            font-weight: 600; cursor: pointer; font-family: var(--font);
+            transition: all 0.2s; white-space: nowrap; min-width: 90px;
+        }
+        .btn-disable:hover { background: #f5c6cb; }
+
+        .btn-enable {
+            padding: 7px 16px; background: var(--purple-light); color: var(--purple-dark);
+            border: none; border-radius: var(--radius-sm); font-size: 12px;
+            font-weight: 600; cursor: pointer; font-family: var(--font);
+            transition: all 0.2s; white-space: nowrap; min-width: 90px;
+        }
+        .btn-enable:hover { background: #d8d6fc; }
+
+        /* ── Empty ── */
+        .empty-state { text-align: center; padding: 48px 20px; color: var(--gray-600); }
+        .empty-icon  { font-size: 44px; margin-bottom: 14px; }
+        .empty-title { font-size: 16px; font-weight: 600; color: var(--gray-800); margin-bottom: 6px; }
+        .empty-sub   { font-size: 13px; }
+
+        /* ── Skeleton ── */
+        .skeleton { background: linear-gradient(90deg, var(--gray-200) 25%, var(--gray-100) 50%, var(--gray-200) 75%); background-size: 200% 100%; animation: shimmer 1.2s infinite; border-radius: 6px; }
+        @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+
+        /* ── Loader ── */
+        #bmd-loader { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.75); z-index: 9999; align-items: center; justify-content: center; flex-direction: column; gap: 12px; }
+        .spinner { width: 40px; height: 40px; border: 4px solid var(--gray-200); border-top: 4px solid var(--purple-mid); border-radius: 50%; animation: spin 0.8s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        #bmd-toast { position: fixed; bottom: 24px; right: 24px; padding: 12px 20px; border-radius: 8px; font-size: 14px; font-family: var(--font); color: var(--white); box-shadow: var(--shadow-md); z-index: 99999; display: none; max-width: 320px; }
+
+        @media (max-width: 600px) {
+            .doctor-card { flex-wrap: wrap; }
+            .doctor-actions { flex-direction: row; width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="bmd-loader">
+    <div class="spinner"></div>
+    <span style="color:var(--purple-mid);font-size:14px;" id="loader-text">Loading...</span>
+</div>
+<div id="bmd-toast"></div>
+
+<!-- Navbar -->
+<nav class="navbar">
+    <a href="../index.html" class="nav-brand">
+        <div class="nav-brand-icon">🏥</div>
+        <span class="nav-brand-name">BookMyDoctor</span>
+    </a>
+    <div class="nav-right">
+        <div class="nav-links">
+            <a href="dashboard.html"  class="btn-nav btn-nav-outline">🏠 Dashboard</a>
+            <a href="doctors.html"    class="btn-nav btn-nav-solid">👨‍⚕️ Doctors</a>
+            <a href="hospitals.html"  class="btn-nav btn-nav-outline">🏥 Hospitals</a>
+        </div>
+        <div class="role-badge">
+            <span class="role-pill">ADMIN</span>
+            <span class="role-name" id="admin-name">—</span>
+        </div>
+        <button class="btn-nav btn-nav-outline" onclick="handleLogout()"
+            style="color:var(--red);border-color:var(--red) !important;">Logout</button>
+    </div>
+</nav>
+
+<!-- Hero -->
+<div class="page-hero">
+    <div class="page-hero-inner">
+        <div class="hero-title">👨‍⚕️ Manage Doctors</div>
+        <div class="hero-sub">Approve, disable or review all registered doctors</div>
+    </div>
+</div>
+
+<!-- Page -->
+<div class="page-wrap">
+
+    <!-- Tabs -->
+    <div class="tabs-row">
+        <button class="tab-btn active" onclick="switchTab('pending', this)">
+            ⏳ Pending <span id="count-pending" style="font-size:11px;"></span>
+        </button>
+        <button class="tab-btn" onclick="switchTab('approved', this)">
+            ✅ Approved <span id="count-approved" style="font-size:11px;"></span>
+        </button>
+        <button class="tab-btn" onclick="switchTab('disabled', this)">
+            ❌ Disabled <span id="count-disabled" style="font-size:11px;"></span>
+        </button>
+        <button class="tab-btn" onclick="switchTab('all', this)">
+            📋 All Doctors
+        </button>
+    </div>
+
+    <!-- Filter -->
+    <div class="filter-row">
+        <div class="search-wrap">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="search-input" class="search-input"
+                placeholder="Search doctor name or hospital..."
+                oninput="filterDoctors()">
+        </div>
+        <div class="results-count" id="results-count"></div>
+    </div>
+
+    <!-- List -->
+    <div id="doctors-list">
+        <div class="doctor-card">
+            <div class="skeleton" style="width:52px;height:52px;border-radius:12px;flex-shrink:0;"></div>
+            <div style="flex:1;">
+                <div class="skeleton" style="height:16px;width:50%;margin-bottom:8px;"></div>
+                <div class="skeleton" style="height:12px;width:30%;margin-bottom:8px;"></div>
+                <div class="skeleton" style="height:12px;width:70%;"></div>
+            </div>
+        </div>
+        <div class="doctor-card">
+            <div class="skeleton" style="width:52px;height:52px;border-radius:12px;flex-shrink:0;"></div>
+            <div style="flex:1;">
+                <div class="skeleton" style="height:16px;width:50%;margin-bottom:8px;"></div>
+                <div class="skeleton" style="height:12px;width:30%;margin-bottom:8px;"></div>
+                <div class="skeleton" style="height:12px;width:70%;"></div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+const BASE_URL = 'https://bookmydoctor-proxy.pulipraveenkumar08.workers.dev/';
+let allDoctors   = [];
+let currentTab   = 'pending';
+
+function showLoader(msg) { document.getElementById('loader-text').textContent = msg||'Loading...'; document.getElementById('bmd-loader').style.display = 'flex'; }
+function hideLoader()    { document.getElementById('bmd-loader').style.display = 'none'; }
+
+function showToast(msg, color) {
+    const t = document.getElementById('bmd-toast');
+    t.innerHTML = msg; t.style.background = color || '#534ab7';
+    t.style.display = 'block';
+    setTimeout(() => t.style.display = 'none', 4000);
+}
+
+function getSession() {
+    return {
+        token    : localStorage.getItem('bmd_token'),
+        userType : localStorage.getItem('bmd_user_type'),
+        name     : localStorage.getItem('bmd_name')
+    };
+}
+
+async function callBMD(endpoint, payload) {
+    try {
+        const res  = await fetch(BASE_URL + endpoint, {
+            method  : 'POST',
+            headers : { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+            body    : JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (data.p_message) return JSON.parse(data.p_message);
+        if (data.p_result)  return JSON.parse(data.p_result);
+        return data;
+    } catch (err) { return { status: 'ERROR', message: err.message }; }
+}
+
+async function handleLogout() {
+    const s = getSession();
+    if (s.token) await callBMD('logout', { session_token: s.token });
+    localStorage.clear();
+    window.location.href = '../patient/login.html';
+}
+
+// ── Load all data ──
+async function loadAllDoctors() {
+    const s = getSession();
+
+    // Load pending + approved doctors in parallel
+    const [pendingRes, approvedRes] = await Promise.all([
+        callBMD('get-pending-doctors', { session_token: s.token }),
+        callBMD('get-doctors',         { session_token: s.token })
+    ]);
+
+    allDoctors = [];
+
+    // Add pending doctors
+    if (pendingRes.status === 'SUCCESS') {
+        (pendingRes.pending_doctors || []).forEach(d => {
+            allDoctors.push({ ...d, status: 'PENDING' });
+        });
+    }
+
+    // Add approved and disabled from get-doctors
+    // get-doctors only returns IS_ACTIVE='Y' doctors
+    // We need to also check disabled — for now use get-doctors for approved
+    if (approvedRes.status === 'SUCCESS') {
+        (approvedRes.doctors || []).forEach(d => {
+            // Only add if not already in pending list
+            if (!allDoctors.find(x => x.doctor_id === d.doctor_id)) {
+                allDoctors.push({
+                    doctor_id       : d.doctor_id,
+                    full_name       : d.full_name,
+                    email           : d.email || '',
+                    mobile          : d.mobile || '',
+                    specialization  : d.specialization,
+                    qualification   : d.qualification,
+                    experience_years: d.experience_years,
+                    consultation_fee: d.consultation_fee,
+                    hospital_name   : d.hospital_name,
+                    dept_name       : d.dept_name,
+                    gender          : d.gender || 'M',
+                    status          : 'APPROVED'
+                });
+            }
+        });
+    }
+
+    // Update tab counts
+    const pending  = allDoctors.filter(d => d.status === 'PENDING').length;
+    const approved = allDoctors.filter(d => d.status === 'APPROVED').length;
+
+    document.getElementById('count-pending').textContent  = pending  ? `(${pending})`  : '';
+    document.getElementById('count-approved').textContent = approved ? `(${approved})` : '';
+
+    renderDoctors();
+}
+
+// ── Render ──
+function renderDoctors() {
+    const search = document.getElementById('search-input').value.trim().toLowerCase();
+    const list   = document.getElementById('doctors-list');
+
+    let filtered = allDoctors.filter(d => {
+        const matchTab =
+            currentTab === 'all'      ? true :
+            currentTab === 'pending'  ? d.status === 'PENDING' :
+            currentTab === 'approved' ? d.status === 'APPROVED' :
+            currentTab === 'disabled' ? d.status === 'DISABLED' : true;
+
+        const matchSearch = !search ||
+            (d.full_name      || '').toLowerCase().includes(search) ||
+            (d.hospital_name  || '').toLowerCase().includes(search) ||
+            (d.specialization || '').toLowerCase().includes(search);
+
+        return matchTab && matchSearch;
+    });
+
+    document.getElementById('results-count').innerHTML =
+        `Showing <strong>${filtered.length}</strong> doctor${filtered.length !== 1 ? 's' : ''}`;
+
+    if (filtered.length === 0) {
+        list.innerHTML = `
+            <div class="empty-state">
+                <div class="empty-icon">${currentTab === 'pending' ? '⏳' : '👨‍⚕️'}</div>
+                <div class="empty-title">${currentTab === 'pending' ? 'No pending approvals' : 'No doctors found'}</div>
+                <div class="empty-sub">${currentTab === 'pending' ? 'All doctors are approved ✅' : 'Try a different search or tab'}</div>
+            </div>`;
+        return;
+    }
+
+    list.innerHTML = filtered.map(d => {
+        const icon = d.gender === 'F' ? '👩‍⚕️' : '👨‍⚕️';
+
+        const statusBadge =
+            d.status === 'PENDING'  ? `<span class="status-badge pending">⏳ Pending</span>` :
+            d.status === 'APPROVED' ? `<span class="status-badge approved">✅ Approved</span>` :
+            `<span class="status-badge disabled">❌ Disabled</span>`;
+
+        const actions =
+            d.status === 'PENDING' ? `
+                <button class="btn-approve" onclick="approveDoctor(${d.doctor_id},'${(d.full_name||'').replace(/'/g,"\\'")}')">✓ Approve</button>
+                <button class="btn-disable" onclick="disableDoctor(${d.doctor_id},'${(d.full_name||'').replace(/'/g,"\\'")}')">✕ Reject</button>
+            ` :
+            d.status === 'APPROVED' ? `
+                <button class="btn-disable" onclick="disableDoctor(${d.doctor_id},'${(d.full_name||'').replace(/'/g,"\\'")}')">✕ Disable</button>
+            ` : `
+                <button class="btn-enable" onclick="approveDoctor(${d.doctor_id},'${(d.full_name||'').replace(/'/g,"\\'")}')">↩ Re-enable</button>
+            `;
+
+        return `
+        <div class="doctor-card" id="doc-card-${d.doctor_id}">
+            <div class="doctor-avatar">${icon}</div>
+            <div class="doctor-info">
+                <div class="doctor-name">${d.full_name}</div>
+                <div class="doctor-spec">${d.specialization}</div>
+                <div class="doctor-qual">${d.qualification || ''}</div>
+                <div class="doctor-meta">
+                    <span class="meta-tag">🏥 ${d.hospital_name || '—'}</span>
+                    <span class="meta-tag">🏬 ${d.dept_name || '—'}</span>
+                    ${d.experience_years ? `<span class="meta-tag">📅 ${d.experience_years} yrs</span>` : ''}
+                    ${d.mobile ? `<span class="meta-tag">📱 ${d.mobile}</span>` : ''}
+                    ${statusBadge}
+                </div>
+            </div>
+            <div class="doctor-actions">
+                <div class="doctor-fee">₹${d.consultation_fee || 0}<small style="font-size:10px;font-weight:400;color:var(--gray-600);">/visit</small></div>
+                ${actions}
+            </div>
+        </div>`;
+    }).join('');
+}
+
+// ── Tab switch ──
+function switchTab(tab, el) {
+    currentTab = tab;
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    el.classList.add('active');
+    document.getElementById('search-input').value = '';
+    renderDoctors();
+}
+
+// ── Filter ──
+function filterDoctors() { renderDoctors(); }
+
+// ── Approve ──
+async function approveDoctor(doctorId, name) {
+    const s    = getSession();
+    showLoader('Approving...');
+    const data = await callBMD('approve-doctor', { session_token: s.token, doctor_id: doctorId });
+    hideLoader();
+
+    if (data.status === 'SUCCESS') {
+        showToast(`✅ ${name} approved! Doctor can now login.`, '#2d9e5f');
+        // Update locally
+        const doc = allDoctors.find(d => d.doctor_id === doctorId);
+        if (doc) doc.status = 'APPROVED';
+        updateCounts();
+        renderDoctors();
+    } else {
+        showToast('❌ ' + (data.message || 'Failed'), '#dc3545');
+    }
+}
+
+// ── Disable ──
+async function disableDoctor(doctorId, name) {
+    const s    = getSession();
+    showLoader('Disabling...');
+    const data = await callBMD('disable-doctor', {
+        session_token : s.token,
+        doctor_id     : doctorId,
+        reason        : 'Disabled by admin'
+    });
+    hideLoader();
+
+    if (data.status === 'SUCCESS') {
+        showToast(`❌ ${name} disabled.`, '#fd7e14');
+        const doc = allDoctors.find(d => d.doctor_id === doctorId);
+        if (doc) doc.status = 'DISABLED';
+        updateCounts();
+        renderDoctors();
+    } else {
+        showToast('❌ ' + (data.message || 'Failed'), '#dc3545');
+    }
+}
+
+// ── Update counts ──
+function updateCounts() {
+    const pending  = allDoctors.filter(d => d.status === 'PENDING').length;
+    const approved = allDoctors.filter(d => d.status === 'APPROVED').length;
+    const disabled = allDoctors.filter(d => d.status === 'DISABLED').length;
+    document.getElementById('count-pending').textContent  = pending  ? `(${pending})`  : '';
+    document.getElementById('count-approved').textContent = approved ? `(${approved})` : '';
+    document.getElementById('count-disabled').textContent = disabled ? `(${disabled})` : '';
+}
+
+// ── Init ──
+async function init() {
+    const s = getSession();
+    if (!s.token || s.userType !== 'ADMIN') {
+        window.location.href = '../patient/login.html';
+        return;
+    }
+    document.getElementById('admin-name').textContent = s.name ? s.name.split(' ')[0] : 'Admin';
+    showLoader('Loading doctors...');
+    await loadAllDoctors();
+    hideLoader();
+}
+
+init();
+</script>
+</body>
+</html>
