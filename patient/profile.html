@@ -256,6 +256,106 @@
             .avatar-badges { justify-content: center; }
             .danger-zone { flex-direction: column; }
         }
+
+        /* ── Navbar ── */
+        .navbar {
+            background     : var(--white);
+            padding        : 0 24px;
+            height         : 60px;
+            display        : flex;
+            align-items    : center;
+            justify-content: space-between;
+            box-shadow     : 0 1px 4px rgba(0,0,0,0.08);
+            position       : sticky;
+            top            : 0;
+            z-index        : 100;
+        }
+
+        .nav-brand {
+            display        : flex;
+            align-items    : center;
+            gap            : 9px;
+            text-decoration: none;
+        }
+
+        .nav-brand-icon {
+            width          : 34px;
+            height         : 34px;
+            background     : var(--green-mid);
+            border-radius  : 8px;
+            display        : flex;
+            align-items    : center;
+            justify-content: center;
+            font-size      : 18px;
+        }
+
+        .nav-brand-name {
+            font-size  : 18px;
+            font-weight: 700;
+            color      : var(--green-dark);
+            white-space: nowrap;
+        }
+
+        .nav-links {
+            display    : flex;
+            align-items: center;
+            gap        : 8px;
+        }
+
+        .btn-nav {
+            padding        : 7px 16px;
+            border-radius  : 20px;
+            font-size      : 13px;
+            font-weight    : 600;
+            cursor         : pointer;
+            font-family    : var(--font);
+            text-decoration: none;
+            border         : none;
+            transition     : all 0.2s;
+            white-space    : nowrap;
+        }
+
+        .btn-nav-outline {
+            background: var(--white);
+            color     : var(--green-dark);
+            border    : 1.5px solid var(--green-mid) !important;
+        }
+
+        .btn-nav-outline:hover { background: var(--green-light); }
+
+        .btn-nav-solid {
+            background: var(--green-mid);
+            color     : var(--white);
+        }
+
+        .btn-nav-solid:hover { background: var(--green-dark); }
+
+        .nav-user-badge {
+            display       : flex;
+            align-items   : center;
+            gap           : 8px;
+            background    : var(--green-light);
+            border-radius : 20px;
+            padding       : 5px 14px 5px 5px;
+        }
+
+        .role-pill {
+            font-size     : 10px;
+            font-weight   : 700;
+            color         : var(--white);
+            padding       : 3px 9px;
+            border-radius : 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            white-space   : nowrap;
+        }
+
+        .nav-user-name {
+            font-size  : 13px;
+            font-weight: 600;
+            color      : var(--green-dark);
+            white-space: nowrap;
+        }
     </style>
 </head>
 <body>
@@ -268,8 +368,13 @@
 <div id="bmd-toast"></div>
 
 <!-- Shared Navbar -->
-<div id="bmd-navbar"></div>
-<script src="../js/bmd-nav.js"></script>
+<nav class="navbar">
+    <a href="../index.html" class="nav-brand">
+        <div class="nav-brand-icon">🏥</div>
+        <span class="nav-brand-name">BookMyDoctor</span>
+    </a>
+    <div class="nav-links" id="nav-links"></div>
+</nav>
 
 <!-- Hero -->
 <div class="page-hero">
@@ -577,9 +682,9 @@ async function loadProfile() {
     }
 
     if (summaryRes.status === 'SUCCESS') {
-        document.getElementById('stat-total').textContent     = summaryRes.total_visits || 0;
-        document.getElementById('stat-completed').textContent = summaryRes.completed    || 0;
-        document.getElementById('stat-upcoming').textContent  = summaryRes.upcoming     || 0;
+        document.getElementById('stat-total').textContent     = summaryRes.total_visits  || summaryRes.visit_count   || summaryRes.total_appointments || 0;
+        document.getElementById('stat-completed').textContent = summaryRes.completed     || summaryRes.completed_appts || 0;
+        document.getElementById('stat-upcoming').textContent  = summaryRes.upcoming      || summaryRes.upcoming_appts  || 0;
     }
 }
 
@@ -603,7 +708,18 @@ function renderProfile(p) {
     // View fields
     document.getElementById('view-name').textContent      = name;
     document.getElementById('view-gender').textContent    = genderMap[p.gender] || (p.gender ? p.gender : '—');
-    document.getElementById('view-dob').textContent       = p.date_of_birth || '—';
+    // Format date nicely
+    if (p.date_of_birth) {
+        try {
+            const d = new Date(p.date_of_birth);
+            const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+            document.getElementById('view-dob').textContent = d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear();
+        } catch(e) {
+            document.getElementById('view-dob').textContent = p.date_of_birth;
+        }
+    } else {
+        document.getElementById('view-dob').textContent = '—';
+    }
     document.getElementById('view-blood').textContent     = p.blood_group || '—';
     document.getElementById('view-address').textContent   = p.address || '—';
     document.getElementById('view-emergency').textContent = p.emergency_contact || '—';
@@ -759,6 +875,44 @@ async function changePassword() {
     }
 }
 
+
+// ─────────────────────────────────────────────────────
+//  Navbar
+// ─────────────────────────────────────────────────────
+function renderNav() {
+    const s   = getSession();
+    const nav = document.getElementById('nav-links');
+
+    const roleColors = {
+        'PATIENT'        : '#2d9e5f',
+        'DOCTOR'         : '#1565c0',
+        'ADMIN'          : '#6a1b9a',
+        'HOSPITAL_ADMIN' : '#e65100'
+    };
+
+    const color = roleColors[s.userType] || '#2d9e5f';
+    const name  = s.name ? s.name.split(' ')[0] : 'Account';
+
+    nav.innerHTML = `
+        <a href="../index.html"                class="btn-nav btn-nav-outline">🏥 Find Doctors</a>
+        <a href="../patient/appointments.html" class="btn-nav btn-nav-outline">📋 Appointments</a>
+        <div class="nav-user-badge">
+            <span class="role-pill" style="background:${color};">${s.userType || 'PATIENT'}</span>
+            <span class="nav-user-name">${name}</span>
+        </div>
+        <button class="btn-nav btn-nav-solid" onclick="handleLogout()">Logout</button>
+    `;
+}
+
+async function handleLogout() {
+    const s = getSession();
+    if (s.token) {
+        await callBMD('logout', { session_token: s.token });
+    }
+    localStorage.clear();
+    window.location.href = '../patient/login.html';
+}
+
 // ─────────────────────────────────────────────────────
 //  Init
 // ─────────────────────────────────────────────────────
@@ -770,6 +924,7 @@ async function init() {
         return;
     }
 
+    renderNav();
     showLoader();
     await loadProfile();
     hideLoader();
