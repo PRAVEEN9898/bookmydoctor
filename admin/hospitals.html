@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Hospitals — BookMyDoctor Admin</title>
+    <style>
+        :root {
+            --green-dark  : #1a6b3c;
+            --green-mid   : #2d9e5f;
+            --green-light : #e8f5ee;
+            --purple-dark : #3c3489;
+            --purple-mid  : #534ab7;
+            --purple-light: #eeedfe;
+            --white       : #ffffff;
+            --gray-100    : #f8f9fa;
+            --gray-200    : #e9ecef;
+            --gray-600    : #6c757d;
+            --gray-800    : #343a40;
+            --red         : #dc3545;
+            --orange      : #fd7e14;
+            --shadow-sm   : 0 2px 8px rgba(0,0,0,0.08);
+            --shadow-md   : 0 4px 20px rgba(0,0,0,0.12);
+            --radius      : 12px;
+            --radius-sm   : 8px;
+            --font        : 'Segoe UI', Arial, sans-serif;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: var(--font); background: var(--gray-100); color: var(--gray-800); }
+
+        /* ── Navbar ── */
+        .navbar {
+            background: var(--white); padding: 0 24px; height: 60px;
+            display: flex; align-items: center; justify-content: space-between;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.08); position: sticky; top: 0; z-index: 100;
+        }
+        .nav-brand { display: flex; align-items: center; gap: 9px; text-decoration: none; }
+        .nav-brand-icon { width: 34px; height: 34px; background: var(--purple-mid); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+        .nav-brand-name { font-size: 18px; font-weight: 700; color: var(--purple-dark); }
+        .nav-right { display: flex; align-items: center; gap: 10px; }
+        .nav-links { display: flex; align-items: center; gap: 6px; }
+        .btn-nav { padding: 7px 14px; border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: var(--font); text-decoration: none; border: none; transition: all 0.2s; white-space: nowrap; }
+        .btn-nav-outline { background: var(--white); color: var(--purple-dark); border: 1.5px solid var(--purple-mid) !important; }
+        .btn-nav-outline:hover { background: var(--purple-light); }
+        .btn-nav-solid { background: var(--purple-mid); color: var(--white); }
+        .btn-nav-solid:hover { background: var(--purple-dark); }
+        .role-badge { display: flex; align-items: center; gap: 8px; background: var(--purple-light); border-radius: 20px; padding: 5px 14px 5px 5px; }
+        .role-pill { font-size: 10px; font-weight: 700; color: var(--white); background: var(--purple-mid); padding: 3px 9px; border-radius: 12px; text-transform: uppercase; }
+        .role-name { font-size: 13px; font-weight: 600; color: var(--purple-dark); }
+
+        /* ── Hero ── */
+        .page-hero { background: linear-gradient(135deg, var(--purple-dark), var(--purple-mid)); padding: 28px 24px 48px; }
+        .page-hero-inner { max-width: 1100px; margin: 0 auto; }
+        .hero-title { font-size: 24px; font-weight: 800; color: var(--white); margin-bottom: 4px; }
+        .hero-sub   { font-size: 13px; color: rgba(255,255,255,0.75); }
+
+        /* ── Page ── */
+        .page-wrap { max-width: 1100px; margin: -24px auto 48px; padding: 0 24px; }
+
+        /* ── Stats Row ── */
+        .stats-row {
+            display: grid; grid-template-columns: repeat(4,1fr);
+            gap: 14px; margin-bottom: 24px;
+        }
+        .stat-card {
+            background: var(--white); border-radius: var(--radius);
+            box-shadow: var(--shadow-sm); padding: 16px 20px;
+            display: flex; align-items: center; gap: 12px;
+        }
+        .stat-icon { width: 42px; height: 42px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+        .stat-icon.green  { background: var(--green-light); }
+        .stat-icon.purple { background: var(--purple-light); }
+        .stat-icon.blue   { background: #e6f1fb; }
+        .stat-icon.orange { background: #fff3e0; }
+        .stat-num   { font-size: 24px; font-weight: 800; color: var(--gray-800); line-height: 1; }
+        .stat-label { font-size: 11px; color: var(--gray-600); margin-top: 3px; }
+
+        /* ── Filter Row ── */
+        .filter-row { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; align-items: center; }
+        .search-wrap { flex: 1; position: relative; min-width: 200px; }
+        .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 15px; pointer-events: none; }
+        .search-input { width: 100%; padding: 10px 12px 10px 36px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-sm); font-size: 14px; font-family: var(--font); outline: none; background: var(--white); transition: border-color 0.2s; }
+        .search-input:focus { border-color: var(--purple-mid); }
+        .results-count { font-size: 13px; color: var(--gray-600); white-space: nowrap; }
+        .results-count strong { color: var(--gray-800); }
+
+        /* ── Hospital Cards Grid ── */
+        .hospitals-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(480px, 1fr));
+            gap: 16px;
+        }
+
+        /* ── Hospital Card ── */
+        .hospital-card {
+            background: var(--white); border-radius: var(--radius);
+            box-shadow: var(--shadow-sm); overflow: hidden;
+            border: 1.5px solid transparent; transition: all 0.2s;
+        }
+        .hospital-card:hover { border-color: var(--purple-light); transform: translateY(-1px); }
+
+        .hospital-card-header {
+            background: linear-gradient(135deg, var(--purple-dark), var(--purple-mid));
+            padding: 16px 20px; display: flex; justify-content: space-between; align-items: flex-start;
+        }
+        .h-name { font-size: 16px; font-weight: 700; color: var(--white); margin-bottom: 3px; }
+        .h-type { font-size: 11px; color: rgba(255,255,255,0.8); }
+        .h-badges { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+        .h-badge { font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 10px; white-space: nowrap; }
+        .badge-nabh   { background: rgba(255,255,255,0.2); color: var(--white); }
+        .badge-open   { background: #e8f5e9; color: #2e7d32; }
+        .badge-closed { background: #fdecea; color: var(--red); }
+
+        .hospital-card-body { padding: 16px 20px; }
+
+        .h-stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin-bottom: 14px; }
+        .h-stat { text-align: center; background: var(--gray-100); border-radius: var(--radius-sm); padding: 8px 4px; }
+        .h-stat-num   { font-size: 18px; font-weight: 700; color: var(--purple-dark); }
+        .h-stat-label { font-size: 10px; color: var(--gray-600); margin-top: 1px; }
+
+        .h-meta { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+        .h-tag { font-size: 11px; color: var(--gray-600); background: var(--gray-100); padding: 3px 8px; border-radius: 6px; }
+
+        .h-insurance { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
+        .ins-tag { font-size: 11px; color: var(--green-dark); background: var(--green-light); padding: 3px 8px; border-radius: 10px; }
+
+        .h-footer { display: flex; align-items: center; justify-content: space-between; padding-top: 12px; border-top: 1px solid var(--gray-200); }
+        .h-contact { font-size: 12px; color: var(--gray-600); }
+
+        .btn-view-hosp {
+            padding: 7px 16px; background: var(--purple-mid); color: var(--white);
+            border: none; border-radius: var(--radius-sm); font-size: 12px;
+            font-weight: 600; cursor: pointer; font-family: var(--font);
+            text-decoration: none; transition: background 0.2s; white-space: nowrap;
+        }
+        .btn-view-hosp:hover { background: var(--purple-dark); }
+
+        /* ── Empty ── */
+        .empty-state { text-align: center; padding: 48px 20px; color: var(--gray-600); }
+        .empty-icon  { font-size: 44px; margin-bottom: 14px; }
+        .empty-title { font-size: 16px; font-weight: 600; color: var(--gray-800); margin-bottom: 6px; }
+        .empty-sub   { font-size: 13px; }
+
+        /* ── Skeleton ── */
+        .skeleton { background: linear-gradient(90deg, var(--gray-200) 25%, var(--gray-100) 50%, var(--gray-200) 75%); background-size: 200% 100%; animation: shimmer 1.2s infinite; border-radius: 6px; }
+        @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+
+        /* ── Loader ── */
+        #bmd-loader { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.75); z-index: 9999; align-items: center; justify-content: center; flex-direction: column; gap: 12px; }
+        .spinner { width: 40px; height: 40px; border: 4px solid var(--gray-200); border-top: 4px solid var(--purple-mid); border-radius: 50%; animation: spin 0.8s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        #bmd-toast { position: fixed; bottom: 24px; right: 24px; padding: 12px 20px; border-radius: 8px; font-size: 14px; font-family: var(--font); color: var(--white); box-shadow: var(--shadow-md); z-index: 99999; display: none; max-width: 320px; }
+
+        @media (max-width: 768px) { .hospitals-grid { grid-template-columns: 1fr; } .stats-row { grid-template-columns: repeat(2,1fr); } }
+    </style>
+</head>
+<body>
+
+<div id="bmd-loader">
+    <div class="spinner"></div>
+    <span style="color:var(--purple-mid);font-size:14px;" id="loader-text">Loading...</span>
+</div>
+<div id="bmd-toast"></div>
+
+<!-- Navbar -->
+<nav class="navbar">
+    <a href="../index.html" class="nav-brand">
+        <div class="nav-brand-icon">🏥</div>
+        <span class="nav-brand-name">BookMyDoctor</span>
+    </a>
+    <div class="nav-right">
+        <div class="nav-links">
+            <a href="dashboard.html"  class="btn-nav btn-nav-outline">🏠 Dashboard</a>
+            <a href="doctors.html"    class="btn-nav btn-nav-outline">👨‍⚕️ Doctors</a>
+            <a href="hospitals.html"  class="btn-nav btn-nav-solid">🏥 Hospitals</a>
+        </div>
+        <div class="role-badge">
+            <span class="role-pill">ADMIN</span>
+            <span class="role-name" id="admin-name">—</span>
+        </div>
+        <button class="btn-nav btn-nav-outline" onclick="handleLogout()"
+            style="color:var(--red);border-color:var(--red) !important;">Logout</button>
+    </div>
+</nav>
+
+<!-- Hero -->
+<div class="page-hero">
+    <div class="page-hero-inner">
+        <div class="hero-title">🏥 Manage Hospitals</div>
+        <div class="hero-sub">View and manage all hospitals on the platform</div>
+    </div>
+</div>
+
+<!-- Page -->
+<div class="page-wrap">
+
+    <!-- Stats -->
+    <div class="stats-row">
+        <div class="stat-card">
+            <div class="stat-icon green">🏥</div>
+            <div>
+                <div class="stat-num" id="stat-total">—</div>
+                <div class="stat-label">Total Hospitals</div>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon purple">👨‍⚕️</div>
+            <div>
+                <div class="stat-num" id="stat-doctors">—</div>
+                <div class="stat-label">Total Doctors</div>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon blue">✅</div>
+            <div>
+                <div class="stat-num" id="stat-nabh">—</div>
+                <div class="stat-label">NABH Certified</div>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon orange">🟢</div>
+            <div>
+                <div class="stat-num" id="stat-open">—</div>
+                <div class="stat-label">Open Now</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filter -->
+    <div class="filter-row">
+        <div class="search-wrap">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="search-input" class="search-input"
+                placeholder="Search hospital name or city..."
+                oninput="filterHospitals()">
+        </div>
+        <div class="results-count" id="results-count"></div>
+    </div>
+
+    <!-- Grid -->
+    <div class="hospitals-grid" id="hospitals-grid">
+        <div class="hospital-card">
+            <div style="background:var(--gray-200);height:70px;"></div>
+            <div style="padding:16px 20px;">
+                <div class="skeleton" style="height:14px;width:60%;margin-bottom:10px;"></div>
+                <div class="skeleton" style="height:40px;width:100%;margin-bottom:10px;border-radius:8px;"></div>
+                <div class="skeleton" style="height:32px;width:100%;border-radius:8px;"></div>
+            </div>
+        </div>
+        <div class="hospital-card">
+            <div style="background:var(--gray-200);height:70px;"></div>
+            <div style="padding:16px 20px;">
+                <div class="skeleton" style="height:14px;width:60%;margin-bottom:10px;"></div>
+                <div class="skeleton" style="height:40px;width:100%;margin-bottom:10px;border-radius:8px;"></div>
+                <div class="skeleton" style="height:32px;width:100%;border-radius:8px;"></div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+const BASE_URL   = 'https://bookmydoctor-proxy.pulipraveenkumar08.workers.dev/';
+let allHospitals = [];
+
+function showLoader(msg) { document.getElementById('loader-text').textContent = msg||'Loading...'; document.getElementById('bmd-loader').style.display = 'flex'; }
+function hideLoader()    { document.getElementById('bmd-loader').style.display = 'none'; }
+
+function showToast(msg, color) {
+    const t = document.getElementById('bmd-toast');
+    t.innerHTML = msg; t.style.background = color || '#534ab7';
+    t.style.display = 'block';
+    setTimeout(() => t.style.display = 'none', 3000);
+}
+
+function getSession() {
+    return {
+        token    : localStorage.getItem('bmd_token'),
+        userType : localStorage.getItem('bmd_user_type'),
+        name     : localStorage.getItem('bmd_name')
+    };
+}
+
+async function callBMD(endpoint, payload) {
+    try {
+        const res  = await fetch(BASE_URL + endpoint, {
+            method  : 'POST',
+            headers : { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+            body    : JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (data.p_message) return JSON.parse(data.p_message);
+        if (data.p_result)  return JSON.parse(data.p_result);
+        return data;
+    } catch (err) { return { status: 'ERROR', message: err.message }; }
+}
+
+async function handleLogout() {
+    const s = getSession();
+    if (s.token) await callBMD('logout', { session_token: s.token });
+    localStorage.clear();
+    window.location.href = '../patient/login.html';
+}
+
+function isOpen(openTime, closeTime) {
+    try {
+        const now      = new Date();
+        const [oh, om] = openTime.split(':').map(Number);
+        const [ch, cm] = closeTime.split(':').map(Number);
+        const nowMins  = now.getHours() * 60 + now.getMinutes();
+        return nowMins >= (oh*60+om) && nowMins <= (ch*60+cm);
+    } catch(e) { return true; }
+}
+
+// ── Load Hospitals ──
+async function loadHospitals() {
+    const s    = getSession();
+    const data = await callBMD('get-hospitals', { session_token: s.token });
+
+    if (data.status !== 'SUCCESS') {
+        document.getElementById('hospitals-grid').innerHTML = `
+            <div class="empty-state" style="grid-column:1/-1;">
+                <div class="empty-icon">⚠️</div>
+                <div class="empty-title">Could not load hospitals</div>
+                <div class="empty-sub">${data.message || 'Please try again'}</div>
+            </div>`;
+        return;
+    }
+
+    allHospitals = data.hospitals || [];
+
+    // Stats
+    const totalDoctors = allHospitals.reduce((sum, h) => sum + (h.doctor_count || 0), 0);
+    const nabh         = allHospitals.filter(h => h.nabh_certified === 'Y').length;
+    const openNow      = allHospitals.filter(h => isOpen(h.open_time || '08:00', h.close_time || '20:00')).length;
+
+    document.getElementById('stat-total').textContent   = allHospitals.length;
+    document.getElementById('stat-doctors').textContent = totalDoctors;
+    document.getElementById('stat-nabh').textContent    = nabh;
+    document.getElementById('stat-open').textContent    = openNow;
+
+    renderHospitals(allHospitals);
+}
+
+// ── Render ──
+function renderHospitals(hospitals) {
+    const grid = document.getElementById('hospitals-grid');
+    document.getElementById('results-count').innerHTML =
+        `Showing <strong>${hospitals.length}</strong> hospital${hospitals.length !== 1 ? 's' : ''}`;
+
+    if (hospitals.length === 0) {
+        grid.innerHTML = `
+            <div class="empty-state" style="grid-column:1/-1;">
+                <div class="empty-icon">🔍</div>
+                <div class="empty-title">No hospitals found</div>
+                <div class="empty-sub">Try a different search term</div>
+            </div>`;
+        return;
+    }
+
+    grid.innerHTML = hospitals.map(h => {
+        const open       = isOpen(h.open_time || '08:00', h.close_time || '20:00');
+        const insurance  = (h.insurance || []);
+        const rating     = parseFloat(h.avg_rating || 0);
+
+        return `
+        <div class="hospital-card">
+            <div class="hospital-card-header">
+                <div>
+                    <div class="h-name">🏥 ${h.hospital_name}</div>
+                    <div class="h-type">${h.hospital_type || 'Multi-Specialty'}</div>
+                </div>
+                <div class="h-badges">
+                    ${h.nabh_certified === 'Y' ? `<span class="h-badge badge-nabh">NABH ✓</span>` : ''}
+                    <span class="h-badge ${open ? 'badge-open' : 'badge-closed'}">
+                        ${open ? '● Open' : '● Closed'}
+                    </span>
+                </div>
+            </div>
+
+            <div class="hospital-card-body">
+
+                <div class="h-stats">
+                    <div class="h-stat">
+                        <div class="h-stat-num">${h.doctor_count || 0}</div>
+                        <div class="h-stat-label">Doctors</div>
+                    </div>
+                    <div class="h-stat">
+                        <div class="h-stat-num">${h.dept_count || 0}</div>
+                        <div class="h-stat-label">Departments</div>
+                    </div>
+                    <div class="h-stat">
+                        <div class="h-stat-num">${h.total_appts || 0}</div>
+                        <div class="h-stat-label">Appointments</div>
+                    </div>
+                </div>
+
+                <div class="h-meta">
+                    <span class="h-tag">📍 ${h.city || 'Hyderabad'}, ${h.state || 'Telangana'}</span>
+                    <span class="h-tag">🕐 ${h.open_time || '08:00'} – ${h.close_time || '20:00'}</span>
+                    <span class="h-tag">⏱️ ${h.avg_wait_mins || 15} min wait</span>
+                    <span class="h-tag">⭐ ${rating > 0 ? rating.toFixed(1) : 'New'}</span>
+                </div>
+
+                ${insurance.length > 0 ? `
+                <div class="h-insurance">
+                    ${insurance.map(i => `<span class="ins-tag">✓ ${i}</span>`).join('')}
+                </div>` : ''}
+
+                <div class="h-footer">
+                    <div class="h-contact">
+                        📞 ${h.contact_phone || '—'}<br>
+                        <span style="font-size:11px;color:var(--gray-600);">✉️ ${h.email || '—'}</span>
+                    </div>
+                    <div style="display:flex;gap:8px;">
+                        <a href="../hospital.html?hospital_id=${h.hospital_id}"
+                            class="btn-view-hosp" target="_blank">
+                            View Page →
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>`;
+    }).join('');
+}
+
+// ── Filter ──
+function filterHospitals() {
+    const search = document.getElementById('search-input').value.trim().toLowerCase();
+    const filtered = allHospitals.filter(h =>
+        !search ||
+        (h.hospital_name || '').toLowerCase().includes(search) ||
+        (h.city          || '').toLowerCase().includes(search) ||
+        (h.hospital_type || '').toLowerCase().includes(search)
+    );
+    renderHospitals(filtered);
+}
+
+// ── Init ──
+async function init() {
+    const s = getSession();
+    if (!s.token || s.userType !== 'ADMIN') {
+        window.location.href = '../patient/login.html';
+        return;
+    }
+    document.getElementById('admin-name').textContent = s.name ? s.name.split(' ')[0] : 'Admin';
+    showLoader('Loading hospitals...');
+    await loadHospitals();
+    hideLoader();
+}
+
+init();
+</script>
+</body>
+</html>
