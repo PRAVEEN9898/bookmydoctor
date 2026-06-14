@@ -581,12 +581,14 @@ async function toggleSlot(slotId, currentStatus) {
 
 // ── Generate Slots Modal ──
 function openGenModal() {
-    document.getElementById('gen-date').value = formatDate(selectedDate);
+    document.getElementById('gen-date').value    = formatDate(selectedDate);
+    document.getElementById('gen-date-to').value = formatDate(selectedDate);
     document.getElementById('gen-modal').classList.add('show');
 }
 
 function openGenModalForDate(dateStr) {
-    document.getElementById('gen-date').value = dateStr;
+    document.getElementById('gen-date').value    = dateStr;
+    document.getElementById('gen-date-to').value = dateStr;
     document.getElementById('gen-modal').classList.add('show');
 }
 
