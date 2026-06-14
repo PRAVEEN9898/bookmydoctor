@@ -104,6 +104,7 @@
                     top           : 0;
                     z-index       : 1000;
                     font-family   : 'Segoe UI', Arial, sans-serif;
+                    min-width     : 0;
                 }
 
                 .bmd-nav-brand {
@@ -131,14 +132,15 @@
                     white-space : nowrap;
                 }
 
-                .bmd-nav-links {
-                    display     : flex;
-                    align-items : center;
-                    gap         : 4px;
-                    justify-content: center;
-                    flex        : 1;
-                    overflow    : hidden;
-                }
+.bmd-nav-links {
+    display     : flex;
+    align-items : center;
+    gap         : 4px;
+    justify-content: center;
+    flex        : 1;
+    min-width   : 0;
+    overflow    : hidden;
+}
 
                 .bmd-nav-link {
                     padding         : 6px 12px;
@@ -156,11 +158,13 @@
                     color      : #1a6b3c;
                 }
 
-                .bmd-nav-right {
-                    display     : flex;
-                    align-items : center;
-                    gap         : 10px;
-                }
+.bmd-nav-right {
+    display     : flex;
+    align-items : center;
+    gap         : 10px;
+    flex-shrink : 0;
+    margin-left : 12px;
+}
 
                 .bmd-user-badge {
                     display       : flex;
