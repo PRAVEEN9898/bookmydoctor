@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Dashboard — BookMyDoctor</title>
+    <style>
+        :root {
+            --blue-dark   : #0c447c;
+            --blue-mid    : #1565c0;
+            --blue-light  : #e6f1fb;
+            --blue-pale   : #f0f7ff;
+            --green-dark  : #1a6b3c;
+            --green-mid   : #2d9e5f;
+            --green-light : #e8f5ee;
+            --white       : #ffffff;
+            --gray-100    : #f8f9fa;
+            --gray-200    : #e9ecef;
+            --gray-600    : #6c757d;
+            --gray-800    : #343a40;
+            --red         : #dc3545;
+            --orange      : #fd7e14;
+            --shadow-sm   : 0 2px 8px rgba(0,0,0,0.08);
+            --shadow-md   : 0 4px 20px rgba(0,0,0,0.12);
+            --radius      : 12px;
+            --radius-sm   : 8px;
+            --font        : 'Segoe UI', Arial, sans-serif;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: var(--font); background: var(--gray-100); color: var(--gray-800); }
+
+        /* ── Navbar ── */
+        .navbar {
+            background: var(--white); padding: 0 24px; height: 60px;
+            display: flex; align-items: center; justify-content: space-between;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.08); position: sticky; top: 0; z-index: 100;
+        }
+        .nav-brand { display: flex; align-items: center; gap: 9px; text-decoration: none; }
+        .nav-brand-icon { width: 34px; height: 34px; background: var(--blue-mid); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+        .nav-brand-name { font-size: 18px; font-weight: 700; color: var(--blue-dark); }
+        .nav-right { display: flex; align-items: center; gap: 10px; }
+        .nav-links { display: flex; align-items: center; gap: 6px; }
+        .btn-nav { padding: 7px 14px; border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: var(--font); text-decoration: none; border: none; transition: all 0.2s; white-space: nowrap; }
+        .btn-nav-outline { background: var(--white); color: var(--blue-dark); border: 1.5px solid var(--blue-mid) !important; }
+        .btn-nav-outline:hover { background: var(--blue-light); }
+        .btn-nav-solid { background: var(--blue-mid); color: var(--white); }
+        .btn-nav-solid:hover { background: var(--blue-dark); }
+        .role-badge { display: flex; align-items: center; gap: 8px; background: var(--blue-light); border-radius: 20px; padding: 5px 14px 5px 5px; }
+        .role-pill { font-size: 10px; font-weight: 700; color: var(--white); background: var(--blue-mid); padding: 3px 9px; border-radius: 12px; text-transform: uppercase; }
+        .role-name { font-size: 13px; font-weight: 600; color: var(--blue-dark); }
+
+        /* ── Hero ── */
+        .page-hero {
+            background: linear-gradient(135deg, var(--blue-dark), var(--blue-mid));
+            padding: 28px 24px 52px;
+        }
+        .page-hero-inner { max-width: 1100px; margin: 0 auto; }
+        .hero-top { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+        .hero-left {}
+        .hero-greeting { font-size: 14px; color: rgba(255,255,255,0.75); margin-bottom: 4px; }
+        .hero-title    { font-size: 24px; font-weight: 800; color: var(--white); margin-bottom: 4px; }
+        .hero-sub      { font-size: 13px; color: rgba(255,255,255,0.7); }
+        .hero-date     { font-size: 12px; color: rgba(255,255,255,0.6); margin-top: 4px; }
+
+        .avail-toggle {
+            display: flex; align-items: center; gap: 10px;
+            background: rgba(255,255,255,0.15); border-radius: 20px;
+            padding: 8px 16px; cursor: pointer; border: none; font-family: var(--font);
+            color: var(--white); font-size: 13px; font-weight: 600; transition: all 0.2s;
+        }
+        .avail-toggle:hover { background: rgba(255,255,255,0.25); }
+        .avail-dot { width: 10px; height: 10px; border-radius: 50%; transition: background 0.3s; }
+        .avail-dot.online  { background: #4caf50; }
+        .avail-dot.offline { background: #f44336; }
+
+        /* ── Page ── */
+        .page-wrap { max-width: 1100px; margin: -24px auto 48px; padding: 0 24px; }
+
+        /* ── Stats ── */
+        .stats-grid {
+            display: grid; grid-template-columns: repeat(4,1fr);
+            gap: 14px; margin-bottom: 24px;
+        }
+        .stat-card {
+            background: var(--white); border-radius: var(--radius);
+            box-shadow: var(--shadow-sm); padding: 18px 20px;
+            display: flex; align-items: center; gap: 14px; position: relative; overflow: hidden;
+        }
+        .stat-card::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; border-radius: 4px 0 0 4px; }
+        .stat-card.blue::before   { background: var(--blue-mid); }
+        .stat-card.green::before  { background: var(--green-mid); }
+        .stat-card.orange::before { background: var(--orange); }
+        .stat-card.red::before    { background: var(--red); }
+        .stat-icon { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+        .stat-icon.blue   { background: var(--blue-light); }
+        .stat-icon.green  { background: var(--green-light); }
+        .stat-icon.orange { background: #fff3e0; }
+        .stat-icon.red    { background: #fdecea; }
+        .stat-num   { font-size: 26px; font-weight: 800; color: var(--gray-800); line-height: 1; }
+        .stat-label { font-size: 12px; color: var(--gray-600); margin-top: 4px; }
+
+        /* ── Grid ── */
+        .section-grid { display: grid; grid-template-columns: 1fr 320px; gap: 20px; align-items: start; }
+
+        /* ── Card ── */
+        .card { background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow-sm); overflow: hidden; margin-bottom: 20px; }
+        .card-head { padding: 16px 20px; border-bottom: 1px solid var(--gray-200); display: flex; align-items: center; justify-content: space-between; }
+        .card-head-left { display: flex; align-items: center; gap: 10px; }
+        .card-head-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+        .card-head-icon.blue   { background: var(--blue-light); }
+        .card-head-icon.green  { background: var(--green-light); }
+        .card-head-icon.orange { background: #fff3e0; }
+        .card-head-title { font-size: 15px; font-weight: 700; color: var(--gray-800); }
+        .card-body { padding: 20px; }
+
+        /* ── Patient Queue ── */
+        .queue-row {
+            display: flex; align-items: center; gap: 12px;
+            padding: 12px 0; border-bottom: 1px solid var(--gray-200);
+        }
+        .queue-row:last-child { border-bottom: none; }
+
+        .queue-token {
+            width: 40px; height: 40px; border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 13px; font-weight: 700; flex-shrink: 0;
+        }
+        .queue-token.current  { background: var(--blue-mid); color: var(--white); }
+        .queue-token.waiting  { background: var(--gray-100); color: var(--gray-600); }
+        .queue-token.done     { background: var(--green-light); color: var(--green-dark); }
+
+        .queue-info { flex: 1; min-width: 0; }
+        .queue-name { font-size: 14px; font-weight: 600; color: var(--gray-800); margin-bottom: 2px; }
+        .queue-meta { font-size: 12px; color: var(--gray-600); }
+
+        .queue-status { text-align: right; flex-shrink: 0; }
+        .queue-time   { font-size: 12px; color: var(--gray-600); }
+
+        .status-chip { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+        .status-chip.current   { background: var(--blue-light); color: var(--blue-dark); }
+        .status-chip.waiting   { background: #fff3e0; color: #e65100; }
+        .status-chip.completed { background: var(--green-light); color: var(--green-dark); }
+
+        .btn-call {
+            padding: 5px 12px; background: var(--blue-mid); color: var(--white);
+            border: none; border-radius: var(--radius-sm); font-size: 11px;
+            font-weight: 600; cursor: pointer; font-family: var(--font);
+            transition: all 0.2s; white-space: nowrap;
+        }
+        .btn-call:hover { background: var(--blue-dark); }
+
+        .btn-done {
+            padding: 5px 12px; background: var(--green-light); color: var(--green-dark);
+            border: none; border-radius: var(--radius-sm); font-size: 11px;
+            font-weight: 600; cursor: pointer; font-family: var(--font);
+            transition: all 0.2s; white-space: nowrap;
+        }
+        .btn-done:hover { background: #c8e6c9; }
+
+        /* ── Sidebar ── */
+        .sidebar { position: sticky; top: 80px; }
+
+        /* ── Profile Card ── */
+        .profile-card {
+            background: linear-gradient(135deg, var(--blue-dark), var(--blue-mid));
+            border-radius: var(--radius); padding: 24px 20px;
+            text-align: center; margin-bottom: 20px;
+        }
+        .profile-avatar {
+            width: 72px; height: 72px; border-radius: 50%;
+            background: rgba(255,255,255,0.2); display: flex;
+            align-items: center; justify-content: center;
+            font-size: 32px; margin: 0 auto 14px;
+            border: 3px solid rgba(255,255,255,0.3);
+        }
+        .profile-name { font-size: 16px; font-weight: 700; color: var(--white); margin-bottom: 4px; }
+        .profile-spec { font-size: 12px; color: rgba(255,255,255,0.8); margin-bottom: 12px; }
+        .profile-tags { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; }
+        .profile-tag  { font-size: 11px; color: var(--white); background: rgba(255,255,255,0.15); padding: 3px 10px; border-radius: 10px; }
+
+        /* ── Today's Schedule ── */
+        .schedule-row {
+            display: flex; align-items: center; gap: 10px;
+            padding: 10px 0; border-bottom: 1px solid var(--gray-200); font-size: 13px;
+        }
+        .schedule-row:last-child { border-bottom: none; }
+        .schedule-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+        .schedule-dot.blue   { background: var(--blue-mid); }
+        .schedule-dot.green  { background: var(--green-mid); }
+        .schedule-dot.gray   { background: var(--gray-400); }
+        .schedule-text { flex: 1; color: var(--gray-800); font-weight: 500; }
+        .schedule-time { font-size: 12px; color: var(--gray-600); white-space: nowrap; }
+
+        /* ── Quick Actions ── */
+        .quick-links { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .quick-link {
+            display: flex; align-items: center; gap: 8px;
+            padding: 12px; background: var(--gray-100); border-radius: var(--radius-sm);
+            text-decoration: none; color: var(--gray-800); font-size: 13px; font-weight: 600;
+            transition: all 0.2s; border: 1.5px solid transparent;
+        }
+        .quick-link:hover { background: var(--blue-light); border-color: var(--blue-mid); color: var(--blue-dark); }
+
+        /* ── Empty ── */
+        .empty-state { text-align: center; padding: 32px 20px; color: var(--gray-600); }
+        .empty-icon  { font-size: 36px; margin-bottom: 10px; }
+        .empty-title { font-size: 14px; font-weight: 600; color: var(--gray-800); }
+        .empty-sub   { font-size: 12px; margin-top: 4px; }
+
+        /* ── Skeleton ── */
+        .skeleton { background: linear-gradient(90deg, var(--gray-200) 25%, var(--gray-100) 50%, var(--gray-200) 75%); background-size: 200% 100%; animation: shimmer 1.2s infinite; border-radius: 6px; }
+        @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+
+        /* ── Loader ── */
+        #bmd-loader { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.75); z-index: 9999; align-items: center; justify-content: center; flex-direction: column; gap: 12px; }
+        .spinner { width: 40px; height: 40px; border: 4px solid var(--gray-200); border-top: 4px solid var(--blue-mid); border-radius: 50%; animation: spin 0.8s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        #bmd-toast { position: fixed; bottom: 24px; right: 24px; padding: 12px 20px; border-radius: 8px; font-size: 14px; font-family: var(--font); color: var(--white); box-shadow: var(--shadow-md); z-index: 99999; display: none; max-width: 320px; }
+
+        @media (max-width: 900px) { .stats-grid { grid-template-columns: repeat(2,1fr); } .section-grid { grid-template-columns: 1fr; } .sidebar { position: static; } }
+        @media (max-width: 480px) { .stats-grid { grid-template-columns: 1fr 1fr; } .quick-links { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+<div id="bmd-loader"><div class="spinner"></div><span style="color:var(--blue-mid);font-size:14px;">Loading...</span></div>
+<div id="bmd-toast"></div>
+
+<!-- Navbar -->
+<nav class="navbar">
+    <a href="../index.html" class="nav-brand">
+        <div class="nav-brand-icon">🏥</div>
+        <span class="nav-brand-name">BookMyDoctor</span>
+    </a>
+    <div class="nav-right">
+        <div class="nav-links">
+            <a href="dashboard.html"  class="btn-nav btn-nav-solid">🏠 Dashboard</a>
+            <a href="schedule.html"   class="btn-nav btn-nav-outline">📅 Schedule</a>
+            <a href="queue.html"      class="btn-nav btn-nav-outline">👥 Queue</a>
+        </div>
+        <div class="role-badge">
+            <span class="role-pill">DOCTOR</span>
+            <span class="role-name" id="doctor-name">—</span>
+        </div>
+        <button class="btn-nav btn-nav-outline" onclick="handleLogout()"
+            style="color:var(--red);border-color:var(--red) !important;">Logout</button>
+    </div>
+</nav>
+
+<!-- Hero -->
+<div class="page-hero">
+    <div class="page-hero-inner">
+        <div class="hero-top">
+            <div class="hero-left">
+                <div class="hero-greeting" id="hero-greeting">Good morning 👋</div>
+                <div class="hero-title"    id="hero-title">Dr. —</div>
+                <div class="hero-sub"      id="hero-sub">—</div>
+                <div class="hero-date"     id="hero-date"></div>
+            </div>
+            <button class="avail-toggle" id="avail-toggle" onclick="toggleAvailability()">
+                <div class="avail-dot" id="avail-dot"></div>
+                <span id="avail-label">Available Today</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Page -->
+<div class="page-wrap">
+
+    <!-- Stats -->
+    <div class="stats-grid">
+        <div class="stat-card blue">
+            <div class="stat-icon blue">📋</div>
+            <div><div class="stat-num" id="stat-today">—</div><div class="stat-label">Today's Appointments</div></div>
+        </div>
+        <div class="stat-card green">
+            <div class="stat-icon green">✅</div>
+            <div><div class="stat-num" id="stat-completed">—</div><div class="stat-label">Completed Today</div></div>
+        </div>
+        <div class="stat-card orange">
+            <div class="stat-icon orange">⏳</div>
+            <div><div class="stat-num" id="stat-waiting">—</div><div class="stat-label">Waiting</div></div>
+        </div>
+        <div class="stat-card blue">
+            <div class="stat-icon blue">📊</div>
+            <div><div class="stat-num" id="stat-total">—</div><div class="stat-label">Total Appointments</div></div>
+        </div>
+    </div>
+
+    <!-- Main Grid -->
+    <div class="section-grid">
+
+        <!-- LEFT -->
+        <div>
+            <!-- Today's Queue -->
+            <div class="card">
+                <div class="card-head">
+                    <div class="card-head-left">
+                        <div class="card-head-icon blue">👥</div>
+                        <div class="card-head-title">Today's Patient Queue</div>
+                    </div>
+                    <a href="queue.html" style="font-size:12px;color:var(--blue-mid);font-weight:600;text-decoration:none;">
+                        Full Queue →
+                    </a>
+                </div>
+                <div class="card-body" id="queue-list">
+                    <div class="skeleton" style="height:56px;margin-bottom:10px;border-radius:8px;"></div>
+                    <div class="skeleton" style="height:56px;margin-bottom:10px;border-radius:8px;"></div>
+                    <div class="skeleton" style="height:56px;border-radius:8px;"></div>
+                </div>
+            </div>
+
+            <!-- All Appointments Today -->
+            <div class="card">
+                <div class="card-head">
+                    <div class="card-head-left">
+                        <div class="card-head-icon green">📋</div>
+                        <div class="card-head-title">Today's Appointments</div>
+                    </div>
+                    <span id="appt-count" style="font-size:12px;color:var(--gray-600);"></span>
+                </div>
+                <div class="card-body" id="appt-list">
+                    <div class="skeleton" style="height:56px;margin-bottom:10px;border-radius:8px;"></div>
+                    <div class="skeleton" style="height:56px;border-radius:8px;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT sidebar -->
+        <div class="sidebar">
+
+            <!-- Profile Card -->
+            <div class="profile-card" id="profile-card">
+                <div class="profile-avatar" id="profile-avatar">👨‍⚕️</div>
+                <div class="profile-name" id="profile-name">—</div>
+                <div class="profile-spec" id="profile-spec">—</div>
+                <div class="profile-tags" id="profile-tags"></div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="card">
+                <div class="card-head">
+                    <div class="card-head-left">
+                        <div class="card-head-icon blue">⚡</div>
+                        <div class="card-head-title">Quick Actions</div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="quick-links">
+                        <a href="queue.html"    class="quick-link">👥 Live Queue</a>
+                        <a href="schedule.html" class="quick-link">📅 Schedule</a>
+                        <a href="../index.html" class="quick-link">🏥 View Site</a>
+                        <a href="#"             class="quick-link" onclick="toggleAvailability();return false;">🟢 Availability</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Today's Schedule Summary -->
+            <div class="card">
+                <div class="card-head">
+                    <div class="card-head-left">
+                        <div class="card-head-icon orange">📅</div>
+                        <div class="card-head-title">Schedule Info</div>
+                    </div>
+                </div>
+                <div class="card-body" id="schedule-info">
+                    <div class="skeleton" style="height:14px;width:80%;margin-bottom:10px;"></div>
+                    <div class="skeleton" style="height:14px;width:60%;margin-bottom:10px;"></div>
+                    <div class="skeleton" style="height:14px;width:70%;"></div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+const BASE_URL = 'https://bookmydoctor-proxy.pulipraveenkumar08.workers.dev/';
+let doctorProfile  = null;
+let todayAppts     = [];
+let isAvailable    = true;
+
+function showLoader() { document.getElementById('bmd-loader').style.display = 'flex'; }
+function hideLoader() { document.getElementById('bmd-loader').style.display = 'none'; }
+
+function showToast(msg, color) {
+    const t = document.getElementById('bmd-toast');
+    t.innerHTML = msg; t.style.background = color || '#1565c0';
+    t.style.display = 'block';
+    setTimeout(() => t.style.display = 'none', 3500);
+}
+
+function getSession() {
+    return {
+        token      : localStorage.getItem('bmd_token'),
+        userType   : localStorage.getItem('bmd_user_type'),
+        userId     : localStorage.getItem('bmd_user_id'),
+        name       : localStorage.getItem('bmd_name'),
+        hospitalId : localStorage.getItem('bmd_hospital_id')
+    };
+}
+
+async function callBMD(endpoint, payload) {
+    try {
+        const res  = await fetch(BASE_URL + endpoint, {
+            method  : 'POST',
+            headers : { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+            body    : JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (data.p_message) return JSON.parse(data.p_message);
+        if (data.p_result)  return JSON.parse(data.p_result);
+        return data;
+    } catch (err) { return { status: 'ERROR', message: err.message }; }
+}
+
+async function handleLogout() {
+    const s = getSession();
+    if (s.token) await callBMD('logout', { session_token: s.token });
+    localStorage.clear();
+    window.location.href = '../patient/login.html';
+}
+
+// ── Greeting ──
+function setGreeting() {
+    const h = new Date().getHours();
+    const g = h < 12 ? 'Good morning 🌅' : h < 17 ? 'Good afternoon ☀️' : 'Good evening 🌙';
+    document.getElementById('hero-greeting').textContent = g;
+    document.getElementById('hero-date').textContent =
+        new Date().toLocaleDateString('en-IN', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+}
+
+// ── Load Doctor Profile ──
+async function loadProfile() {
+    const s    = getSession();
+    const data = await callBMD('get-doctor', {
+        session_token : s.token,
+        doctor_id     : parseInt(s.userId)
+    });
+
+    if (data.status === 'SUCCESS') {
+        const d = data.doctor;
+        doctorProfile = d;
+        isAvailable   = d.is_available_today === 'Y';
+
+        const icon = d.gender === 'F' ? '👩‍⚕️' : '👨‍⚕️';
+
+        document.getElementById('doctor-name').textContent  = (d.full_name || '').replace('Dr. ','').split(' ')[0];
+        document.getElementById('hero-title').textContent   = d.full_name || '—';
+        document.getElementById('hero-sub').textContent     = d.specialization + ' · ' + (d.hospital_name || '');
+        document.getElementById('profile-avatar').textContent = icon;
+        document.getElementById('profile-name').textContent = d.full_name || '—';
+        document.getElementById('profile-spec').textContent = d.specialization || '—';
+        document.getElementById('profile-tags').innerHTML   = `
+            <span class="profile-tag">🏥 ${d.hospital_name || '—'}</span>
+            <span class="profile-tag">₹${d.consultation_fee || 0}/visit</span>
+            ${d.experience_years ? `<span class="profile-tag">📅 ${d.experience_years} yrs</span>` : ''}
+        `;
+
+        document.getElementById('schedule-info').innerHTML = `
+            <div class="schedule-row"><div class="schedule-dot blue"></div><div class="schedule-text">Hospital</div><div class="schedule-time">${d.hospital_name || '—'}</div></div>
+            <div class="schedule-row"><div class="schedule-dot green"></div><div class="schedule-text">Department</div><div class="schedule-time">${d.dept_name || '—'}</div></div>
+            <div class="schedule-row"><div class="schedule-dot blue"></div><div class="schedule-text">Consultation Fee</div><div class="schedule-time">₹${d.consultation_fee || 0}</div></div>
+            <div class="schedule-row"><div class="schedule-dot ${isAvailable ? 'green' : 'gray'}"></div><div class="schedule-text">Availability</div><div class="schedule-time" style="color:${isAvailable ? 'var(--green-dark)' : 'var(--gray-600)'};">${isAvailable ? '🟢 Available' : '🔴 Off Today'}</div></div>
+            <div class="schedule-row"><div class="schedule-dot orange"></div><div class="schedule-text">Rating</div><div class="schedule-time">⭐ ${parseFloat(d.avg_rating||0).toFixed(1)} (${d.total_reviews||0} reviews)</div></div>
+        `;
+
+        updateAvailUI();
+    }
+}
+
+// ── Availability Toggle ──
+function updateAvailUI() {
+    const dot   = document.getElementById('avail-dot');
+    const label = document.getElementById('avail-label');
+    if (isAvailable) {
+        dot.className   = 'avail-dot online';
+        label.textContent = 'Available Today';
+    } else {
+        dot.className   = 'avail-dot offline';
+        label.textContent = 'Not Available';
+    }
+}
+
+async function toggleAvailability() {
+    const s       = getSession();
+    const newVal  = isAvailable ? 'N' : 'Y';
+    const data    = await callBMD('update-doctor', {
+        session_token      : s.token,
+        is_available_today : newVal
+    });
+
+    if (data.status === 'SUCCESS') {
+        isAvailable = !isAvailable;
+        updateAvailUI();
+        showToast(isAvailable ? '🟢 You are now available today' : '🔴 You are marked as unavailable', isAvailable ? '#2d9e5f' : '#fd7e14');
+    }
+}
+
+// ── Load Today's Appointments ──
+async function loadTodayAppointments() {
+    const s    = getSession();
+    const data = await callBMD('get-doctor-appointments', {
+        session_token : s.token,
+        doctor_id     : parseInt(s.userId),
+        date_filter   : 'TODAY'
+    });
+
+    if (data.status === 'SUCCESS') {
+        todayAppts = data.appointments || [];
+
+        const total     = todayAppts.length;
+        const completed = todayAppts.filter(a => ['COMPLETED','DONE'].includes((a.appointment_status||'').toUpperCase())).length;
+        const waiting   = todayAppts.filter(a => ['BOOKED','CONFIRMED'].includes((a.appointment_status||'').toUpperCase())).length;
+
+        document.getElementById('stat-today').textContent     = total;
+        document.getElementById('stat-completed').textContent = completed;
+        document.getElementById('stat-waiting').textContent   = waiting;
+        document.getElementById('stat-total').textContent     = total;
+
+        renderQueue(todayAppts);
+        renderAppts(todayAppts);
+    } else {
+        document.getElementById('stat-today').textContent     = 0;
+        document.getElementById('stat-completed').textContent = 0;
+        document.getElementById('stat-waiting').textContent   = 0;
+        document.getElementById('stat-total').textContent     = 0;
+        document.getElementById('queue-list').innerHTML = emptyState('📋', 'No appointments today', 'Your queue is empty');
+        document.getElementById('appt-list').innerHTML  = emptyState('📋', 'No appointments today', 'Patients will appear here once they book');
+    }
+}
+
+function emptyState(icon, title, sub) {
+    return `<div class="empty-state"><div class="empty-icon">${icon}</div><div class="empty-title">${title}</div><div class="empty-sub">${sub}</div></div>`;
+}
+
+function formatTime(t) {
+    if (!t) return '';
+    const [h, m] = t.split(':');
+    const hr = parseInt(h);
+    return `${hr%12||12}:${m} ${hr>=12?'PM':'AM'}`;
+}
+
+// ── Render Queue ──
+function renderQueue(appts) {
+    const list = document.getElementById('queue-list');
+    const upcoming = appts.filter(a => ['BOOKED','CONFIRMED','IN_CONSULTATION'].includes((a.appointment_status||'').toUpperCase())).slice(0,5);
+
+    if (upcoming.length === 0) {
+        list.innerHTML = emptyState('👥', 'Queue is empty', 'No patients waiting right now');
+        return;
+    }
+
+    list.innerHTML = upcoming.map((a, idx) => {
+        const status   = (a.appointment_status || '').toUpperCase();
+        const isCurrent = status === 'IN_CONSULTATION' || idx === 0;
+        const tokenCls = isCurrent ? 'current' : 'waiting';
+        const chipCls  = isCurrent ? 'current' : 'waiting';
+        const chipTxt  = isCurrent ? '🔵 In Queue' : '⏳ Waiting';
+
+        return `
+        <div class="queue-row">
+            <div class="queue-token ${tokenCls}">#${idx+1}</div>
+            <div class="queue-info">
+                <div class="queue-name">${a.patient_name || 'Patient'}</div>
+                <div class="queue-meta">${a.token_display || '—'} · ${formatTime(a.start_time)}</div>
+            </div>
+            <div class="queue-status">
+                <div class="queue-time">${formatTime(a.start_time)}</div>
+                <div style="display:flex;gap:4px;margin-top:4px;">
+                    ${isCurrent ? `<button class="btn-done" onclick="markComplete(${a.appointment_id})">✓ Done</button>` : ''}
+                </div>
+            </div>
+        </div>`;
+    }).join('');
+}
+
+// ── Render Appointments ──
+function renderAppts(appts) {
+    const list = document.getElementById('appt-list');
+    document.getElementById('appt-count').textContent = `${appts.length} total`;
+
+    if (appts.length === 0) {
+        list.innerHTML = emptyState('📋', 'No appointments today', '');
+        return;
+    }
+
+    list.innerHTML = appts.map(a => {
+        const status = (a.appointment_status || '').toUpperCase();
+        const chipCls = ['COMPLETED','DONE'].includes(status) ? 'completed' : ['BOOKED','CONFIRMED'].includes(status) ? 'waiting' : 'current';
+        const chipTxt = ['COMPLETED','DONE'].includes(status) ? '✅ Completed' : ['BOOKED','CONFIRMED'].includes(status) ? '⏳ Upcoming' : '🔵 Active';
+
+        return `
+        <div class="queue-row">
+            <div class="queue-token ${['COMPLETED','DONE'].includes(status) ? 'done' : 'waiting'}">
+                ${a.token_display ? a.token_display.split('-').pop() : '—'}
+            </div>
+            <div class="queue-info">
+                <div class="queue-name">${a.patient_name || 'Patient'}</div>
+                <div class="queue-meta">${formatTime(a.start_time)} · Ref: ${a.booking_reference || '—'}</div>
+            </div>
+            <div class="queue-status">
+                <span class="status-chip ${chipCls}">${chipTxt}</span>
+            </div>
+        </div>`;
+    }).join('');
+}
+
+// ── Mark Complete ──
+async function markComplete(apptId) {
+    const s    = getSession();
+    const data = await callBMD('complete-appointment', {
+        session_token  : s.token,
+        appointment_id : apptId
+    });
+
+    if (data.status === 'SUCCESS') {
+        showToast('✅ Appointment marked as completed!', '#2d9e5f');
+        await loadTodayAppointments();
+    } else {
+        showToast('❌ ' + (data.message || 'Failed'), '#dc3545');
+    }
+}
+
+// ── Init ──
+async function init() {
+    const s = getSession();
+    if (!s.token || s.userType !== 'DOCTOR') {
+        window.location.href = '../patient/login.html';
+        return;
+    }
+
+    setGreeting();
+    showLoader();
+
+    await Promise.all([
+        loadProfile(),
+        loadTodayAppointments()
+    ]);
+
+    hideLoader();
+}
+
+init();
+</script>
+</body>
+</html>
