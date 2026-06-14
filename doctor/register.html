@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Registration — BookMyDoctor</title>
+    <style>
+        :root {
+            --blue-dark   : #0c447c;
+            --blue-mid    : #1565c0;
+            --blue-light  : #e6f1fb;
+            --blue-pale   : #f0f7ff;
+            --green-mid   : #2d9e5f;
+            --green-light : #e8f5ee;
+            --white       : #ffffff;
+            --gray-100    : #f8f9fa;
+            --gray-200    : #e9ecef;
+            --gray-400    : #ced4da;
+            --gray-600    : #6c757d;
+            --gray-800    : #343a40;
+            --red         : #dc3545;
+            --shadow-sm   : 0 2px 8px rgba(0,0,0,0.08);
+            --shadow-md   : 0 4px 20px rgba(0,0,0,0.12);
+            --radius      : 12px;
+            --radius-sm   : 8px;
+            --font        : 'Segoe UI', Arial, sans-serif;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: var(--font); background: var(--gray-100); color: var(--gray-800); }
+
+        /* ── Navbar ── */
+        .navbar {
+            background: var(--white); padding: 0 24px; height: 60px;
+            display: flex; align-items: center; justify-content: space-between;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+        }
+        .nav-brand { display: flex; align-items: center; gap: 9px; text-decoration: none; }
+        .nav-brand-icon { width: 34px; height: 34px; background: var(--blue-mid); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+        .nav-brand-name { font-size: 18px; font-weight: 700; color: var(--blue-dark); }
+        .nav-right { display: flex; align-items: center; gap: 10px; }
+        .btn-link { font-size: 13px; color: var(--gray-600); text-decoration: none; font-weight: 500; }
+        .btn-link:hover { color: var(--blue-mid); }
+        .btn-signin {
+            padding: 7px 16px; background: var(--blue-mid); color: var(--white);
+            border: none; border-radius: 20px; font-size: 13px; font-weight: 600;
+            cursor: pointer; font-family: var(--font); text-decoration: none;
+            transition: background 0.2s;
+        }
+        .btn-signin:hover { background: var(--blue-dark); }
+
+        /* ── Hero ── */
+        .page-hero {
+            background: linear-gradient(135deg, var(--blue-dark), var(--blue-mid));
+            padding: 40px 24px 80px; text-align: center;
+        }
+        .hero-icon { font-size: 48px; margin-bottom: 16px; }
+        .hero-title { font-size: 28px; font-weight: 800; color: var(--white); margin-bottom: 8px; }
+        .hero-sub   { font-size: 15px; color: rgba(255,255,255,0.8); }
+
+        /* ── Steps ── */
+        .steps-bar {
+            display: flex; justify-content: center; gap: 0;
+            margin: 0 auto 28px; max-width: 600px;
+            padding: 0 24px;
+        }
+
+        .step {
+            flex: 1; text-align: center; position: relative;
+        }
+
+        .step::after {
+            content: ''; position: absolute; top: 16px; left: 50%;
+            width: 100%; height: 2px; background: var(--gray-200); z-index: 0;
+        }
+
+        .step:last-child::after { display: none; }
+
+        .step-circle {
+            width: 32px; height: 32px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 13px; font-weight: 700; margin: 0 auto 6px;
+            position: relative; z-index: 1; border: 2px solid var(--gray-200);
+            background: var(--white); color: var(--gray-400); transition: all 0.3s;
+        }
+
+        .step.active .step-circle  { background: var(--blue-mid); color: var(--white); border-color: var(--blue-mid); }
+        .step.done   .step-circle  { background: var(--green-mid); color: var(--white); border-color: var(--green-mid); }
+        .step.active::after        { background: var(--gray-200); }
+        .step.done::after          { background: var(--green-mid); }
+
+        .step-label { font-size: 11px; color: var(--gray-600); font-weight: 500; }
+        .step.active .step-label { color: var(--blue-mid); font-weight: 600; }
+        .step.done   .step-label { color: var(--green-mid); font-weight: 600; }
+
+        /* ── Form Card ── */
+        .form-wrap {
+            max-width: 640px; margin: -48px auto 48px;
+            padding: 0 24px; position: relative; z-index: 2;
+        }
+
+        .form-card {
+            background: var(--white); border-radius: var(--radius);
+            box-shadow: var(--shadow-md); overflow: hidden;
+        }
+
+        .form-card-head {
+            padding: 20px 24px; border-bottom: 1px solid var(--gray-200);
+            background: var(--blue-pale);
+        }
+
+        .form-card-title { font-size: 17px; font-weight: 700; color: var(--blue-dark); margin-bottom: 3px; }
+        .form-card-sub   { font-size: 13px; color: var(--gray-600); }
+
+        .form-card-body { padding: 24px; }
+
+        /* ── Form Fields ── */
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+        .form-row.single { grid-template-columns: 1fr; }
+        .form-row.triple { grid-template-columns: 1fr 1fr 1fr; }
+
+        .form-group { display: flex; flex-direction: column; gap: 6px; }
+        .form-label { font-size: 12px; font-weight: 600; color: var(--gray-800); text-transform: uppercase; letter-spacing: 0.3px; }
+        .form-label .req { color: var(--red); margin-left: 2px; }
+
+        .form-input, .form-select, .form-textarea {
+            padding: 10px 12px; border: 1.5px solid var(--gray-200);
+            border-radius: var(--radius-sm); font-size: 14px;
+            color: var(--gray-800); font-family: var(--font);
+            outline: none; transition: border-color 0.2s; background: var(--white);
+        }
+        .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--blue-mid); }
+        .form-input.error, .form-select.error { border-color: var(--red); }
+        .form-textarea { resize: vertical; min-height: 80px; }
+        .form-hint { font-size: 11px; color: var(--gray-600); }
+        .form-error { font-size: 11px; color: var(--red); display: none; }
+        .form-error.show { display: block; }
+
+        /* Password field */
+        .pwd-wrap { position: relative; }
+        .pwd-toggle { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; font-size: 15px; padding: 0; }
+        .pwd-strength { margin-top: 6px; }
+        .pwd-bar { height: 4px; border-radius: 2px; background: var(--gray-200); overflow: hidden; margin-bottom: 4px; }
+        .pwd-bar-fill { height: 100%; border-radius: 2px; transition: width 0.3s, background 0.3s; width: 0; }
+        .pwd-hint { font-size: 11px; }
+
+        /* ── Step Buttons ── */
+        .form-card-foot {
+            padding: 16px 24px; border-top: 1px solid var(--gray-200);
+            display: flex; justify-content: space-between; align-items: center;
+            background: var(--gray-100);
+        }
+
+        .btn-back {
+            padding: 10px 20px; background: var(--white); color: var(--gray-600);
+            border: 1.5px solid var(--gray-200); border-radius: var(--radius-sm);
+            font-size: 14px; font-weight: 600; cursor: pointer; font-family: var(--font);
+            transition: all 0.2s;
+        }
+        .btn-back:hover { background: var(--gray-100); }
+
+        .btn-next {
+            padding: 10px 28px; background: var(--blue-mid); color: var(--white);
+            border: none; border-radius: var(--radius-sm); font-size: 14px;
+            font-weight: 600; cursor: pointer; font-family: var(--font);
+            transition: background 0.2s;
+        }
+        .btn-next:hover    { background: var(--blue-dark); }
+        .btn-next:disabled { opacity: 0.6; cursor: not-allowed; }
+
+        .btn-submit {
+            padding: 10px 28px; background: var(--green-mid); color: var(--white);
+            border: none; border-radius: var(--radius-sm); font-size: 14px;
+            font-weight: 600; cursor: pointer; font-family: var(--font);
+            transition: background 0.2s;
+        }
+        .btn-submit:hover    { background: #1a6b3c; }
+        .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+
+        /* ── Success Screen ── */
+        .success-card {
+            background: var(--white); border-radius: var(--radius);
+            box-shadow: var(--shadow-md); padding: 48px 32px;
+            text-align: center;
+        }
+        .success-icon  { font-size: 56px; margin-bottom: 20px; }
+        .success-title { font-size: 22px; font-weight: 800; color: var(--gray-800); margin-bottom: 10px; }
+        .success-sub   { font-size: 14px; color: var(--gray-600); line-height: 1.6; margin-bottom: 24px; }
+        .success-info  {
+            background: var(--blue-pale); border-radius: var(--radius-sm);
+            padding: 14px 20px; margin-bottom: 24px; text-align: left;
+        }
+        .success-info-row { display: flex; gap: 8px; font-size: 13px; margin-bottom: 6px; }
+        .success-info-row:last-child { margin-bottom: 0; }
+        .success-info-label { color: var(--gray-600); min-width: 100px; }
+        .success-info-value { font-weight: 600; color: var(--gray-800); }
+
+        /* ── Loader ── */
+        #bmd-loader { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.8); z-index: 9999; align-items: center; justify-content: center; flex-direction: column; gap: 12px; }
+        .spinner { width: 40px; height: 40px; border: 4px solid var(--gray-200); border-top: 4px solid var(--blue-mid); border-radius: 50%; animation: spin 0.8s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        #bmd-toast { position: fixed; bottom: 24px; right: 24px; padding: 12px 20px; border-radius: 8px; font-size: 14px; font-family: var(--font); color: var(--white); box-shadow: var(--shadow-md); z-index: 99999; display: none; max-width: 320px; }
+
+        @media (max-width: 540px) {
+            .form-row        { grid-template-columns: 1fr; }
+            .form-row.triple { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="bmd-loader">
+    <div class="spinner"></div>
+    <span style="color:var(--blue-mid);font-size:14px;" id="loader-text">Submitting...</span>
+</div>
+<div id="bmd-toast"></div>
+
+<!-- Navbar -->
+<nav class="navbar">
+    <a href="../index.html" class="nav-brand">
+        <div class="nav-brand-icon">🏥</div>
+        <span class="nav-brand-name">BookMyDoctor</span>
+    </a>
+    <div class="nav-right">
+        <a href="../index.html" class="btn-link">← Back to Home</a>
+        <a href="login.html" class="btn-signin">Doctor Login</a>
+    </div>
+</nav>
+
+<!-- Hero -->
+<div class="page-hero">
+    <div class="hero-icon">👨‍⚕️</div>
+    <div class="hero-title">Join BookMyDoctor</div>
+    <div class="hero-sub">Register as a doctor and start receiving patients today</div>
+</div>
+
+<!-- Form -->
+<div class="form-wrap">
+
+    <!-- Steps Bar -->
+    <div class="steps-bar" id="steps-bar">
+        <div class="step active" id="step-dot-1">
+            <div class="step-circle">1</div>
+            <div class="step-label">Personal</div>
+        </div>
+        <div class="step" id="step-dot-2">
+            <div class="step-circle">2</div>
+            <div class="step-label">Professional</div>
+        </div>
+        <div class="step" id="step-dot-3">
+            <div class="step-circle">3</div>
+            <div class="step-label">Account</div>
+        </div>
+    </div>
+
+    <!-- Success screen -->
+    <div id="success-screen" style="display:none;">
+        <div class="success-card">
+            <div class="success-icon">🎉</div>
+            <div class="success-title">Application Submitted!</div>
+            <div class="success-sub">
+                Your registration is under review. Our admin team will approve your account within 24 hours.
+                You will receive login credentials once approved.
+            </div>
+            <div class="success-info" id="success-info"></div>
+            <a href="../index.html" style="display:inline-block;padding:12px 28px;background:var(--blue-mid);color:var(--white);border-radius:var(--radius-sm);font-size:14px;font-weight:600;text-decoration:none;">
+                Back to Home
+            </a>
+        </div>
+    </div>
+
+    <!-- Step 1 — Personal Info -->
+    <div class="form-card" id="step-1">
+        <div class="form-card-head">
+            <div class="form-card-title">👤 Personal Information</div>
+            <div class="form-card-sub">Step 1 of 3 — Tell us about yourself</div>
+        </div>
+        <div class="form-card-body">
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Full Name <span class="req">*</span></label>
+                    <input type="text" id="full_name" class="form-input" placeholder="Dr. Full Name">
+                    <span class="form-error" id="err-full_name">Full name is required</span>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Gender <span class="req">*</span></label>
+                    <select id="gender" class="form-select">
+                        <option value="">Select gender</option>
+                        <option value="M">Male</option>
+                        <option value="F">Female</option>
+                        <option value="O">Other</option>
+                    </select>
+                    <span class="form-error" id="err-gender">Gender is required</span>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Email Address <span class="req">*</span></label>
+                    <input type="email" id="email" class="form-input" placeholder="doctor@example.com">
+                    <span class="form-error" id="err-email">Valid email is required</span>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Mobile Number <span class="req">*</span></label>
+                    <input type="tel" id="mobile" class="form-input" placeholder="10-digit number" maxlength="10">
+                    <span class="form-error" id="err-mobile">Valid mobile number required</span>
+                </div>
+            </div>
+            <div class="form-row single">
+                <div class="form-group">
+                    <label class="form-label">Bio / About</label>
+                    <textarea id="bio" class="form-textarea" placeholder="Brief description about your expertise and experience..."></textarea>
+                    <span class="form-hint">Max 500 characters — shown to patients on your profile</span>
+                </div>
+            </div>
+        </div>
+        <div class="form-card-foot">
+            <span style="font-size:13px;color:var(--gray-600);">Step 1 of 3</span>
+            <button class="btn-next" onclick="goToStep(2)">Next →</button>
+        </div>
+    </div>
+
+    <!-- Step 2 — Professional Info -->
+    <div class="form-card" id="step-2" style="display:none;">
+        <div class="form-card-head">
+            <div class="form-card-title">🏥 Professional Details</div>
+            <div class="form-card-sub">Step 2 of 3 — Your qualifications and hospital</div>
+        </div>
+        <div class="form-card-body">
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Specialization <span class="req">*</span></label>
+                    <select id="specialization" class="form-select">
+                        <option value="">Select specialization</option>
+                    </select>
+                    <span class="form-error" id="err-specialization">Specialization is required</span>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Qualification <span class="req">*</span></label>
+                    <input type="text" id="qualification" class="form-input" placeholder="e.g. MBBS, MD (Cardiology)">
+                    <span class="form-error" id="err-qualification">Qualification is required</span>
+                </div>
+            </div>
+            <div class="form-row triple">
+                <div class="form-group">
+                    <label class="form-label">Experience (yrs) <span class="req">*</span></label>
+                    <input type="number" id="experience_years" class="form-input" placeholder="e.g. 10" min="0" max="60">
+                    <span class="form-error" id="err-experience_years">Experience is required</span>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Consultation Fee ₹ <span class="req">*</span></label>
+                    <input type="number" id="consultation_fee" class="form-input" placeholder="e.g. 500" min="0">
+                    <span class="form-error" id="err-consultation_fee">Fee is required</span>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Available Today</label>
+                    <select id="is_available_today" class="form-select">
+                        <option value="Y">Yes</option>
+                        <option value="N">No</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Hospital <span class="req">*</span></label>
+                    <select id="hospital_id" class="form-select" onchange="loadDepts()">
+                        <option value="">Select hospital</option>
+                    </select>
+                    <span class="form-error" id="err-hospital_id">Hospital is required</span>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Department <span class="req">*</span></label>
+                    <select id="dept_id" class="form-select">
+                        <option value="">Select department</option>
+                    </select>
+                    <span class="form-error" id="err-dept_id">Department is required</span>
+                </div>
+            </div>
+        </div>
+        <div class="form-card-foot">
+            <button class="btn-back" onclick="goToStep(1)">← Back</button>
+            <button class="btn-next" onclick="goToStep(3)">Next →</button>
+        </div>
+    </div>
+
+    <!-- Step 3 — Account Setup -->
+    <div class="form-card" id="step-3" style="display:none;">
+        <div class="form-card-head">
+            <div class="form-card-title">🔑 Account Setup</div>
+            <div class="form-card-sub">Step 3 of 3 — Create your login password</div>
+        </div>
+        <div class="form-card-body">
+            <div class="form-row single">
+                <div class="form-group">
+                    <label class="form-label">Password <span class="req">*</span></label>
+                    <div class="pwd-wrap">
+                        <input type="password" id="password" class="form-input"
+                            placeholder="Min 6 characters" oninput="checkStrength(this.value)">
+                        <button class="pwd-toggle" onclick="togglePwd('password',this)">👁️</button>
+                    </div>
+                    <div class="pwd-strength" id="pwd-strength" style="display:none;">
+                        <div class="pwd-bar"><div class="pwd-bar-fill" id="pwd-fill"></div></div>
+                        <span class="pwd-hint" id="pwd-hint"></span>
+                    </div>
+                    <span class="form-error" id="err-password">Password must be at least 6 characters</span>
+                </div>
+            </div>
+            <div class="form-row single">
+                <div class="form-group">
+                    <label class="form-label">Confirm Password <span class="req">*</span></label>
+                    <div class="pwd-wrap">
+                        <input type="password" id="confirm_password" class="form-input" placeholder="Re-enter password">
+                        <button class="pwd-toggle" onclick="togglePwd('confirm_password',this)">👁️</button>
+                    </div>
+                    <span class="form-error" id="err-confirm_password">Passwords do not match</span>
+                </div>
+            </div>
+
+            <!-- Summary box -->
+            <div style="background:var(--blue-pale);border-radius:var(--radius-sm);padding:16px;margin-top:8px;">
+                <div style="font-size:13px;font-weight:700;color:var(--blue-dark);margin-bottom:10px;">📋 Registration Summary</div>
+                <div id="summary" style="font-size:13px;color:var(--gray-800);line-height:1.8;"></div>
+            </div>
+
+            <div style="margin-top:14px;padding:12px 14px;background:#fff3e0;border-radius:var(--radius-sm);font-size:12px;color:#e65100;">
+                ⚠️ After submitting, your application will be reviewed by the BookMyDoctor admin team. You'll be able to login once approved.
+            </div>
+        </div>
+        <div class="form-card-foot">
+            <button class="btn-back" onclick="goToStep(2)">← Back</button>
+            <button class="btn-submit" id="submit-btn" onclick="submitRegistration()">
+                ✓ Submit Application
+            </button>
+        </div>
+    </div>
+
+</div>
+
+<script>
+const BASE_URL   = 'https://bookmydoctor-proxy.pulipraveenkumar08.workers.dev/';
+let currentStep  = 1;
+let hospitals    = [];
+let specializations = [];
+
+// ─────────────────────────────────────────────────────
+//  Helpers
+// ─────────────────────────────────────────────────────
+function showLoader(msg) { document.getElementById('loader-text').textContent = msg||'Loading...'; document.getElementById('bmd-loader').style.display = 'flex'; }
+function hideLoader()    { document.getElementById('bmd-loader').style.display = 'none'; }
+
+function showToast(msg, color) {
+    const t = document.getElementById('bmd-toast');
+    t.innerHTML = msg; t.style.background = color || '#1565c0';
+    t.style.display = 'block';
+    setTimeout(() => t.style.display = 'none', 4000);
+}
+
+async function callBMD(endpoint, payload) {
+    try {
+        const res  = await fetch(BASE_URL + endpoint, {
+            method  : 'POST',
+            headers : { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+            body    : JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (data.p_message) return JSON.parse(data.p_message);
+        if (data.p_result)  return JSON.parse(data.p_result);
+        return data;
+    } catch (err) { return { status: 'ERROR', message: err.message }; }
+}
+
+// ─────────────────────────────────────────────────────
+//  Load dropdowns
+// ─────────────────────────────────────────────────────
+async function loadDropdowns() {
+    // Load hospitals
+    const hData = await callBMD('get-hospitals', { session_token: '' });
+    if (hData.status === 'SUCCESS') {
+        hospitals = hData.hospitals || [];
+        const sel = document.getElementById('hospital_id');
+        hospitals.forEach(h => {
+            const opt = document.createElement('option');
+            opt.value = h.hospital_id;
+            opt.textContent = h.hospital_name;
+            sel.appendChild(opt);
+        });
+    }
+
+    // Load specializations
+    const sData = await callBMD('get-lookups', { lookup_type: 'BMD_SPECIALIZATION' });
+    if (sData.status === 'SUCCESS') {
+        specializations = sData.lookups || [];
+        const sel = document.getElementById('specialization');
+        sData.lookups.forEach(l => {
+            const opt = document.createElement('option');
+            opt.value = l.code;
+            opt.textContent = l.meaning;
+            sel.appendChild(opt);
+        });
+    }
+}
+
+async function loadDepts() {
+    const hospitalId = document.getElementById('hospital_id').value;
+    const deptSel    = document.getElementById('dept_id');
+    deptSel.innerHTML = '<option value="">Loading...</option>';
+
+    if (!hospitalId) { deptSel.innerHTML = '<option value="">Select hospital first</option>'; return; }
+
+    const data = await callBMD('get-departments', { session_token: '', hospital_id: parseInt(hospitalId) });
+    deptSel.innerHTML = '<option value="">Select department</option>';
+
+    if (data.status === 'SUCCESS') {
+        (data.departments || []).forEach(d => {
+            const opt = document.createElement('option');
+            opt.value = d.dept_id;
+            opt.textContent = d.dept_name;
+            deptSel.appendChild(opt);
+        });
+    }
+}
+
+// ─────────────────────────────────────────────────────
+//  Password
+// ─────────────────────────────────────────────────────
+function togglePwd(id, btn) {
+    const f = document.getElementById(id);
+    f.type  = f.type === 'password' ? 'text' : 'password';
+    btn.textContent = f.type === 'password' ? '👁️' : '🙈';
+}
+
+function checkStrength(pwd) {
+    const widget = document.getElementById('pwd-strength');
+    const fill   = document.getElementById('pwd-fill');
+    const hint   = document.getElementById('pwd-hint');
+    if (!pwd) { widget.style.display = 'none'; return; }
+    widget.style.display = 'block';
+
+    let score = 0;
+    if (pwd.length >= 6)           score++;
+    if (pwd.length >= 10)          score++;
+    if (/[A-Z]/.test(pwd))         score++;
+    if (/[^A-Za-z0-9]/.test(pwd))  score++;
+
+    const levels = [
+        { pct:'25%',  color:'#dc3545', text:'Weak'    },
+        { pct:'50%',  color:'#fd7e14', text:'Fair'    },
+        { pct:'75%',  color:'#ffc107', text:'Good'    },
+        { pct:'100%', color:'#28a745', text:'Strong ✓'},
+    ];
+
+    const l = levels[Math.max(score-1,0)];
+    fill.style.width      = l.pct;
+    fill.style.background = l.color;
+    hint.textContent      = l.text;
+    hint.style.color      = l.color;
+}
+
+// ─────────────────────────────────────────────────────
+//  Validation
+// ─────────────────────────────────────────────────────
+function showError(id, show) {
+    const errEl  = document.getElementById('err-' + id);
+    const inpEl  = document.getElementById(id);
+    if (errEl) errEl.classList.toggle('show', show);
+    if (inpEl) inpEl.classList.toggle('error', show);
+    return show;
+}
+
+function validateStep1() {
+    let ok = true;
+    if (!document.getElementById('full_name').value.trim()) ok = showError('full_name', true) && false;
+    else showError('full_name', false);
+    if (!document.getElementById('gender').value) ok = showError('gender', true) && false;
+    else showError('gender', false);
+
+    const email = document.getElementById('email').value.trim();
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) ok = showError('email', true) && false;
+    else showError('email', false);
+
+    const mobile = document.getElementById('mobile').value.trim();
+    if (!mobile || !/^\d{10}$/.test(mobile)) ok = showError('mobile', true) && false;
+    else showError('mobile', false);
+
+    return ok;
+}
+
+function validateStep2() {
+    let ok = true;
+    if (!document.getElementById('specialization').value)  ok = showError('specialization', true) && false;
+    else showError('specialization', false);
+    if (!document.getElementById('qualification').value.trim()) ok = showError('qualification', true) && false;
+    else showError('qualification', false);
+    if (!document.getElementById('experience_years').value) ok = showError('experience_years', true) && false;
+    else showError('experience_years', false);
+    if (!document.getElementById('consultation_fee').value) ok = showError('consultation_fee', true) && false;
+    else showError('consultation_fee', false);
+    if (!document.getElementById('hospital_id').value)     ok = showError('hospital_id', true) && false;
+    else showError('hospital_id', false);
+    if (!document.getElementById('dept_id').value)         ok = showError('dept_id', true) && false;
+    else showError('dept_id', false);
+    return ok;
+}
+
+function validateStep3() {
+    let ok = true;
+    const pwd  = document.getElementById('password').value;
+    const conf = document.getElementById('confirm_password').value;
+    if (!pwd || pwd.length < 6) ok = showError('password', true) && false;
+    else showError('password', false);
+    if (pwd !== conf) ok = showError('confirm_password', true) && false;
+    else showError('confirm_password', false);
+    return ok;
+}
+
+// ─────────────────────────────────────────────────────
+//  Step Navigation
+// ─────────────────────────────────────────────────────
+function goToStep(step) {
+    if (step === 2 && !validateStep1()) return;
+    if (step === 3 && !validateStep2()) return;
+
+    // Update UI
+    document.getElementById('step-' + currentStep).style.display = 'none';
+    document.getElementById('step-' + step).style.display        = 'block';
+
+    // Update step dots
+    for (let i = 1; i <= 3; i++) {
+        const dot = document.getElementById('step-dot-' + i);
+        dot.classList.remove('active', 'done');
+        if (i < step)       dot.classList.add('done');
+        else if (i === step) dot.classList.add('active');
+    }
+
+    // Fill summary on step 3
+    if (step === 3) fillSummary();
+
+    currentStep = step;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function fillSummary() {
+    const hospName  = document.getElementById('hospital_id').options[document.getElementById('hospital_id').selectedIndex]?.text || '—';
+    const deptName  = document.getElementById('dept_id').options[document.getElementById('dept_id').selectedIndex]?.text || '—';
+    const specName  = document.getElementById('specialization').options[document.getElementById('specialization').selectedIndex]?.text || '—';
+
+    document.getElementById('summary').innerHTML = `
+        <b>Name:</b> ${document.getElementById('full_name').value}<br>
+        <b>Email:</b> ${document.getElementById('email').value}<br>
+        <b>Mobile:</b> ${document.getElementById('mobile').value}<br>
+        <b>Specialization:</b> ${specName}<br>
+        <b>Qualification:</b> ${document.getElementById('qualification').value}<br>
+        <b>Experience:</b> ${document.getElementById('experience_years').value} years<br>
+        <b>Fee:</b> ₹${document.getElementById('consultation_fee').value} / visit<br>
+        <b>Hospital:</b> ${hospName}<br>
+        <b>Department:</b> ${deptName}
+    `;
+}
+
+// ─────────────────────────────────────────────────────
+//  Submit
+// ─────────────────────────────────────────────────────
+async function submitRegistration() {
+    if (!validateStep3()) return;
+
+    const btn = document.getElementById('submit-btn');
+    btn.disabled    = true;
+    btn.textContent = 'Submitting...';
+
+    showLoader('Submitting your application...');
+
+    const payload = {
+        full_name        : document.getElementById('full_name').value.trim(),
+        email            : document.getElementById('email').value.trim(),
+        mobile           : document.getElementById('mobile').value.trim(),
+        password         : document.getElementById('password').value,
+        gender           : document.getElementById('gender').value,
+        bio              : document.getElementById('bio').value.trim() || null,
+        specialization   : document.getElementById('specialization').value,
+        qualification    : document.getElementById('qualification').value.trim(),
+        experience_years : parseInt(document.getElementById('experience_years').value),
+        consultation_fee : parseInt(document.getElementById('consultation_fee').value),
+        hospital_id      : parseInt(document.getElementById('hospital_id').value),
+        dept_id          : parseInt(document.getElementById('dept_id').value),
+        is_available_today: document.getElementById('is_available_today').value
+    };
+
+    const data = await callBMD('register-doctor', payload);
+    hideLoader();
+
+    if (data.status === 'SUCCESS') {
+        // Show success screen
+        document.getElementById('step-3').style.display       = 'none';
+        document.getElementById('steps-bar').style.display    = 'none';
+        document.getElementById('success-screen').style.display = 'block';
+
+        document.getElementById('success-info').innerHTML = `
+            <div class="success-info-row"><span class="success-info-label">Name</span><span class="success-info-value">${payload.full_name}</span></div>
+            <div class="success-info-row"><span class="success-info-label">Email</span><span class="success-info-value">${payload.email}</span></div>
+            <div class="success-info-row"><span class="success-info-label">Specialization</span><span class="success-info-value">${payload.specialization}</span></div>
+            <div class="success-info-row"><span class="success-info-label">Status</span><span class="success-info-value" style="color:#e65100;">⏳ Pending Approval</span></div>
+        `;
+
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+        btn.disabled    = false;
+        btn.textContent = '✓ Submit Application';
+        showToast('❌ ' + (data.message || 'Registration failed. Please try again.'), '#dc3545');
+    }
+}
+
+// ─────────────────────────────────────────────────────
+//  Init
+// ─────────────────────────────────────────────────────
+async function init() {
+    showLoader('Loading...');
+    await loadDropdowns();
+    hideLoader();
+}
+
+init();
+</script>
+</body>
+</html>
