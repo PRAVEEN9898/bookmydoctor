@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Schedule — BookMyDoctor</title>
+    <style>
+        :root {
+            --blue-dark   : #0c447c;
+            --blue-mid    : #1565c0;
+            --blue-light  : #e6f1fb;
+            --blue-pale   : #f0f7ff;
+            --green-dark  : #1a6b3c;
+            --green-mid   : #2d9e5f;
+            --green-light : #e8f5ee;
+            --white       : #ffffff;
+            --gray-100    : #f8f9fa;
+            --gray-200    : #e9ecef;
+            --gray-400    : #ced4da;
+            --gray-600    : #6c757d;
+            --gray-800    : #343a40;
+            --red         : #dc3545;
+            --orange      : #fd7e14;
+            --shadow-sm   : 0 2px 8px rgba(0,0,0,0.08);
+            --shadow-md   : 0 4px 20px rgba(0,0,0,0.12);
+            --radius      : 12px;
+            --radius-sm   : 8px;
+            --font        : 'Segoe UI', Arial, sans-serif;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: var(--font); background: var(--gray-100); color: var(--gray-800); }
+
+        /* ── Navbar ── */
+        .navbar { background: var(--white); padding: 0 24px; height: 60px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 1px 4px rgba(0,0,0,0.08); position: sticky; top: 0; z-index: 100; }
+        .nav-brand { display: flex; align-items: center; gap: 9px; text-decoration: none; }
+        .nav-brand-icon { width: 34px; height: 34px; background: var(--blue-mid); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+        .nav-brand-name { font-size: 18px; font-weight: 700; color: var(--blue-dark); }
+        .nav-right { display: flex; align-items: center; gap: 10px; }
+        .nav-links { display: flex; align-items: center; gap: 6px; }
+        .btn-nav { padding: 7px 14px; border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: var(--font); text-decoration: none; border: none; transition: all 0.2s; white-space: nowrap; }
+        .btn-nav-outline { background: var(--white); color: var(--blue-dark); border: 1.5px solid var(--blue-mid) !important; }
+        .btn-nav-outline:hover { background: var(--blue-light); }
+        .btn-nav-solid { background: var(--blue-mid); color: var(--white); }
+        .btn-nav-solid:hover { background: var(--blue-dark); }
+        .role-badge { display: flex; align-items: center; gap: 8px; background: var(--blue-light); border-radius: 20px; padding: 5px 14px 5px 5px; }
+        .role-pill { font-size: 10px; font-weight: 700; color: var(--white); background: var(--blue-mid); padding: 3px 9px; border-radius: 12px; text-transform: uppercase; }
+        .role-name { font-size: 13px; font-weight: 600; color: var(--blue-dark); }
+
+        /* ── Hero ── */
+        .page-hero { background: linear-gradient(135deg, var(--blue-dark), var(--blue-mid)); padding: 28px 24px 52px; }
+        .page-hero-inner { max-width: 1000px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+        .hero-title { font-size: 22px; font-weight: 800; color: var(--white); margin-bottom: 4px; }
+        .hero-sub   { font-size: 13px; color: rgba(255,255,255,0.75); }
+
+        .btn-generate {
+            padding: 10px 20px; background: rgba(255,255,255,0.2); color: var(--white);
+            border: 1.5px solid rgba(255,255,255,0.4); border-radius: var(--radius-sm);
+            font-size: 13px; font-weight: 600; cursor: pointer; font-family: var(--font);
+            transition: all 0.2s; white-space: nowrap;
+        }
+        .btn-generate:hover { background: rgba(255,255,255,0.3); }
+
+        /* ── Page ── */
+        .page-wrap { max-width: 1000px; margin: -24px auto 48px; padding: 0 24px; display: grid; grid-template-columns: 1fr 300px; gap: 20px; align-items: start; }
+
+        /* ── Card ── */
+        .card { background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow-sm); overflow: hidden; margin-bottom: 20px; }
+        .card-head { padding: 16px 20px; border-bottom: 1px solid var(--gray-200); display: flex; align-items: center; justify-content: space-between; }
+        .card-head-left { display: flex; align-items: center; gap: 10px; }
+        .card-head-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+        .card-head-icon.blue   { background: var(--blue-light); }
+        .card-head-icon.green  { background: var(--green-light); }
+        .card-head-icon.orange { background: #fff3e0; }
+        .card-head-title { font-size: 15px; font-weight: 700; color: var(--gray-800); }
+        .card-body { padding: 20px; }
+
+        /* ── Week Days ── */
+        .week-nav {
+            display: flex; align-items: center; justify-content: space-between;
+            margin-bottom: 16px;
+        }
+        .week-label { font-size: 15px; font-weight: 700; color: var(--gray-800); }
+        .btn-week { padding: 6px 12px; background: var(--gray-100); border: none; border-radius: var(--radius-sm); font-size: 13px; font-weight: 600; cursor: pointer; font-family: var(--font); color: var(--gray-600); transition: all 0.2s; }
+        .btn-week:hover { background: var(--blue-light); color: var(--blue-dark); }
+
+        .days-row { display: flex; gap: 8px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 4px; }
+        .day-pill {
+            flex-shrink: 0; padding: 10px 16px; border-radius: 20px;
+            text-align: center; cursor: pointer; transition: all 0.2s;
+            border: 1.5px solid var(--gray-200); background: var(--white);
+            min-width: 70px;
+        }
+        .day-pill:hover { border-color: var(--blue-mid); background: var(--blue-pale); }
+        .day-pill.active { background: var(--blue-mid); border-color: var(--blue-mid); }
+        .day-pill.today  { border-color: var(--orange); }
+        .day-name  { font-size: 11px; font-weight: 600; color: var(--gray-600); }
+        .day-date  { font-size: 16px; font-weight: 700; color: var(--gray-800); margin-top: 2px; }
+        .day-count { font-size: 10px; color: var(--gray-600); margin-top: 2px; }
+        .day-pill.active .day-name  { color: rgba(255,255,255,0.8); }
+        .day-pill.active .day-date  { color: var(--white); }
+        .day-pill.active .day-count { color: rgba(255,255,255,0.7); }
+        .day-pill.today .day-name   { color: var(--orange); }
+
+        /* ── Slot Grid ── */
+        .slot-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px; }
+
+        .slot {
+            padding: 10px 8px; border-radius: var(--radius-sm);
+            text-align: center; cursor: pointer; border: 1.5px solid;
+            transition: all 0.2s; position: relative;
+        }
+        .slot.available { background: var(--green-light); border-color: var(--green-mid); }
+        .slot.available:hover { background: #c8e6c9; }
+        .slot.booked    { background: var(--blue-light); border-color: var(--blue-mid); cursor: default; }
+        .slot.blocked   { background: #fdecea; border-color: var(--red); }
+        .slot.blocked:hover { background: #f5c6cb; }
+        .slot.past      { background: var(--gray-100); border-color: var(--gray-200); cursor: default; opacity: 0.6; }
+
+        .slot-time  { font-size: 12px; font-weight: 600; }
+        .slot.available .slot-time { color: var(--green-dark); }
+        .slot.booked    .slot-time { color: var(--blue-dark); }
+        .slot.blocked   .slot-time { color: var(--red); }
+        .slot.past      .slot-time { color: var(--gray-600); }
+
+        .slot-status { font-size: 10px; margin-top: 3px; }
+        .slot.available .slot-status { color: var(--green-mid); }
+        .slot.booked    .slot-status { color: var(--blue-mid); }
+        .slot.blocked   .slot-status { color: var(--red); }
+        .slot.past      .slot-status { color: var(--gray-400); }
+
+        /* ── Generate Slots Modal ── */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 9000; align-items: center; justify-content: center; }
+        .modal-overlay.show { display: flex; }
+        .modal { background: var(--white); border-radius: var(--radius); padding: 28px; max-width: 440px; width: 90%; box-shadow: var(--shadow-md); }
+        .modal-title { font-size: 18px; font-weight: 700; color: var(--gray-800); margin-bottom: 6px; }
+        .modal-sub   { font-size: 13px; color: var(--gray-600); margin-bottom: 20px; }
+        .form-row    { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
+        .form-group  { display: flex; flex-direction: column; gap: 5px; }
+        .form-label  { font-size: 12px; font-weight: 600; color: var(--gray-800); text-transform: uppercase; letter-spacing: 0.3px; }
+        .form-input, .form-select { padding: 9px 12px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-sm); font-size: 14px; font-family: var(--font); outline: none; transition: border-color 0.2s; }
+        .form-input:focus, .form-select:focus { border-color: var(--blue-mid); }
+        .modal-actions { display: flex; gap: 10px; margin-top: 20px; }
+        .btn-modal-cancel { flex: 1; padding: 11px; background: var(--gray-100); color: var(--gray-800); border: none; border-radius: var(--radius-sm); font-size: 14px; font-weight: 600; cursor: pointer; font-family: var(--font); }
+        .btn-modal-submit { flex: 2; padding: 11px; background: var(--blue-mid); color: var(--white); border: none; border-radius: var(--radius-sm); font-size: 14px; font-weight: 600; cursor: pointer; font-family: var(--font); }
+        .btn-modal-submit:hover { background: var(--blue-dark); }
+        .btn-modal-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+
+        /* ── Sidebar ── */
+        .sidebar { position: sticky; top: 80px; }
+
+        .legend-item { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--gray-200); font-size: 13px; }
+        .legend-item:last-child { border-bottom: none; }
+        .legend-dot { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
+        .legend-dot.available { background: var(--green-mid); }
+        .legend-dot.booked    { background: var(--blue-mid); }
+        .legend-dot.blocked   { background: var(--red); }
+        .legend-dot.past      { background: var(--gray-400); }
+        .legend-text { color: var(--gray-800); font-weight: 500; }
+        .legend-sub  { font-size: 11px; color: var(--gray-600); margin-top: 1px; }
+
+        /* ── Slot Summary ── */
+        .summary-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--gray-200); font-size: 13px; }
+        .summary-row:last-child { border-bottom: none; }
+        .summary-label { color: var(--gray-600); }
+        .summary-value { font-weight: 700; color: var(--gray-800); }
+        .summary-value.blue   { color: var(--blue-mid); }
+        .summary-value.green  { color: var(--green-mid); }
+        .summary-value.orange { color: var(--orange); }
+
+        /* ── Empty ── */
+        .empty-state { text-align: center; padding: 40px 20px; color: var(--gray-600); }
+        .empty-icon  { font-size: 40px; margin-bottom: 12px; }
+        .empty-title { font-size: 15px; font-weight: 600; color: var(--gray-800); margin-bottom: 6px; }
+        .empty-sub   { font-size: 13px; margin-bottom: 16px; }
+        .btn-empty   { padding: 10px 20px; background: var(--blue-mid); color: var(--white); border: none; border-radius: var(--radius-sm); font-size: 13px; font-weight: 600; cursor: pointer; font-family: var(--font); }
+
+        /* ── Skeleton ── */
+        .skeleton { background: linear-gradient(90deg, var(--gray-200) 25%, var(--gray-100) 50%, var(--gray-200) 75%); background-size: 200% 100%; animation: shimmer 1.2s infinite; border-radius: 6px; }
+        @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+
+        /* ── Loader ── */
+        #bmd-loader { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.75); z-index: 9999; align-items: center; justify-content: center; flex-direction: column; gap: 12px; }
+        .spinner { width: 40px; height: 40px; border: 4px solid var(--gray-200); border-top: 4px solid var(--blue-mid); border-radius: 50%; animation: spin 0.8s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        #bmd-toast { position: fixed; bottom: 24px; right: 24px; padding: 12px 20px; border-radius: 8px; font-size: 14px; font-family: var(--font); color: var(--white); box-shadow: var(--shadow-md); z-index: 99999; display: none; max-width: 320px; }
+
+        @media (max-width: 768px) { .page-wrap { grid-template-columns: 1fr; } .sidebar { position: static; } }
+    </style>
+</head>
+<body>
+
+<div id="bmd-loader"><div class="spinner"></div><span style="color:var(--blue-mid);font-size:14px;" id="loader-text">Loading...</span></div>
+<div id="bmd-toast"></div>
+
+<!-- Generate Slots Modal -->
+<div class="modal-overlay" id="gen-modal">
+    <div class="modal">
+        <div class="modal-title">📅 Generate Slots</div>
+        <div class="modal-sub">Create appointment slots for a date</div>
+        <div class="form-row">
+            <div class="form-group">
+                <label class="form-label">Date</label>
+                <input type="date" id="gen-date" class="form-input">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Slot Duration</label>
+                <select id="gen-duration" class="form-select">
+                    <option value="15">15 minutes</option>
+                    <option value="20">20 minutes</option>
+                    <option value="30" selected>30 minutes</option>
+                    <option value="45">45 minutes</option>
+                    <option value="60">60 minutes</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label class="form-label">Start Time</label>
+                <input type="time" id="gen-start" class="form-input" value="09:00">
+            </div>
+            <div class="form-group">
+                <label class="form-label">End Time</label>
+                <input type="time" id="gen-end" class="form-input" value="17:00">
+            </div>
+        </div>
+        <div class="form-group" style="margin-bottom:0;">
+            <label class="form-label">Max Slots Per Day</label>
+            <input type="number" id="gen-max" class="form-input" value="20" min="1" max="50">
+        </div>
+        <div class="modal-actions">
+            <button class="btn-modal-cancel" onclick="closeGenModal()">Cancel</button>
+            <button class="btn-modal-submit" id="gen-submit-btn" onclick="generateSlots()">Generate Slots</button>
+        </div>
+    </div>
+</div>
+
+<!-- Navbar -->
+<nav class="navbar">
+    <a href="../index.html" class="nav-brand">
+        <div class="nav-brand-icon">🏥</div>
+        <span class="nav-brand-name">BookMyDoctor</span>
+    </a>
+    <div class="nav-right">
+        <div class="nav-links">
+            <a href="dashboard.html" class="btn-nav btn-nav-outline">🏠 Dashboard</a>
+            <a href="schedule.html"  class="btn-nav btn-nav-solid">📅 Schedule</a>
+            <a href="queue.html"     class="btn-nav btn-nav-outline">👥 Queue</a>
+        </div>
+        <div class="role-badge">
+            <span class="role-pill">DOCTOR</span>
+            <span class="role-name" id="doctor-name">—</span>
+        </div>
+        <button class="btn-nav btn-nav-outline" onclick="handleLogout()"
+            style="color:var(--red);border-color:var(--red) !important;">Logout</button>
+    </div>
+</nav>
+
+<!-- Hero -->
+<div class="page-hero">
+    <div class="page-hero-inner">
+        <div>
+            <div class="hero-title">📅 My Schedule</div>
+            <div class="hero-sub">Manage your appointment slots and availability</div>
+        </div>
+        <button class="btn-generate" onclick="openGenModal()">+ Generate Slots</button>
+    </div>
+</div>
+
+<!-- Page -->
+<div class="page-wrap">
+
+    <!-- LEFT — Calendar + Slots -->
+    <div>
+
+        <!-- Week Navigation -->
+        <div class="card">
+            <div class="card-head">
+                <div class="card-head-left">
+                    <div class="card-head-icon blue">📅</div>
+                    <div class="card-head-title">Weekly View</div>
+                </div>
+                <div style="display:flex;gap:6px;">
+                    <button class="btn-week" onclick="changeWeek(-1)">← Prev</button>
+                    <button class="btn-week" onclick="changeWeek(0)">Today</button>
+                    <button class="btn-week" onclick="changeWeek(1)">Next →</button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="week-nav">
+                    <div class="week-label" id="week-label">—</div>
+                </div>
+                <div class="days-row" id="days-row"></div>
+            </div>
+        </div>
+
+        <!-- Slots for selected day -->
+        <div class="card">
+            <div class="card-head">
+                <div class="card-head-left">
+                    <div class="card-head-icon blue">🕐</div>
+                    <div class="card-head-title" id="slots-title">Slots</div>
+                </div>
+                <span id="slots-count" style="font-size:12px;color:var(--gray-600);"></span>
+            </div>
+            <div class="card-body" id="slots-grid">
+                <div class="skeleton" style="height:140px;border-radius:8px;"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- RIGHT Sidebar -->
+    <div class="sidebar">
+
+        <!-- Summary -->
+        <div class="card">
+            <div class="card-head">
+                <div class="card-head-left">
+                    <div class="card-head-icon blue">📊</div>
+                    <div class="card-head-title">Day Summary</div>
+                </div>
+            </div>
+            <div class="card-body" id="day-summary">
+                <div class="skeleton" style="height:14px;width:80%;margin-bottom:10px;"></div>
+                <div class="skeleton" style="height:14px;width:60%;margin-bottom:10px;"></div>
+                <div class="skeleton" style="height:14px;width:70%;"></div>
+            </div>
+        </div>
+
+        <!-- Legend -->
+        <div class="card">
+            <div class="card-head">
+                <div class="card-head-left">
+                    <div class="card-head-icon orange">ℹ️</div>
+                    <div class="card-head-title">Slot Legend</div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="legend-item">
+                    <div class="legend-dot available"></div>
+                    <div><div class="legend-text">Available</div><div class="legend-sub">Open for booking</div></div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-dot booked"></div>
+                    <div><div class="legend-text">Booked</div><div class="legend-sub">Patient confirmed</div></div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-dot blocked"></div>
+                    <div><div class="legend-text">Blocked</div><div class="legend-sub">Click to unblock</div></div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-dot past"></div>
+                    <div><div class="legend-text">Past</div><div class="legend-sub">Time has passed</div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick tip -->
+        <div style="background:var(--blue-pale);border-radius:var(--radius);padding:16px;border:1.5px solid var(--blue-light);">
+            <div style="font-size:13px;font-weight:700;color:var(--blue-dark);margin-bottom:6px;">💡 Tips</div>
+            <div style="font-size:12px;color:var(--gray-600);line-height:1.6;">
+                • Click <b>Generate Slots</b> to create new slots for any date<br>
+                • Click an available slot to <b>block</b> it<br>
+                • Click a blocked slot to <b>unblock</b> it<br>
+                • Booked slots cannot be changed
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+const BASE_URL   = 'https://bookmydoctor-proxy.pulipraveenkumar08.workers.dev/';
+let selectedDate = new Date();
+let weekOffset   = 0;
+let allSlots     = [];
+
+function showLoader(msg) { document.getElementById('loader-text').textContent = msg||'Loading...'; document.getElementById('bmd-loader').style.display = 'flex'; }
+function hideLoader()    { document.getElementById('bmd-loader').style.display = 'none'; }
+
+function showToast(msg, color) {
+    const t = document.getElementById('bmd-toast');
+    t.innerHTML = msg; t.style.background = color || '#1565c0';
+    t.style.display = 'block';
+    setTimeout(() => t.style.display = 'none', 3500);
+}
+
+function getSession() {
+    return {
+        token    : localStorage.getItem('bmd_token'),
+        userType : localStorage.getItem('bmd_user_type'),
+        userId   : localStorage.getItem('bmd_user_id'),
+        name     : localStorage.getItem('bmd_name')
+    };
+}
+
+async function callBMD(endpoint, payload) {
+    try {
+        const res  = await fetch(BASE_URL + endpoint, {
+            method  : 'POST',
+            headers : { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+            body    : JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (data.p_message) return JSON.parse(data.p_message);
+        if (data.p_result)  return JSON.parse(data.p_result);
+        return data;
+    } catch (err) { return { status: 'ERROR', message: err.message }; }
+}
+
+async function handleLogout() {
+    const s = getSession();
+    if (s.token) await callBMD('logout', { session_token: s.token });
+    localStorage.clear();
+    window.location.href = '../patient/login.html';
+}
+
+function formatDate(d) {
+    return d.toISOString().split('T')[0];
+}
+
+function formatTime(t) {
+    if (!t) return '';
+    const [h, m] = t.split(':');
+    const hr = parseInt(h);
+    return `${hr%12||12}:${m} ${hr>=12?'PM':'AM'}`;
+}
+
+function isPast(dateStr, timeStr) {
+    const now  = new Date();
+    const slot = new Date(dateStr + 'T' + (timeStr || '00:00'));
+    return slot < now;
+}
+
+// ── Render Week Days ──
+function renderWeek() {
+    const today   = new Date();
+    const start   = new Date(today);
+    start.setDate(today.getDate() - today.getDay() + 1 + weekOffset * 7);
+
+    const days    = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+    const row     = document.getElementById('days-row');
+
+    const endDate = new Date(start);
+    endDate.setDate(start.getDate() + 6);
+    document.getElementById('week-label').textContent =
+        start.toLocaleDateString('en-IN', { day:'numeric', month:'short' }) + ' – ' +
+        endDate.toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' });
+
+    row.innerHTML = '';
+    for (let i = 0; i < 7; i++) {
+        const d      = new Date(start);
+        d.setDate(start.getDate() + i);
+        const isToday = formatDate(d) === formatDate(today);
+        const isSel   = formatDate(d) === formatDate(selectedDate);
+
+        const pill = document.createElement('div');
+        pill.className = 'day-pill' + (isSel ? ' active' : '') + (isToday && !isSel ? ' today' : '');
+        pill.innerHTML = `
+            <div class="day-name">${days[i]}</div>
+            <div class="day-date">${d.getDate()}</div>
+            <div class="day-count" id="day-count-${formatDate(d)}">—</div>
+        `;
+        pill.onclick = () => selectDay(d);
+        row.appendChild(pill);
+    }
+}
+
+function selectDay(d) {
+    selectedDate = new Date(d);
+    renderWeek();
+    loadSlots();
+}
+
+function changeWeek(dir) {
+    if (dir === 0) { weekOffset = 0; selectedDate = new Date(); }
+    else           weekOffset += dir;
+    renderWeek();
+    loadSlots();
+}
+
+// ── Load Slots ──
+async function loadSlots() {
+    const s    = getSession();
+    const dateStr = formatDate(selectedDate);
+
+    document.getElementById('slots-title').textContent = 'Slots for ' +
+        selectedDate.toLocaleDateString('en-IN', { weekday:'long', day:'numeric', month:'short' });
+
+    document.getElementById('slots-grid').innerHTML = `<div class="skeleton" style="height:120px;border-radius:8px;"></div>`;
+
+    const data = await callBMD('get-slots', {
+        session_token : s.token,
+        doctor_id     : parseInt(s.userId),
+        slot_date     : dateStr
+    });
+
+    if (data.status !== 'SUCCESS' || (data.slots || []).length === 0) {
+        document.getElementById('slots-grid').innerHTML = `
+            <div class="empty-state">
+                <div class="empty-icon">📅</div>
+                <div class="empty-title">No slots for this day</div>
+                <div class="empty-sub">Generate slots to allow patients to book</div>
+                <button class="btn-empty" onclick="openGenModalForDate('${dateStr}')">+ Generate Slots</button>
+            </div>`;
+        renderSummary([], dateStr);
+        return;
+    }
+
+    allSlots = data.slots || [];
+    renderSlots(allSlots, dateStr);
+    renderSummary(allSlots, dateStr);
+}
+
+// ── Render Slots ──
+function renderSlots(slots, dateStr) {
+    const grid = document.getElementById('slots-grid');
+    document.getElementById('slots-count').textContent = `${slots.length} slots`;
+
+    grid.innerHTML = `<div class="slot-grid">
+        ${slots.map(s => {
+            const past = isPast(dateStr, s.start_time);
+            const status = s.is_booked === 'Y' ? 'booked' : s.is_blocked === 'Y' ? 'blocked' : past ? 'past' : 'available';
+            const statusLabel = s.is_booked === 'Y' ? '👤 Booked' : s.is_blocked === 'Y' ? '🔒 Blocked' : past ? '⏰ Past' : '✓ Available';
+            const clickable = !['booked','past'].includes(status);
+
+            return `<div class="slot ${status}" ${clickable ? `onclick="toggleSlot(${s.slot_id},'${status}')"` : ''}>
+                <div class="slot-time">${formatTime(s.start_time)}</div>
+                <div class="slot-status">${statusLabel}</div>
+            </div>`;
+        }).join('')}
+    </div>`;
+}
+
+// ── Render Summary ──
+function renderSummary(slots, dateStr) {
+    const total     = slots.length;
+    const available = slots.filter(s => s.is_booked !== 'Y' && s.is_blocked !== 'Y' && !isPast(dateStr, s.start_time)).length;
+    const booked    = slots.filter(s => s.is_booked === 'Y').length;
+    const blocked   = slots.filter(s => s.is_blocked === 'Y').length;
+
+    document.getElementById('day-summary').innerHTML = `
+        <div class="summary-row"><span class="summary-label">Total Slots</span><span class="summary-value blue">${total}</span></div>
+        <div class="summary-row"><span class="summary-label">Available</span><span class="summary-value green">${available}</span></div>
+        <div class="summary-row"><span class="summary-label">Booked</span><span class="summary-value blue">${booked}</span></div>
+        <div class="summary-row"><span class="summary-label">Blocked</span><span class="summary-value orange">${blocked}</span></div>
+    `;
+}
+
+// ── Toggle Slot (block/unblock) ──
+async function toggleSlot(slotId, currentStatus) {
+    const s       = getSession();
+    const block   = currentStatus === 'available';
+    const data    = await callBMD('block-slot', {
+        session_token : s.token,
+        slot_id       : slotId,
+        is_blocked    : block ? 'Y' : 'N'
+    });
+
+    if (data.status === 'SUCCESS') {
+        showToast(block ? '🔒 Slot blocked' : '✅ Slot unblocked', block ? '#fd7e14' : '#2d9e5f');
+        loadSlots();
+    } else {
+        showToast('❌ ' + (data.message || 'Failed'), '#dc3545');
+    }
+}
+
+// ── Generate Slots Modal ──
+function openGenModal() {
+    document.getElementById('gen-date').value = formatDate(selectedDate);
+    document.getElementById('gen-modal').classList.add('show');
+}
+
+function openGenModalForDate(dateStr) {
+    document.getElementById('gen-date').value = dateStr;
+    document.getElementById('gen-modal').classList.add('show');
+}
+
+function closeGenModal() {
+    document.getElementById('gen-modal').classList.remove('show');
+}
+
+async function generateSlots() {
+    const s       = getSession();
+    const date    = document.getElementById('gen-date').value;
+    const start   = document.getElementById('gen-start').value;
+    const end     = document.getElementById('gen-end').value;
+    const dur     = parseInt(document.getElementById('gen-duration').value);
+    const maxSlots= parseInt(document.getElementById('gen-max').value);
+
+    if (!date || !start || !end) { showToast('❌ Please fill all fields', '#dc3545'); return; }
+
+    const btn = document.getElementById('gen-submit-btn');
+    btn.disabled = true; btn.textContent = 'Generating...';
+
+    const data = await callBMD('generate-slots', {
+        session_token   : s.token,
+        doctor_id       : parseInt(s.userId),
+        slot_date       : date,
+        start_time      : start,
+        end_time        : end,
+        slot_duration   : dur,
+        max_slots       : maxSlots
+    });
+
+    btn.disabled = false; btn.textContent = 'Generate Slots';
+
+    if (data.status === 'SUCCESS') {
+        showToast(`✅ ${data.slots_created || ''} slots generated for ${date}!`, '#2d9e5f');
+        closeGenModal();
+        selectedDate = new Date(date + 'T12:00:00');
+        renderWeek();
+        loadSlots();
+    } else {
+        showToast('❌ ' + (data.message || 'Generation failed'), '#dc3545');
+    }
+}
+
+// ── Init ──
+async function init() {
+    const s = getSession();
+    if (!s.token || s.userType !== 'DOCTOR') {
+        window.location.href = '../patient/login.html';
+        return;
+    }
+
+    document.getElementById('doctor-name').textContent = s.name ? s.name.replace('Dr. ','').split(' ')[0] : '—';
+
+    renderWeek();
+    showLoader('Loading schedule...');
+    await loadSlots();
+    hideLoader();
+}
+
+init();
+</script>
+</body>
+</html>
