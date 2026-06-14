@@ -264,7 +264,12 @@
             <div class="hero-title">📅 My Schedule</div>
             <div class="hero-sub">Manage your appointment slots and availability</div>
         </div>
-        <button class="btn-generate" onclick="openGenModal()">+ Generate Slots</button>
+        <div style="display:flex;gap:8px;">
+            <button class="btn-generate" onclick="markLeave()" style="background:rgba(255,100,100,0.2);border-color:rgba(255,150,150,0.4);">
+                🏖️ Mark Leave
+            </button>
+            <button class="btn-generate" onclick="openGenModal()">+ Generate Slots</button>
+        </div>
     </div>
 </div>
 
@@ -617,6 +622,74 @@ async function generateSlots() {
     } else {
         showToast('❌ ' + (data.message || 'Generation failed'), '#dc3545');
     }
+}
+
+    // ── Mark Leave ──
+async function markLeave() {
+    const dateStr = formatDate(selectedDate);
+    const dateLabel = selectedDate.toLocaleDateString('en-IN',
+        { weekday:'long', day:'numeric', month:'long' });
+
+    // Check if there are booked appointments
+    const booked = allSlots.filter(sl => sl.is_booked === 'Y');
+    const available = allSlots.filter(sl =>
+        sl.is_booked !== 'Y' && sl.is_blocked !== 'Y'
+    );
+
+    if (allSlots.length === 0) {
+        showToast('⚠️ No slots found for this date', '#fd7e14');
+        return;
+    }
+
+    let confirmMsg = `Mark ${dateLabel} as Leave Day?\n\n`;
+    confirmMsg += `• ${available.length} available slots will be blocked\n`;
+    if (booked.length > 0) {
+        confirmMsg += `• ${booked.length} booked appointment(s) will be CANCELLED\n`;
+        confirmMsg += `• Patients will receive refunds\n`;
+    }
+    confirmMsg += `\nThis cannot be undone easily. Continue?`;
+
+    if (!window.confirm(confirmMsg)) return;
+
+    const s = getSession();
+    showLoader('Marking leave...');
+
+    let blockedCount   = 0;
+    let cancelledCount = 0;
+    let errorCount     = 0;
+
+    // Step 1 — Cancel all BOOKED appointments
+    for (const sl of booked) {
+        if (sl.appointment_id) {
+            const data = await callBMD('cancel-appointment', {
+                session_token       : s.token,
+                appointment_id      : sl.appointment_id,
+                cancellation_reason : 'Doctor on leave — ' + dateLabel
+            });
+            if (data.status === 'SUCCESS') cancelledCount++;
+            else errorCount++;
+        }
+    }
+
+    // Step 2 — Block all AVAILABLE slots
+    for (const sl of available) {
+        const data = await callBMD('block-slot', {
+            session_token : s.token,
+            slot_id       : sl.slot_id,
+            is_blocked    : 'Y'
+        });
+        if (data.status === 'SUCCESS') blockedCount++;
+    }
+
+    hideLoader();
+
+    let msg = `🏖️ Leave marked for ${dateLabel}!\n`;
+    if (blockedCount   > 0) msg += `✅ ${blockedCount} slots blocked\n`;
+    if (cancelledCount > 0) msg += `❌ ${cancelledCount} appointments cancelled & refunded`;
+    if (errorCount     > 0) msg += `\n⚠️ ${errorCount} errors occurred`;
+
+    showToast(msg, '#fd7e14');
+    loadSlots();
 }
 
 // ── Init ──
