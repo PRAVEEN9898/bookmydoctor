@@ -31,60 +31,43 @@
 
         /* ── Navbar ── */
         .navbar {
-            background     : var(--white);
-            padding        : 0 24px;
-            height         : 60px;
-            display        : flex;
-            align-items    : center;
-            justify-content: space-between;
-            box-shadow     : 0 1px 4px rgba(0,0,0,0.08);
-            position       : sticky;
-            top            : 0;
-            z-index        : 100;
+            background: var(--white); padding: 0 24px; height: 60px;
+            display: flex; align-items: center; justify-content: space-between;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.08); position: sticky; top: 0; z-index: 100;
         }
 
-        .nav-brand {
-            display        : flex;
-            align-items    : center;
-            gap            : 9px;
-            text-decoration: none;
-        }
+        .nav-brand { display: flex; align-items: center; gap: 9px; text-decoration: none; }
 
         .nav-brand-icon {
-            width          : 34px;
-            height         : 34px;
-            background     : var(--green-mid);
-            border-radius  : 8px;
-            display        : flex;
-            align-items    : center;
-            justify-content: center;
-            font-size      : 18px;
+            width: 34px; height: 34px; background: var(--green-mid);
+            border-radius: 8px; display: flex; align-items: center;
+            justify-content: center; font-size: 18px;
         }
 
-        .nav-brand-name {
-            font-size  : 18px;
-            font-weight: 700;
-            color      : var(--green-dark);
-            white-space: nowrap;
+        .nav-brand-name { font-size: 18px; font-weight: 700; color: var(--green-dark); }
+
+        .nav-right { display: flex; align-items: center; gap: 12px; }
+
+        /* WHO IS LOGGED IN BADGE */
+        .user-badge {
+            display: flex; align-items: center; gap: 8px;
+            background: var(--green-light); border-radius: 20px;
+            padding: 6px 14px; font-size: 13px;
         }
 
-        .nav-links {
-            display    : flex;
-            align-items: center;
-            gap        : 8px;
+        .user-badge-role {
+            font-size: 10px; font-weight: 700; color: var(--white);
+            background: var(--green-dark); padding: 2px 7px;
+            border-radius: 10px; text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
+
+        .user-badge-name { font-weight: 600; color: var(--green-dark); font-size: 13px; }
 
         .btn-nav {
-            padding        : 7px 16px;
-            border-radius  : 20px;
-            font-size      : 13px;
-            font-weight    : 600;
-            cursor         : pointer;
-            font-family    : var(--font);
-            text-decoration: none;
-            border         : none;
-            transition     : all 0.2s;
-            white-space    : nowrap;
+            padding: 7px 16px; border-radius: 20px; font-size: 13px;
+            font-weight: 600; cursor: pointer; font-family: var(--font);
+            text-decoration: none; border: none; transition: all 0.2s;
         }
 
         .btn-nav-outline {
@@ -92,42 +75,13 @@
             color     : var(--green-dark);
             border    : 1.5px solid var(--green-mid) !important;
         }
-
         .btn-nav-outline:hover { background: var(--green-light); }
-
-        .btn-nav-solid {
-            background: var(--green-mid);
-            color     : var(--white);
+        .btn-logout {
+            background: var(--white); color: var(--red);
+            border: 1.5px solid var(--red) !important;
         }
 
-        .btn-nav-solid:hover { background: var(--green-dark); }
-
-        .nav-user-badge {
-            display       : flex;
-            align-items   : center;
-            gap           : 8px;
-            background    : var(--green-light);
-            border-radius : 20px;
-            padding       : 5px 14px 5px 5px;
-        }
-
-        .role-pill {
-            font-size     : 10px;
-            font-weight   : 700;
-            color         : var(--white);
-            padding       : 3px 9px;
-            border-radius : 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.4px;
-            white-space   : nowrap;
-        }
-
-        .nav-user-name {
-            font-size  : 13px;
-            font-weight: 600;
-            color      : var(--green-dark);
-            white-space: nowrap;
-        }
+        .btn-logout:hover { background: #fdecea; }
 
         /* ── Hero ── */
         .page-hero {
@@ -505,7 +459,15 @@
         <div class="nav-brand-icon">🏥</div>
         <span class="nav-brand-name">BookMyDoctor</span>
     </a>
-    <div class="nav-links" id="nav-links"></div>
+    <div class="nav-right">
+        <a href="../index.html"           class="btn-nav btn-nav-outline">🏥 Find Doctors</a>
+        <a href="../patient/profile.html" class="btn-nav btn-nav-outline">👤 Profile</a>
+        <div class="user-badge" id="user-badge">
+            <span class="user-badge-role" id="badge-role">PATIENT</span>
+            <span class="user-badge-name" id="badge-name">—</span>
+        </div>
+        <button class="btn-nav btn-logout" onclick="handleLogout()">Logout</button>
+    </div>
 </nav>
 
 <!-- Hero -->
@@ -633,27 +595,22 @@ function formatTime(t) {
 // ─────────────────────────────────────────────────────
 //  Navbar — who is logged in
 // ─────────────────────────────────────────────────────
-
-
-
 function renderNav() {
     const s = getSession();
+
     const roleColors = {
         'PATIENT'        : '#2d9e5f',
         'DOCTOR'         : '#1565c0',
         'ADMIN'          : '#6a1b9a',
         'HOSPITAL_ADMIN' : '#e65100'
     };
-    const roleLabels = {
-        'PATIENT'        : 'PATIENT',
-        'DOCTOR'         : 'DOCTOR',
-        'ADMIN'          : 'ADMIN',
-        'HOSPITAL_ADMIN' : 'HOSPITAL ADMIN'
-    };
-    const role  = s.userType || 'PATIENT';
-    document.getElementById('badge-role').textContent      = roleLabels[role] || role;
-    document.getElementById('badge-role').style.background = roleColors[role] || '#2d9e5f';
-    document.getElementById('badge-name').textContent      = s.name || '—';
+
+    const color = roleColors[s.userType] || '#2d9e5f';
+    const name  = s.name ? s.name.split(' ')[0] : 'Account';
+
+    document.getElementById('badge-role').textContent        = s.userType || 'PATIENT';
+    document.getElementById('badge-role').style.background   = color;
+    document.getElementById('badge-name').textContent        = name;
 }
 
 async function handleLogout() {
