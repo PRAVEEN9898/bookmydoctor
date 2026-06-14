@@ -27,7 +27,6 @@
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: var(--font); background: var(--gray-100); color: var(--gray-800); }
 
-        /* ── Navbar ── */
         .navbar {
             background: var(--white); padding: 0 24px; height: 60px;
             display: flex; align-items: center; justify-content: space-between;
@@ -57,44 +56,25 @@
         }
         .nav-back:hover { background: var(--gray-100); }
 
-        /* ── Hero ── */
         .hospital-hero {
             background: linear-gradient(135deg, var(--green-dark), var(--green-mid));
             padding: 32px 24px 40px;
         }
         .hospital-hero-inner { max-width: 1000px; margin: 0 auto; }
-
-        .hospital-hero-top {
-            display: flex; justify-content: space-between;
-            align-items: flex-start; flex-wrap: wrap; gap: 16px;
-        }
-
+        .hospital-hero-top { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 16px; }
         .hospital-hero-name { font-size: 28px; font-weight: 800; color: var(--white); margin-bottom: 6px; }
         .hospital-hero-type { font-size: 14px; color: rgba(255,255,255,0.8); margin-bottom: 12px; }
-
         .hero-badges { display: flex; gap: 8px; flex-wrap: wrap; }
-
-        .hero-badge {
-            font-size: 11px; font-weight: 700; padding: 4px 10px;
-            border-radius: 12px; white-space: nowrap;
-        }
+        .hero-badge { font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 12px; white-space: nowrap; }
         .badge-nabh  { background: rgba(255,255,255,0.2); color: var(--white); }
         .badge-open  { background: #e8f5e9; color: #2e7d32; }
         .badge-closed{ background: #fdecea; color: var(--red); }
         .badge-type  { background: rgba(255,255,255,0.15); color: var(--white); }
-
-        /* Hero Stats */
-        .hero-stats {
-            display: flex; gap: 20px; flex-wrap: wrap; margin-top: 20px;
-        }
-        .hero-stat {
-            background: rgba(255,255,255,0.15); border-radius: var(--radius-sm);
-            padding: 12px 20px; text-align: center; min-width: 90px;
-        }
+        .hero-stats  { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 20px; }
+        .hero-stat   { background: rgba(255,255,255,0.15); border-radius: var(--radius-sm); padding: 12px 20px; text-align: center; min-width: 90px; }
         .hero-stat-num   { font-size: 22px; font-weight: 800; color: var(--white); }
         .hero-stat-label { font-size: 11px; color: rgba(255,255,255,0.8); margin-top: 2px; }
 
-        /* ── Page Layout ── */
         .page-wrap {
             max-width: 1000px; margin: 0 auto;
             padding: 28px 24px 48px;
@@ -102,24 +82,12 @@
             gap: 24px; align-items: start;
         }
 
-        /* ── Card ── */
-        .card {
-            background: var(--white); border-radius: var(--radius);
-            box-shadow: var(--shadow-sm); overflow: hidden; margin-bottom: 20px;
-        }
-        .card-head {
-            padding: 16px 20px; border-bottom: 1px solid var(--gray-200);
-            display: flex; align-items: center; gap: 10px;
-        }
-        .card-head-icon {
-            width: 32px; height: 32px; background: var(--green-light);
-            border-radius: 8px; display: flex; align-items: center;
-            justify-content: center; font-size: 16px;
-        }
+        .card { background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow-sm); overflow: hidden; margin-bottom: 20px; }
+        .card-head { padding: 16px 20px; border-bottom: 1px solid var(--gray-200); display: flex; align-items: center; gap: 10px; }
+        .card-head-icon { width: 32px; height: 32px; background: var(--green-light); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
         .card-head-title { font-size: 15px; font-weight: 700; color: var(--gray-800); }
         .card-body { padding: 20px; }
 
-        /* ── Department Pills ── */
         .dept-pills { display: flex; gap: 8px; flex-wrap: wrap; }
         .dept-pill {
             padding: 8px 16px; background: var(--green-pale);
@@ -127,20 +95,11 @@
             font-size: 13px; font-weight: 500; color: var(--green-dark);
             cursor: pointer; transition: all 0.2s; white-space: nowrap;
         }
-        .dept-pill:hover, .dept-pill.active {
-            background: var(--green-mid); color: var(--white); border-color: var(--green-mid);
-        }
-        .dept-count {
-            display: inline-block; background: var(--green-light); color: var(--green-dark);
-            font-size: 10px; font-weight: 700; padding: 1px 6px;
-            border-radius: 8px; margin-left: 4px;
-        }
+        .dept-pill:hover, .dept-pill.active { background: var(--green-mid); color: var(--white); border-color: var(--green-mid); }
+        .dept-count { display: inline-block; background: var(--green-light); color: var(--green-dark); font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: 8px; margin-left: 4px; }
         .dept-pill.active .dept-count { background: rgba(255,255,255,0.25); color: var(--white); }
 
-        /* ── Doctor Cards ── */
-        .doctors-grid {
-            display: grid; grid-template-columns: 1fr; gap: 14px;
-        }
+        .doctors-grid { display: grid; grid-template-columns: 1fr; gap: 14px; }
 
         .doctor-card {
             background: var(--white); border-radius: var(--radius);
@@ -150,103 +109,50 @@
         }
         .doctor-card:hover { border-color: var(--green-light); transform: translateY(-1px); }
 
-        .doctor-avatar {
-            width: 56px; height: 56px; border-radius: 12px;
-            background: var(--green-light); display: flex;
-            align-items: center; justify-content: center;
-            font-size: 26px; flex-shrink: 0;
-        }
-
-        .doctor-info { flex: 1; }
-        .doctor-name { font-size: 15px; font-weight: 700; color: var(--gray-800); margin-bottom: 3px; }
-        .doctor-spec { font-size: 12px; color: var(--green-mid); font-weight: 600; margin-bottom: 4px; }
-        .doctor-qual { font-size: 11px; color: var(--gray-600); margin-bottom: 8px; }
-
-        .doctor-tags { display: flex; gap: 6px; flex-wrap: wrap; }
-        .doctor-tag {
-            font-size: 11px; color: var(--gray-600);
-            background: var(--gray-100); padding: 3px 8px; border-radius: 6px;
-        }
-        .avail-badge {
-            font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 20px;
-        }
+        .doctor-avatar { width: 56px; height: 56px; border-radius: 12px; background: var(--green-light); display: flex; align-items: center; justify-content: center; font-size: 26px; flex-shrink: 0; }
+        .doctor-info   { flex: 1; }
+        .doctor-name   { font-size: 15px; font-weight: 700; color: var(--gray-800); margin-bottom: 3px; }
+        .doctor-spec   { font-size: 12px; color: var(--green-mid); font-weight: 600; margin-bottom: 4px; }
+        .doctor-qual   { font-size: 11px; color: var(--gray-600); margin-bottom: 8px; }
+        .doctor-tags   { display: flex; gap: 6px; flex-wrap: wrap; }
+        .doctor-tag    { font-size: 11px; color: var(--gray-600); background: var(--gray-100); padding: 3px 8px; border-radius: 6px; }
+        .avail-badge   { font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 20px; }
         .avail-badge.yes { background: #e8f5e9; color: #2e7d32; }
         .avail-badge.no  { background: #fdecea; color: #c62828; }
 
-        .doctor-right { text-align: right; flex-shrink: 0; }
-        .doctor-fee   { font-size: 18px; font-weight: 700; color: var(--green-dark); }
+        .doctor-right  { text-align: right; flex-shrink: 0; }
+        .doctor-fee    { font-size: 18px; font-weight: 700; color: var(--green-dark); }
         .doctor-fee small { font-size: 11px; font-weight: 400; color: var(--gray-600); }
         .doctor-rating { font-size: 12px; color: #f59e0b; margin-bottom: 10px; }
 
-        .btn-book {
-            padding: 8px 18px; background: var(--green-mid); color: var(--white);
-            border: none; border-radius: var(--radius-sm); font-size: 13px;
-            font-weight: 600; cursor: pointer; font-family: var(--font);
-            transition: background 0.2s; white-space: nowrap;
-        }
+        .btn-book { padding: 8px 18px; background: var(--green-mid); color: var(--white); border: none; border-radius: var(--radius-sm); font-size: 13px; font-weight: 600; cursor: pointer; font-family: var(--font); transition: background 0.2s; white-space: nowrap; }
         .btn-book:hover { background: var(--green-dark); }
 
-        /* ── Sidebar ── */
         .sidebar { position: sticky; top: 80px; }
-
-        .info-row {
-            display: flex; align-items: flex-start; gap: 10px;
-            padding: 10px 0; border-bottom: 1px solid var(--gray-200);
-            font-size: 13px;
-        }
+        .info-row { display: flex; align-items: flex-start; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--gray-200); font-size: 13px; }
         .info-row:last-child { border-bottom: none; }
         .info-icon  { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
         .info-label { font-size: 11px; color: var(--gray-600); margin-bottom: 2px; }
         .info-value { font-weight: 500; color: var(--gray-800); }
-
         .insurance-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
-        .ins-tag {
-            font-size: 11px; color: var(--green-dark); background: var(--green-light);
-            padding: 3px 8px; border-radius: 10px;
-        }
+        .ins-tag { font-size: 11px; color: var(--green-dark); background: var(--green-light); padding: 3px 8px; border-radius: 10px; }
 
-        /* ── Empty ── */
         .empty-state { text-align: center; padding: 40px 20px; color: var(--gray-600); }
         .empty-icon  { font-size: 40px; margin-bottom: 12px; }
         .empty-title { font-size: 16px; font-weight: 600; color: var(--gray-800); margin-bottom: 6px; }
         .empty-sub   { font-size: 13px; }
 
-        /* ── Skeleton ── */
-        .skeleton {
-            background: linear-gradient(90deg, var(--gray-200) 25%, var(--gray-100) 50%, var(--gray-200) 75%);
-            background-size: 200% 100%; animation: shimmer 1.2s infinite; border-radius: 6px;
-        }
+        .skeleton { background: linear-gradient(90deg, var(--gray-200) 25%, var(--gray-100) 50%, var(--gray-200) 75%); background-size: 200% 100%; animation: shimmer 1.2s infinite; border-radius: 6px; }
         @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
 
-        /* ── Loader ── */
-        #bmd-loader {
-            display: none; position: fixed; top: 0; left: 0;
-            width: 100%; height: 100%; background: rgba(255,255,255,0.75);
-            z-index: 9999; align-items: center; justify-content: center;
-            flex-direction: column; gap: 12px;
-        }
-        .spinner {
-            width: 40px; height: 40px; border: 4px solid var(--gray-200);
-            border-top: 4px solid var(--green-mid); border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }
+        #bmd-loader { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.75); z-index: 9999; align-items: center; justify-content: center; flex-direction: column; gap: 12px; }
+        .spinner { width: 40px; height: 40px; border: 4px solid var(--gray-200); border-top: 4px solid var(--green-mid); border-radius: 50%; animation: spin 0.8s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        #bmd-toast {
-            position: fixed; bottom: 24px; right: 24px;
-            padding: 12px 20px; border-radius: 8px; font-size: 14px;
-            font-family: var(--font); color: var(--white);
-            box-shadow: var(--shadow-md); z-index: 99999; display: none;
-        }
+        #bmd-toast { position: fixed; bottom: 24px; right: 24px; padding: 12px 20px; border-radius: 8px; font-size: 14px; font-family: var(--font); color: var(--white); box-shadow: var(--shadow-md); z-index: 99999; display: none; }
 
-        @media (max-width: 768px) {
-            .page-wrap { grid-template-columns: 1fr; }
-            .sidebar   { position: static; }
-        }
-        @media (max-width: 480px) {
-            .hospital-hero-name { font-size: 22px; }
-            .hero-stats { gap: 10px; }
-        }
+        @media (max-width: 768px) { .page-wrap { grid-template-columns: 1fr; } .sidebar { position: static; } }
+        @media (max-width: 480px) { .hospital-hero-name { font-size: 22px; } .hero-stats { gap: 10px; } }
     </style>
 </head>
 <body>
@@ -258,7 +164,6 @@
 
 <div id="bmd-toast"></div>
 
-<!-- Navbar -->
 <nav class="navbar">
     <a href="index.html" class="nav-brand">
         <div class="nav-brand-icon">🏥</div>
@@ -270,7 +175,6 @@
     </div>
 </nav>
 
-<!-- Hospital Hero -->
 <div class="hospital-hero">
     <div class="hospital-hero-inner">
         <div class="hospital-hero-top">
@@ -284,13 +188,8 @@
     </div>
 </div>
 
-<!-- Page Content -->
 <div class="page-wrap">
-
-    <!-- LEFT — Departments + Doctors -->
     <div>
-
-        <!-- Departments -->
         <div class="card">
             <div class="card-head">
                 <div class="card-head-icon">🏬</div>
@@ -303,7 +202,6 @@
             </div>
         </div>
 
-        <!-- Doctors -->
         <div class="card">
             <div class="card-head">
                 <div class="card-head-icon">👨‍⚕️</div>
@@ -319,23 +217,12 @@
                             <div class="skeleton" style="height:12px;width:80%;"></div>
                         </div>
                     </div>
-                    <div class="doctor-card">
-                        <div class="skeleton" style="width:56px;height:56px;border-radius:12px;flex-shrink:0;"></div>
-                        <div style="flex:1;">
-                            <div class="skeleton" style="height:16px;width:60%;margin-bottom:8px;"></div>
-                            <div class="skeleton" style="height:12px;width:40%;margin-bottom:6px;"></div>
-                            <div class="skeleton" style="height:12px;width:80%;"></div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
-
     </div>
 
-    <!-- RIGHT — Hospital Info Sidebar -->
     <div class="sidebar">
-
         <div class="card">
             <div class="card-head">
                 <div class="card-head-icon">ℹ️</div>
@@ -357,29 +244,17 @@
                 <div class="insurance-list" id="insurance-list"></div>
             </div>
         </div>
-
     </div>
-
 </div>
 
 <script>
-// ─────────────────────────────────────────────────────
-//  Config
-// ─────────────────────────────────────────────────────
-const BASE_URL   = 'https://bookmydoctor-proxy.pulipraveenkumar08.workers.dev/';
-let hospitalData  = null;
-let allDoctors    = [];
-let selectedDept  = '';
-let hospitalId    = null;
+const BASE_URL  = 'https://bookmydoctor-proxy.pulipraveenkumar08.workers.dev/';
+let hospitalData = null;
+let allDoctors   = [];
+let hospitalId   = null;
 
-// ─────────────────────────────────────────────────────
-//  Helpers
-// ─────────────────────────────────────────────────────
-function showLoader(msg) {
-    document.getElementById('loader-text').textContent = msg || 'Loading...';
-    document.getElementById('bmd-loader').style.display = 'flex';
-}
-function hideLoader() { document.getElementById('bmd-loader').style.display = 'none'; }
+function showLoader(msg) { document.getElementById('loader-text').textContent = msg || 'Loading...'; document.getElementById('bmd-loader').style.display = 'flex'; }
+function hideLoader()    { document.getElementById('bmd-loader').style.display = 'none'; }
 
 function showToast(msg, color) {
     const t = document.getElementById('bmd-toast');
@@ -392,7 +267,6 @@ function getSession() {
     return {
         token    : localStorage.getItem('bmd_token'),
         userType : localStorage.getItem('bmd_user_type'),
-        userId   : localStorage.getItem('bmd_user_id'),
         name     : localStorage.getItem('bmd_name')
     };
 }
@@ -411,13 +285,6 @@ async function callBMD(endpoint, payload) {
     } catch (err) { return { status: 'ERROR', message: err.message }; }
 }
 
-function formatTime(t) {
-    if (!t) return '';
-    const [h, m] = t.split(':');
-    const hr = parseInt(h);
-    return `${hr % 12 || 12}:${m} ${hr >= 12 ? 'PM' : 'AM'}`;
-}
-
 function isOpen(openTime, closeTime) {
     try {
         const now      = new Date();
@@ -428,13 +295,11 @@ function isOpen(openTime, closeTime) {
     } catch(e) { return true; }
 }
 
-// ─────────────────────────────────────────────────────
-//  Navbar
-// ─────────────────────────────────────────────────────
+// ── Navbar ──
 function renderNav() {
     const s   = getSession();
     const nav = document.getElementById('nav-links');
-    if (s.token && s.user_type === 'PATIENT') {
+    if (s.token && s.userType === 'PATIENT') {
         nav.innerHTML = `
             <a href="patient/appointments.html" class="btn-nav btn-nav-outline">My Appointments</a>
             <button class="btn-nav btn-nav-solid" onclick="handleLogout()">Logout</button>`;
@@ -449,179 +314,92 @@ async function handleLogout() {
     const s = getSession();
     if (s.token) await callBMD('logout', { session_token: s.token });
     localStorage.clear();
-    renderNav();
-    showToast('Logged out successfully');
+    window.location.href = 'patient/login.html';
 }
 
-// ─────────────────────────────────────────────────────
-//  Load Hospital Data
-// ─────────────────────────────────────────────────────
+// ── Load Hospital ──
 async function loadHospital() {
-    const s = getSession();
+    const s    = getSession();
     const data = await callBMD('get-hospitals', { session_token: s.token || '' });
-
     if (data.status !== 'SUCCESS') return;
 
     const hospital = (data.hospitals || []).find(h => h.hospital_id == hospitalId);
-    if (!hospital) {
-        document.getElementById('hero-name').textContent = 'Hospital not found';
-        return;
-    }
+    if (!hospital) { document.getElementById('hero-name').textContent = 'Hospital not found'; return; }
 
     hospitalData = hospital;
-    renderHospitalHero(hospital);
-    renderHospitalInfo(hospital);
-    renderInsurance(hospital.insurance || []);
-}
+    document.title = hospital.hospital_name + ' — BookMyDoctor';
+    document.getElementById('hero-name').textContent = '🏥 ' + hospital.hospital_name;
+    document.getElementById('hero-type').textContent = hospital.hospital_type || 'Multi-Specialty';
 
-// ─────────────────────────────────────────────────────
-//  Render Hero
-// ─────────────────────────────────────────────────────
-function renderHospitalHero(h) {
-    document.title = h.hospital_name + ' — BookMyDoctor';
-    document.getElementById('hero-name').textContent = '🏥 ' + h.hospital_name;
-    document.getElementById('hero-type').textContent = h.hospital_type || 'Multi-Specialty';
-
-    const open = isOpen(h.open_time || '08:00', h.close_time || '20:00');
-
+    const open = isOpen(hospital.open_time || '08:00', hospital.close_time || '20:00');
     document.getElementById('hero-badges').innerHTML = `
-        ${h.nabh_certified === 'Y' ? `<span class="hero-badge badge-nabh">NABH ✓</span>` : ''}
-        <span class="hero-badge ${open ? 'badge-open' : 'badge-closed'}">
-            ${open ? '● Open Now' : '● Closed'}
-        </span>
-        <span class="hero-badge badge-type">${h.city || 'Hyderabad'}</span>
+        ${hospital.nabh_certified === 'Y' ? `<span class="hero-badge badge-nabh">NABH ✓</span>` : ''}
+        <span class="hero-badge ${open ? 'badge-open' : 'badge-closed'}">${open ? '● Open Now' : '● Closed'}</span>
+        <span class="hero-badge badge-type">${hospital.city || 'Hyderabad'}</span>
     `;
 
     document.getElementById('hero-stats').innerHTML = `
-        <div class="hero-stat">
-            <div class="hero-stat-num">${h.doctor_count || 0}</div>
-            <div class="hero-stat-label">Doctors</div>
-        </div>
-        <div class="hero-stat">
-            <div class="hero-stat-num">${h.dept_count || 0}</div>
-            <div class="hero-stat-label">Departments</div>
-        </div>
-        <div class="hero-stat">
-            <div class="hero-stat-num">${h.avg_wait_mins || 15} min</div>
-            <div class="hero-stat-label">Avg Wait</div>
-        </div>
-        <div class="hero-stat">
-            <div class="hero-stat-num">${h.total_appts || 0}</div>
-            <div class="hero-stat-label">Consultations</div>
-        </div>
-        <div class="hero-stat">
-            <div class="hero-stat-num">⭐ ${parseFloat(h.avg_rating || 0).toFixed(1)}</div>
-            <div class="hero-stat-label">Rating</div>
-        </div>
+        <div class="hero-stat"><div class="hero-stat-num">${hospital.doctor_count || 0}</div><div class="hero-stat-label">Doctors</div></div>
+        <div class="hero-stat"><div class="hero-stat-num">${hospital.dept_count || 0}</div><div class="hero-stat-label">Departments</div></div>
+        <div class="hero-stat"><div class="hero-stat-num">${hospital.avg_wait_mins || 15} min</div><div class="hero-stat-label">Avg Wait</div></div>
+        <div class="hero-stat"><div class="hero-stat-num">${hospital.total_appts || 0}</div><div class="hero-stat-label">Consultations</div></div>
+        <div class="hero-stat"><div class="hero-stat-num">⭐ ${parseFloat(hospital.avg_rating || 0).toFixed(1)}</div><div class="hero-stat-label">Rating</div></div>
     `;
-}
 
-// ─────────────────────────────────────────────────────
-//  Render Sidebar Info
-// ─────────────────────────────────────────────────────
-function renderHospitalInfo(h) {
     document.getElementById('hospital-info').innerHTML = `
-        <div class="info-row">
-            <span class="info-icon">📍</span>
-            <div>
-                <div class="info-label">Address</div>
-                <div class="info-value">${h.city || '—'}, ${h.state || '—'}</div>
-            </div>
-        </div>
-        <div class="info-row">
-            <span class="info-icon">📞</span>
-            <div>
-                <div class="info-label">Contact</div>
-                <div class="info-value">${h.contact_phone || '—'}</div>
-            </div>
-        </div>
-        <div class="info-row">
-            <span class="info-icon">✉️</span>
-            <div>
-                <div class="info-label">Email</div>
-                <div class="info-value">${h.email || '—'}</div>
-            </div>
-        </div>
-        <div class="info-row">
-            <span class="info-icon">🕐</span>
-            <div>
-                <div class="info-label">Timings</div>
-                <div class="info-value">${h.open_time || '08:00'} – ${h.close_time || '20:00'}</div>
-            </div>
-        </div>
-        <div class="info-row">
-            <span class="info-icon">⏱️</span>
-            <div>
-                <div class="info-label">Average Wait</div>
-                <div class="info-value">${h.avg_wait_mins || 15} minutes</div>
-            </div>
-        </div>
+        <div class="info-row"><span class="info-icon">📍</span><div><div class="info-label">Address</div><div class="info-value">${hospital.city || '—'}, ${hospital.state || '—'}</div></div></div>
+        <div class="info-row"><span class="info-icon">📞</span><div><div class="info-label">Contact</div><div class="info-value">${hospital.contact_phone || '—'}</div></div></div>
+        <div class="info-row"><span class="info-icon">✉️</span><div><div class="info-label">Email</div><div class="info-value">${hospital.email || '—'}</div></div></div>
+        <div class="info-row"><span class="info-icon">🕐</span><div><div class="info-label">Timings</div><div class="info-value">${hospital.open_time || '08:00'} – ${hospital.close_time || '20:00'}</div></div></div>
+        <div class="info-row"><span class="info-icon">⏱️</span><div><div class="info-label">Avg Wait</div><div class="info-value">${hospital.avg_wait_mins || 15} minutes</div></div></div>
     `;
-}
 
-// ─────────────────────────────────────────────────────
-//  Render Insurance
-// ─────────────────────────────────────────────────────
-function renderInsurance(insurance) {
-    if (!insurance.length) return;
-    document.getElementById('insurance-card').style.display = 'block';
-    document.getElementById('insurance-list').innerHTML =
-        insurance.map(i => `<span class="ins-tag">✓ ${i}</span>`).join('');
-}
-
-// ─────────────────────────────────────────────────────
-//  Load Departments
-// ─────────────────────────────────────────────────────
-async function loadDepartments() {
-    const s    = getSession();
-    const data = await callBMD('get-departments', {
-        session_token : s.token || '',
-        hospital_id   : hospitalId
-    });
-
-    data.departments.forEach(d => {
-    const pill = document.createElement('div');
-    pill.className       = 'dept-pill';
-    pill.dataset.deptId  = d.dept_id;
-    pill.dataset.deptName= d.dept_name;
-    pill.innerHTML       = `${d.dept_name} <span class="dept-count">${d.doctor_count}</span>`;
-    pill.onclick         = () => filterByDept(d.dept_id, d.dept_name, pill);
-    pills.appendChild(pill);
-});
+    const insurance = hospital.insurance || [];
+    if (insurance.length) {
+        document.getElementById('insurance-card').style.display = 'block';
+        document.getElementById('insurance-list').innerHTML = insurance.map(i => `<span class="ins-tag">✓ ${i}</span>`).join('');
     }
 }
 
-// ─────────────────────────────────────────────────────
-//  Load Doctors
-// ─────────────────────────────────────────────────────
+// ── Load Departments ──
+async function loadDepartments() {
+    const s    = getSession();
+    const data = await callBMD('get-departments', { session_token: s.token || '', hospital_id: hospitalId });
+    if (data.status !== 'SUCCESS') return;
+
+    const pills = document.getElementById('dept-pills');
+    (data.departments || []).forEach(d => {
+        const pill           = document.createElement('div');
+        pill.className       = 'dept-pill';
+        pill.dataset.deptName = d.dept_name;
+        pill.innerHTML       = `${d.dept_name} <span class="dept-count">${d.doctor_count}</span>`;
+        pill.onclick         = () => filterByDept(d.dept_id, d.dept_name, pill);
+        pills.appendChild(pill);
+    });
+}
+
+// ── Load Doctors ──
 async function loadDoctors() {
     const s    = getSession();
     const data = await callBMD('get-doctors', { session_token: s.token || '' });
+    if (data.status !== 'SUCCESS') {
+        document.getElementById('doctors-grid').innerHTML = `<div class="empty-state"><div class="empty-icon">⚠️</div><div class="empty-title">Could not load doctors</div></div>`;
+        return;
+    }
 
-    if (data.status === 'SUCCESS') {
-    // Filter by hospital_name since hospital_id not in response
+    // Filter by hospital_name (hospital_id not in response)
     allDoctors = (data.doctors || []).filter(d =>
         hospitalData &&
-        (d.hospital_name || '').toLowerCase() ===
-        (hospitalData.hospital_name || '').toLowerCase()
+        (d.hospital_name || '').toLowerCase() === (hospitalData.hospital_name || '').toLowerCase()
     );
+
     renderDoctors(allDoctors);
-    } else {
-        document.getElementById('doctors-grid').innerHTML = `
-            <div class="empty-state">
-                <div class="empty-icon">⚠️</div>
-                <div class="empty-title">Could not load doctors</div>
-            </div>`;
-    }
 }
 
-// ─────────────────────────────────────────────────────
-//  Render Doctors
-// ─────────────────────────────────────────────────────
+// ── Render Doctors ──
 function renderDoctors(doctors) {
     const grid  = document.getElementById('doctors-grid');
     const title = document.getElementById('doctors-title');
-
     title.textContent = `Available Doctors (${doctors.length})`;
 
     if (doctors.length === 0) {
@@ -634,9 +412,13 @@ function renderDoctors(doctors) {
         return;
     }
 
-    grid.innerHTML = doctors.map(d => `
+    grid.innerHTML = doctors.map(d => {
+        // Use gender from API response
+        const icon = d.gender === 'F' ? '👩‍⚕️' : '👨‍⚕️';
+
+        return `
         <div class="doctor-card" onclick="bookDoctor(${d.doctor_id})">
-            <div class="doctor-avatar">👨‍⚕️</div>
+            <div class="doctor-avatar">${icon}</div>
             <div class="doctor-info">
                 <div class="doctor-name">${d.full_name}</div>
                 <div class="doctor-spec">${d.specialization}</div>
@@ -653,35 +435,25 @@ function renderDoctors(doctors) {
                 <div class="doctor-rating">⭐ ${parseFloat(d.avg_rating||0).toFixed(1)} (${d.total_reviews||0})</div>
                 <div class="doctor-fee">₹${d.consultation_fee || 0}<small>/visit</small></div>
                 <br>
-                <button class="btn-book"
-                    onclick="event.stopPropagation(); bookDoctor(${d.doctor_id})">
-                    Book Now
-                </button>
+                <button class="btn-book" onclick="event.stopPropagation(); bookDoctor(${d.doctor_id})">Book Now</button>
             </div>
-        </div>
-    `).join('');
+        </div>`;
+    }).join('');
 }
 
-// ─────────────────────────────────────────────────────
-//  Filter by Department
-// ─────────────────────────────────────────────────────
+// ── Filter by Dept ──
 function filterByDept(deptId, deptName, pillEl) {
-    selectedDept = deptId;
     document.querySelectorAll('.dept-pill').forEach(p => p.classList.remove('active'));
     if (pillEl) pillEl.classList.add('active');
 
-    const filtered = deptId
-        ? allDoctors.filter(d =>
-            (d.dept_name || '').toLowerCase() === (deptName || '').toLowerCase()
-          )
+    const filtered = deptName
+        ? allDoctors.filter(d => (d.dept_name || '').toLowerCase() === deptName.toLowerCase())
         : allDoctors;
 
     renderDoctors(filtered);
 }
 
-// ─────────────────────────────────────────────────────
-//  Book Doctor
-// ─────────────────────────────────────────────────────
+// ── Book ──
 function bookDoctor(doctorId) {
     const s = getSession();
     if (!s.token || s.userType !== 'PATIENT') {
@@ -692,26 +464,18 @@ function bookDoctor(doctorId) {
     window.location.href = 'patient/booking.html?doctor_id=' + doctorId;
 }
 
-// ─────────────────────────────────────────────────────
-//  Init
-// ─────────────────────────────────────────────────────
+// ── Init ──
 async function init() {
     const params = new URLSearchParams(window.location.search);
     hospitalId   = params.get('hospital_id');
-
-    if (!hospitalId) {
-        window.location.href = 'index.html';
-        return;
-    }
+    if (!hospitalId) { window.location.href = 'index.html'; return; }
 
     renderNav();
     showLoader('Loading hospital...');
 
+    // Load hospital FIRST so hospitalData is set before filtering doctors
     await loadHospital();
-    await Promise.all([
-        loadDepartments(),
-        loadDoctors()
-    ]);
+    await Promise.all([loadDepartments(), loadDoctors()]);
 
     hideLoader();
 }
