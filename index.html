@@ -674,13 +674,20 @@ function selectSpec(code, pillEl) {
         return;
     }
 
-    // Filter hospitals by specialization (from doctors inside)
-    // For now show all hospitals and note on search — doctors page will filter
-    renderHospitals(allHospitals);
-    document.getElementById('search-input').value = '';
-    showToast('Showing all hospitals — select a hospital to find ' + code + ' doctors');
-}
+    // Show only hospitals that have doctors with this specialization
+    const filtered = allHospitals.filter(h =>
+        (h.specializations || []).some(s =>
+            s.toUpperCase() === code.toUpperCase()
+        )
+    );
 
+    if (filtered.length === 0) {
+        showToast('No hospitals found for this specialization', '#fd7e14');
+        renderHospitals([]);
+    } else {
+        renderHospitals(filtered);
+    }
+}
 // ─────────────────────────────────────────────────────
 //  Navigate
 // ─────────────────────────────────────────────────────
