@@ -27,427 +27,251 @@
 
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-        body {
-            font-family : var(--font);
-            background  : var(--gray-100);
-            color       : var(--gray-800);
-        }
+        body { font-family: var(--font); background: var(--gray-100); color: var(--gray-800); }
 
+        /* ── Navbar ── */
         .navbar {
-            background    : var(--white);
-            padding       : 0 24px;
-            height        : 60px;
-            display       : flex;
-            align-items   : center;
-            justify-content: space-between;
-            box-shadow    : 0 1px 4px rgba(0,0,0,0.08);
-            position      : sticky;
-            top           : 0;
-            z-index       : 100;
+            background: var(--white); padding: 0 24px; height: 60px;
+            display: flex; align-items: center; justify-content: space-between;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.08); position: sticky; top: 0; z-index: 100;
         }
 
-        .nav-brand {
-            display     : flex;
-            align-items : center;
-            gap         : 9px;
-            text-decoration: none;
-        }
+        .nav-brand { display: flex; align-items: center; gap: 9px; text-decoration: none; }
 
         .nav-brand-icon {
-            width           : 34px;
-            height          : 34px;
-            background      : var(--green-mid);
-            border-radius   : 8px;
-            display         : flex;
-            align-items     : center;
-            justify-content : center;
-            font-size       : 18px;
+            width: 34px; height: 34px; background: var(--green-mid);
+            border-radius: 8px; display: flex; align-items: center;
+            justify-content: center; font-size: 18px;
         }
 
-        .nav-brand-name {
-            font-size   : 18px;
-            font-weight : 700;
-            color       : var(--green-dark);
-        }
+        .nav-brand-name { font-size: 18px; font-weight: 700; color: var(--green-dark); }
 
-        .nav-links {
-            display     : flex;
-            align-items : center;
-            gap         : 8px;
-        }
-
-        .nav-user {
-            display     : flex;
-            align-items : center;
-            gap         : 6px;
-            padding     : 6px 14px;
-            background  : var(--green-light);
-            border-radius: 20px;
-            font-size   : 13px;
-            color       : var(--green-dark);
-            font-weight : 600;
-            cursor      : pointer;
-            text-decoration: none;
-        }
+        .nav-links { display: flex; align-items: center; gap: 8px; }
 
         .btn-nav {
-            padding       : 7px 16px;
-            border-radius : 20px;
-            font-size     : 13px;
-            font-weight   : 600;
-            cursor        : pointer;
-            font-family   : var(--font);
-            text-decoration: none;
-            border        : none;
-            transition    : all 0.2s;
+            padding: 7px 16px; border-radius: 20px; font-size: 13px;
+            font-weight: 600; cursor: pointer; font-family: var(--font);
+            text-decoration: none; border: none; transition: all 0.2s;
         }
 
         .btn-nav-outline {
-            background : var(--white);
-            color      : var(--green-dark);
-            border     : 1.5px solid var(--green-mid) !important;
+            background: var(--white); color: var(--green-dark);
+            border: 1.5px solid var(--green-mid) !important;
         }
 
         .btn-nav-outline:hover { background: var(--green-light); }
-
-        .btn-nav-solid {
-            background : var(--green-mid);
-            color      : var(--white);
-        }
-
+        .btn-nav-solid  { background: var(--green-mid); color: var(--white); }
         .btn-nav-solid:hover { background: var(--green-dark); }
 
+        /* ── Hero ── */
         .hero {
-            background  : linear-gradient(135deg, var(--green-dark) 0%, var(--green-mid) 60%, #4db87a 100%);
-            padding     : 56px 24px 80px;
-            text-align  : center;
-            position    : relative;
-            overflow    : hidden;
+            background: linear-gradient(135deg, var(--green-dark) 0%, var(--green-mid) 60%, #4db87a 100%);
+            padding: 56px 24px 80px; text-align: center; position: relative; overflow: hidden;
         }
 
         .hero::before {
-            content       : '';
-            position      : absolute;
-            top           : -100px;
-            right         : -100px;
-            width         : 400px;
-            height        : 400px;
-            background    : rgba(255,255,255,0.05);
-            border-radius : 50%;
+            content: ''; position: absolute; top: -100px; right: -100px;
+            width: 400px; height: 400px; background: rgba(255,255,255,0.05); border-radius: 50%;
         }
 
         .hero::after {
-            content       : '';
-            position      : absolute;
-            bottom        : -120px;
-            left          : -80px;
-            width         : 350px;
-            height        : 350px;
-            background    : rgba(255,255,255,0.04);
-            border-radius : 50%;
+            content: ''; position: absolute; bottom: -120px; left: -80px;
+            width: 350px; height: 350px; background: rgba(255,255,255,0.04); border-radius: 50%;
         }
 
         .hero-content { position: relative; z-index: 1; }
 
         .hero-badge {
-            display         : inline-flex;
-            align-items     : center;
-            gap             : 6px;
-            background      : rgba(255,255,255,0.15);
-            color           : var(--white);
-            padding         : 5px 14px;
-            border-radius   : 20px;
-            font-size       : 12px;
-            font-weight     : 600;
-            margin-bottom   : 20px;
-            backdrop-filter : blur(4px);
+            display: inline-flex; align-items: center; gap: 6px;
+            background: rgba(255,255,255,0.15); color: var(--white);
+            padding: 5px 14px; border-radius: 20px; font-size: 12px;
+            font-weight: 600; margin-bottom: 20px; backdrop-filter: blur(4px);
         }
 
         .hero-title {
-            font-size   : 40px;
-            font-weight : 800;
-            color       : var(--white);
-            line-height : 1.15;
-            margin-bottom: 12px;
-            letter-spacing: -0.5px;
+            font-size: 40px; font-weight: 800; color: var(--white);
+            line-height: 1.15; margin-bottom: 12px; letter-spacing: -0.5px;
         }
 
         .hero-title span { color: #a8f0c6; }
-
-        .hero-sub {
-            font-size    : 16px;
-            color        : rgba(255,255,255,0.85);
-            margin-bottom: 36px;
-        }
+        .hero-sub { font-size: 16px; color: rgba(255,255,255,0.85); margin-bottom: 36px; }
 
         .search-box {
-            background    : var(--white);
-            border-radius : var(--radius);
-            padding       : 8px;
-            max-width     : 700px;
-            margin        : 0 auto 20px;
-            display       : flex;
-            gap           : 8px;
-            box-shadow    : var(--shadow-md);
+            background: var(--white); border-radius: var(--radius); padding: 8px;
+            max-width: 700px; margin: 0 auto 20px; display: flex; gap: 8px;
+            box-shadow: var(--shadow-md);
         }
 
-        .search-input-wrap {
-            flex     : 1;
-            position : relative;
-        }
+        .search-input-wrap { flex: 1; position: relative; }
 
         .search-icon {
-            position      : absolute;
-            left          : 14px;
-            top           : 50%;
-            transform     : translateY(-50%);
-            font-size     : 16px;
-            pointer-events: none;
+            position: absolute; left: 14px; top: 50%;
+            transform: translateY(-50%); font-size: 16px; pointer-events: none;
         }
 
         .search-input {
-            width         : 100%;
-            padding       : 11px 14px 11px 42px;
-            border        : 1.5px solid var(--gray-200);
-            border-radius : var(--radius-sm);
-            font-size     : 14px;
-            color         : var(--gray-800);
-            font-family   : var(--font);
-            outline       : none;
-            transition    : border-color 0.2s;
+            width: 100%; padding: 11px 14px 11px 42px;
+            border: 1.5px solid var(--gray-200); border-radius: var(--radius-sm);
+            font-size: 14px; color: var(--gray-800); font-family: var(--font);
+            outline: none; transition: border-color 0.2s;
         }
 
         .search-input:focus { border-color: var(--green-mid); }
 
-        .search-select {
-            padding       : 11px 14px;
-            border        : 1.5px solid var(--gray-200);
-            border-radius : var(--radius-sm);
-            font-size     : 14px;
-            color         : var(--gray-800);
-            font-family   : var(--font);
-            outline       : none;
-            background    : var(--white);
-            min-width     : 160px;
-            cursor        : pointer;
-        }
-
-        .search-select:focus { border-color: var(--green-mid); }
-
         .btn-search {
-            padding       : 11px 24px;
-            background    : var(--green-mid);
-            color         : var(--white);
-            border        : none;
-            border-radius : var(--radius-sm);
-            font-size     : 14px;
-            font-weight   : 600;
-            cursor        : pointer;
-            font-family   : var(--font);
-            white-space   : nowrap;
-            transition    : background 0.2s;
+            padding: 11px 24px; background: var(--green-mid); color: var(--white);
+            border: none; border-radius: var(--radius-sm); font-size: 14px;
+            font-weight: 600; cursor: pointer; font-family: var(--font);
+            white-space: nowrap; transition: background 0.2s;
         }
 
         .btn-search:hover { background: var(--green-dark); }
 
-        .hero-stats {
-            display         : flex;
-            justify-content : center;
-            gap             : 32px;
-            flex-wrap       : wrap;
-        }
+        .hero-stats { display: flex; justify-content: center; gap: 32px; flex-wrap: wrap; }
 
-        .stat-item {
-            color     : var(--white);
-            text-align: center;
-        }
+        .stat-item { color: var(--white); text-align: center; }
+        .stat-number { font-size: 24px; font-weight: 800; display: block; }
+        .stat-label  { font-size: 12px; color: rgba(255,255,255,0.75); }
 
-        .stat-number {
-            font-size   : 24px;
-            font-weight : 800;
-            display     : block;
-        }
+        .section { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+        .section-title { font-size: 20px; font-weight: 700; color: var(--gray-800); margin-bottom: 16px; }
 
-        .stat-label {
-            font-size : 12px;
-            color     : rgba(255,255,255,0.75);
-        }
-
-        .section {
-            max-width : 1100px;
-            margin    : 0 auto;
-            padding   : 0 24px;
-        }
-
-        .section-title {
-            font-size    : 20px;
-            font-weight  : 700;
-            color        : var(--gray-800);
-            margin-bottom: 16px;
-        }
-
+        /* ── Spec Pills ── */
         .spec-section {
-            background : var(--white);
-            padding    : 28px 0;
-            margin-top : -24px;
-            position   : relative;
-            z-index    : 2;
+            background: var(--white); padding: 28px 0;
+            margin-top: -24px; position: relative; z-index: 2;
         }
 
-        .spec-pills {
-            display   : flex;
-            gap       : 10px;
-            flex-wrap : wrap;
-        }
+        .spec-pills { display: flex; gap: 10px; flex-wrap: wrap; }
 
         .spec-pill {
-            padding       : 8px 18px;
-            background    : var(--green-pale);
-            border        : 1.5px solid var(--green-light);
-            border-radius : 20px;
-            font-size     : 13px;
-            font-weight   : 500;
-            color         : var(--green-dark);
-            cursor        : pointer;
-            transition    : all 0.2s;
-            white-space   : nowrap;
+            padding: 8px 18px; background: var(--green-pale);
+            border: 1.5px solid var(--green-light); border-radius: 20px;
+            font-size: 13px; font-weight: 500; color: var(--green-dark);
+            cursor: pointer; transition: all 0.2s; white-space: nowrap;
         }
 
-        .spec-pill:hover,
-        .spec-pill.active {
-            background   : var(--green-mid);
-            color        : var(--white);
-            border-color : var(--green-mid);
+        .spec-pill:hover, .spec-pill.active {
+            background: var(--green-mid); color: var(--white); border-color: var(--green-mid);
         }
 
-        .doctors-section { padding: 32px 0 48px; }
+        /* ── Hospitals Section ── */
+        .hospitals-section { padding: 32px 0 48px; }
 
         .filter-row {
-            display         : flex;
-            justify-content : space-between;
-            align-items     : center;
-            margin-bottom   : 20px;
-            flex-wrap       : wrap;
-            gap             : 12px;
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 20px; flex-wrap: wrap; gap: 12px;
         }
 
         .results-count { font-size: 14px; color: var(--gray-600); }
         .results-count strong { color: var(--gray-800); font-weight: 600; }
 
-        .doctors-grid {
-            display               : grid;
-            grid-template-columns : repeat(auto-fill, minmax(300px, 1fr));
-            gap                   : 20px;
+        .hospitals-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 20px;
         }
 
-        .doctor-card {
-            background    : var(--white);
-            border-radius : var(--radius);
-            padding       : 20px;
-            box-shadow    : var(--shadow-card);
-            transition    : transform 0.2s, box-shadow 0.2s;
-            cursor        : pointer;
-            border        : 1.5px solid transparent;
+        /* ── Hospital Card ── */
+        .hospital-card {
+            background: var(--white); border-radius: var(--radius);
+            box-shadow: var(--shadow-card); overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer; border: 1.5px solid transparent;
         }
 
-        .doctor-card:hover {
-            transform    : translateY(-2px);
-            box-shadow   : var(--shadow-md);
-            border-color : var(--green-light);
+        .hospital-card:hover {
+            transform: translateY(-2px); box-shadow: var(--shadow-md);
+            border-color: var(--green-light);
         }
 
-        .doctor-card-top { display: flex; gap: 14px; margin-bottom: 14px; }
-
-        .doctor-avatar {
-            width           : 56px;
-            height          : 56px;
-            border-radius   : 12px;
-            background      : var(--green-light);
-            display         : flex;
-            align-items     : center;
-            justify-content : center;
-            font-size       : 26px;
-            flex-shrink     : 0;
+        /* Card header band */
+        .hospital-card-header {
+            background: linear-gradient(135deg, var(--green-dark), var(--green-mid));
+            padding: 18px 20px 14px;
+            display: flex; justify-content: space-between; align-items: flex-start;
         }
 
-        .doctor-info { flex: 1; }
-        .doctor-name { font-size: 15px; font-weight: 700; color: var(--gray-800); margin-bottom: 3px; }
-        .doctor-spec { font-size: 12px; color: var(--green-mid); font-weight: 600; margin-bottom: 4px; }
-        .doctor-qual { font-size: 11px; color: var(--gray-600); }
+        .hospital-name { font-size: 16px; font-weight: 700; color: var(--white); margin-bottom: 3px; }
+        .hospital-type { font-size: 11px; color: rgba(255,255,255,0.8); }
 
-        .doctor-rating {
-            display     : flex;
-            align-items : center;
-            gap         : 4px;
-            font-size   : 13px;
-            font-weight : 600;
-            color       : #f59e0b;
+        .hospital-badges { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+
+        .nabh-badge {
+            background: rgba(255,255,255,0.2); color: var(--white);
+            font-size: 10px; font-weight: 700; padding: 3px 8px;
+            border-radius: 10px; white-space: nowrap;
         }
 
-        .doctor-rating span { color: var(--gray-600); font-size: 11px; font-weight: 400; }
-
-        .doctor-card-mid { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
-
-        .doctor-tag {
-            display     : flex;
-            align-items : center;
-            gap         : 4px;
-            font-size   : 12px;
-            color       : var(--gray-600);
-            background  : var(--gray-100);
-            padding     : 4px 10px;
-            border-radius: 6px;
+        .open-badge {
+            font-size: 10px; font-weight: 700; padding: 3px 8px;
+            border-radius: 10px; white-space: nowrap;
         }
 
-        .avail-badge {
-            display       : inline-flex;
-            align-items   : center;
-            gap           : 4px;
-            font-size     : 11px;
-            font-weight   : 600;
-            padding       : 3px 9px;
-            border-radius : 20px;
+        .open-badge.open   { background: #e8f5e9; color: #2e7d32; }
+        .open-badge.closed { background: #fdecea; color: var(--red); }
+
+        /* Card body */
+        .hospital-card-body { padding: 16px 20px; }
+
+        .hospital-meta { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+
+        .hospital-tag {
+            display: flex; align-items: center; gap: 4px;
+            font-size: 12px; color: var(--gray-600);
+            background: var(--gray-100); padding: 4px 10px; border-radius: 6px;
         }
 
-        .avail-badge.yes { background: #e8f5e9; color: #2e7d32; }
-        .avail-badge.no  { background: #fdecea; color: #c62828; }
-
-        .doctor-card-bot {
-            display         : flex;
-            align-items     : center;
-            justify-content : space-between;
-            padding-top     : 14px;
-            border-top      : 1px solid var(--gray-200);
+        /* Stats row */
+        .hospital-stats {
+            display: grid; grid-template-columns: repeat(3,1fr);
+            gap: 8px; margin-bottom: 12px;
         }
 
-        .doctor-fee { font-size: 18px; font-weight: 700; color: var(--green-dark); }
-        .doctor-fee small { font-size: 11px; font-weight: 400; color: var(--gray-600); }
-
-        .btn-book {
-            padding       : 8px 20px;
-            background    : var(--green-mid);
-            color         : var(--white);
-            border        : none;
-            border-radius : var(--radius-sm);
-            font-size     : 13px;
-            font-weight   : 600;
-            cursor        : pointer;
-            font-family   : var(--font);
-            transition    : background 0.2s;
+        .h-stat {
+            text-align: center; background: var(--green-pale);
+            border-radius: var(--radius-sm); padding: 8px 4px;
         }
 
-        .btn-book:hover { background: var(--green-dark); }
+        .h-stat-num   { font-size: 16px; font-weight: 700; color: var(--green-dark); }
+        .h-stat-label { font-size: 10px; color: var(--gray-600); margin-top: 1px; }
 
+        /* Insurance */
+        .insurance-row {
+            display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px;
+        }
+
+        .insurance-tag {
+            font-size: 11px; color: var(--green-dark); background: var(--green-light);
+            padding: 3px 8px; border-radius: 10px; white-space: nowrap;
+        }
+
+        /* Card footer */
+        .hospital-card-footer {
+            display: flex; align-items: center; justify-content: space-between;
+            padding-top: 12px; border-top: 1px solid var(--gray-200);
+        }
+
+        .wait-info { font-size: 12px; color: var(--gray-600); }
+        .wait-info strong { color: var(--gray-800); }
+
+        .btn-view {
+            padding: 8px 20px; background: var(--green-mid); color: var(--white);
+            border: none; border-radius: var(--radius-sm); font-size: 13px;
+            font-weight: 600; cursor: pointer; font-family: var(--font);
+            transition: background 0.2s;
+        }
+
+        .btn-view:hover { background: var(--green-dark); }
+
+        /* ── Empty State ── */
         .empty-state { text-align: center; padding: 60px 20px; color: var(--gray-600); }
         .empty-state-icon  { font-size: 48px; margin-bottom: 16px; }
         .empty-state-title { font-size: 18px; font-weight: 600; margin-bottom: 8px; color: var(--gray-800); }
         .empty-state-sub   { font-size: 14px; }
 
+        /* ── Skeleton ── */
         .skeleton {
-            background    : linear-gradient(90deg, var(--gray-200) 25%, var(--gray-100) 50%, var(--gray-200) 75%);
-            background-size: 200% 100%;
-            animation     : skeleton-shimmer 1.2s infinite;
-            border-radius : 6px;
+            background: linear-gradient(90deg, var(--gray-200) 25%, var(--gray-100) 50%, var(--gray-200) 75%);
+            background-size: 200% 100%; animation: skeleton-shimmer 1.2s infinite; border-radius: 6px;
         }
 
         @keyframes skeleton-shimmer {
@@ -455,52 +279,36 @@
             100% { background-position: -200% 0; }
         }
 
+        /* ── Loader ── */
         #bmd-loader {
-            display         : none;
-            position        : fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background      : rgba(255,255,255,0.75);
-            z-index         : 9999;
-            align-items     : center;
-            justify-content : center;
-            flex-direction  : column;
-            gap             : 12px;
+            display: none; position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%; background: rgba(255,255,255,0.75);
+            z-index: 9999; align-items: center; justify-content: center;
+            flex-direction: column; gap: 12px;
         }
 
         .spinner {
-            width         : 40px;
-            height        : 40px;
-            border        : 4px solid var(--gray-200);
-            border-top    : 4px solid var(--green-mid);
-            border-radius : 50%;
-            animation     : spin 0.8s linear infinite;
+            width: 40px; height: 40px; border: 4px solid var(--gray-200);
+            border-top: 4px solid var(--green-mid); border-radius: 50%;
+            animation: spin 0.8s linear infinite;
         }
 
         @keyframes spin { to { transform: rotate(360deg); } }
 
         #bmd-toast {
-            position      : fixed;
-            bottom        : 24px;
-            right         : 24px;
-            padding       : 12px 20px;
-            border-radius : 8px;
-            font-size     : 14px;
-            font-family   : var(--font);
-            color         : var(--white);
-            box-shadow    : var(--shadow-md);
-            z-index       : 99999;
-            display       : none;
+            position: fixed; bottom: 24px; right: 24px;
+            padding: 12px 20px; border-radius: 8px; font-size: 14px;
+            font-family: var(--font); color: var(--white);
+            box-shadow: var(--shadow-md); z-index: 99999; display: none;
         }
 
         @media (max-width: 600px) {
-            .hero-title     { font-size: 28px; }
-            .search-box     { flex-direction: column; }
-            .search-select  { min-width: unset; }
-            .hero-stats     { gap: 20px; }
-            .stat-number    { font-size: 20px; }
-            .doctors-grid   { grid-template-columns: 1fr; }
-            .filter-row     { flex-direction: column; align-items: flex-start; }
+            .hero-title    { font-size: 28px; }
+            .search-box    { flex-direction: column; }
+            .hero-stats    { gap: 20px; }
+            .stat-number   { font-size: 20px; }
+            .hospitals-grid{ grid-template-columns: 1fr; }
+            .filter-row    { flex-direction: column; align-items: flex-start; }
         }
     </style>
 </head>
@@ -513,6 +321,7 @@
 
 <div id="bmd-toast"></div>
 
+<!-- Navbar -->
 <nav class="navbar">
     <a href="index.html" class="nav-brand">
         <div class="nav-brand-icon">🏥</div>
@@ -521,26 +330,24 @@
     <div class="nav-links" id="nav-links"></div>
 </nav>
 
+<!-- Hero -->
 <section class="hero">
     <div class="hero-content">
         <div class="hero-badge">🌿 Hyderabad's Trusted Health Platform</div>
         <h1 class="hero-title">
-            Book a Doctor,<br>
-            <span>Skip the Wait.</span>
+            Find a Hospital,<br>
+            <span>Book a Doctor.</span>
         </h1>
-        <p class="hero-sub">Instant appointments with top specialists — online or in-person.</p>
+        <p class="hero-sub">Search top hospitals near you — see doctors, insurance & availability.</p>
 
         <div class="search-box">
             <div class="search-input-wrap">
                 <span class="search-icon">🔍</span>
                 <input type="text" id="search-input" class="search-input"
-                    placeholder="Search doctor name..."
-                    oninput="filterDoctors()">
+                    placeholder="Search hospital or doctor name..."
+                    oninput="filterHospitals()">
             </div>
-            <select id="spec-filter" class="search-select" onchange="filterDoctors()">
-                <option value="">All Specializations</option>
-            </select>
-            <button class="btn-search" onclick="filterDoctors()">Search</button>
+            <button class="btn-search" onclick="filterHospitals()">Search</button>
         </div>
 
         <div class="hero-stats">
@@ -564,64 +371,38 @@
     </div>
 </section>
 
+<!-- Specialization Pills -->
 <div class="spec-section">
     <div class="section">
         <div class="spec-pills" id="spec-pills">
-            <div class="spec-pill active" onclick="selectSpec('')">All</div>
+            <div class="spec-pill active" onclick="selectSpec('', this)">All</div>
         </div>
     </div>
 </div>
 
-<div class="doctors-section">
+<!-- Hospitals -->
+<div class="hospitals-section">
     <div class="section">
         <div class="filter-row">
-            <div class="section-title">Available Doctors</div>
+            <div class="section-title">Hospitals Near You</div>
             <div class="results-count" id="results-count"></div>
         </div>
-        <div class="doctors-grid" id="doctors-grid">
-            <div class="doctor-card">
-                <div class="doctor-card-top">
-                    <div class="skeleton" style="width:56px;height:56px;border-radius:12px;flex-shrink:0;"></div>
-                    <div style="flex:1;">
-                        <div class="skeleton" style="height:16px;width:70%;margin-bottom:8px;"></div>
-                        <div class="skeleton" style="height:12px;width:50%;margin-bottom:6px;"></div>
-                        <div class="skeleton" style="height:12px;width:40%;"></div>
-                    </div>
-                </div>
-                <div class="skeleton" style="height:12px;width:60%;margin-bottom:14px;"></div>
-                <div style="display:flex;justify-content:space-between;padding-top:14px;border-top:1px solid var(--gray-200);">
-                    <div class="skeleton" style="height:20px;width:60px;"></div>
-                    <div class="skeleton" style="height:32px;width:80px;border-radius:8px;"></div>
+        <div class="hospitals-grid" id="hospitals-grid">
+            <!-- Skeleton -->
+            <div class="hospital-card">
+                <div style="background:var(--gray-200);height:80px;"></div>
+                <div style="padding:16px 20px;">
+                    <div class="skeleton" style="height:14px;width:60%;margin-bottom:10px;"></div>
+                    <div class="skeleton" style="height:12px;width:80%;margin-bottom:10px;"></div>
+                    <div class="skeleton" style="height:36px;width:100%;border-radius:8px;"></div>
                 </div>
             </div>
-            <div class="doctor-card">
-                <div class="doctor-card-top">
-                    <div class="skeleton" style="width:56px;height:56px;border-radius:12px;flex-shrink:0;"></div>
-                    <div style="flex:1;">
-                        <div class="skeleton" style="height:16px;width:70%;margin-bottom:8px;"></div>
-                        <div class="skeleton" style="height:12px;width:50%;margin-bottom:6px;"></div>
-                        <div class="skeleton" style="height:12px;width:40%;"></div>
-                    </div>
-                </div>
-                <div class="skeleton" style="height:12px;width:60%;margin-bottom:14px;"></div>
-                <div style="display:flex;justify-content:space-between;padding-top:14px;border-top:1px solid var(--gray-200);">
-                    <div class="skeleton" style="height:20px;width:60px;"></div>
-                    <div class="skeleton" style="height:32px;width:80px;border-radius:8px;"></div>
-                </div>
-            </div>
-            <div class="doctor-card">
-                <div class="doctor-card-top">
-                    <div class="skeleton" style="width:56px;height:56px;border-radius:12px;flex-shrink:0;"></div>
-                    <div style="flex:1;">
-                        <div class="skeleton" style="height:16px;width:70%;margin-bottom:8px;"></div>
-                        <div class="skeleton" style="height:12px;width:50%;margin-bottom:6px;"></div>
-                        <div class="skeleton" style="height:12px;width:40%;"></div>
-                    </div>
-                </div>
-                <div class="skeleton" style="height:12px;width:60%;margin-bottom:14px;"></div>
-                <div style="display:flex;justify-content:space-between;padding-top:14px;border-top:1px solid var(--gray-200);">
-                    <div class="skeleton" style="height:20px;width:60px;"></div>
-                    <div class="skeleton" style="height:32px;width:80px;border-radius:8px;"></div>
+            <div class="hospital-card">
+                <div style="background:var(--gray-200);height:80px;"></div>
+                <div style="padding:16px 20px;">
+                    <div class="skeleton" style="height:14px;width:60%;margin-bottom:10px;"></div>
+                    <div class="skeleton" style="height:12px;width:80%;margin-bottom:10px;"></div>
+                    <div class="skeleton" style="height:36px;width:100%;border-radius:8px;"></div>
                 </div>
             </div>
         </div>
@@ -630,56 +411,42 @@
 
 <script>
 // ─────────────────────────────────────────────────────
-//  Config — NEW OCI URL
+//  Config
 // ─────────────────────────────────────────────────────
-const BASE_URL = 'https://bookmydoctor-proxy.pulipraveenkumar08.workers.dev/'; 
-let allDoctors   = [];
-let selectedSpec = '';
+const BASE_URL    = 'https://bookmydoctor-proxy.pulipraveenkumar08.workers.dev/';
+let allHospitals  = [];
+let selectedSpec  = '';
 
 // ─────────────────────────────────────────────────────
-//  Loader & Toast
+//  Helpers
 // ─────────────────────────────────────────────────────
 function showLoader() { document.getElementById('bmd-loader').style.display = 'flex'; }
 function hideLoader() { document.getElementById('bmd-loader').style.display = 'none'; }
 
 function showToast(msg, color) {
     const t = document.getElementById('bmd-toast');
-    t.textContent      = msg;
-    t.style.background = color || '#2d9e5f';
-    t.style.display    = 'block';
+    t.textContent = msg; t.style.background = color || '#2d9e5f';
+    t.style.display = 'block';
     setTimeout(() => t.style.display = 'none', 3000);
 }
 
-// ─────────────────────────────────────────────────────
-//  API helper — uses BASE_URL
-// ─────────────────────────────────────────────────────
 async function callBMD(endpoint, payload) {
     try {
-        const res = await fetch(BASE_URL + endpoint, {
+        const res  = await fetch(BASE_URL + endpoint, {
             method  : 'POST',
-            headers : {
-                'Content-Type' : 'application/json',
-                'Accept'       : 'application/json'
-            },
-            body : JSON.stringify(payload)
+            headers : { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+            body    : JSON.stringify(payload)
         });
-
         const data = await res.json();
-
-        // Worker now unwraps p_message — but handle both cases
         if (data.p_message) return JSON.parse(data.p_message);
         if (data.p_result)  return JSON.parse(data.p_result);
         return data;
-
     } catch (err) {
         console.error('API Error:', err);
         return { status: 'ERROR', message: err.message };
     }
 }
 
-// ─────────────────────────────────────────────────────
-//  Session
-// ─────────────────────────────────────────────────────
 function getSession() {
     return {
         token     : localStorage.getItem('bmd_token'),
@@ -690,20 +457,23 @@ function getSession() {
 }
 
 // ─────────────────────────────────────────────────────
-//  Render Navbar
+//  Navbar
 // ─────────────────────────────────────────────────────
 function renderNav() {
     const s   = getSession();
     const nav = document.getElementById('nav-links');
 
     if (s.token && s.user_type === 'PATIENT') {
-    nav.innerHTML = `
-        <a href="patient/appointments.html" class="btn-nav btn-nav-outline">My Appointments</a>
-        <a href="patient/profile.html"      class="btn-nav btn-nav-outline">👤 Profile</a>
-        <button class="btn-nav btn-nav-solid" onclick="handleLogout()">Logout</button>`;
+        nav.innerHTML = `
+            <a href="patient/appointments.html" class="btn-nav btn-nav-outline">My Appointments</a>
+            <a href="patient/profile.html"      class="btn-nav btn-nav-outline">👤 Profile</a>
+            <button class="btn-nav btn-nav-solid" onclick="handleLogout()">Logout</button>`;
     } else if (s.token && s.user_type === 'DOCTOR') {
         nav.innerHTML = `
             <a href="doctor/dashboard.html" class="btn-nav btn-nav-solid">Doctor Dashboard</a>`;
+    } else if (s.token && s.user_type === 'ADMIN') {
+        nav.innerHTML = `
+            <a href="admin/dashboard.html" class="btn-nav btn-nav-solid">Admin Dashboard</a>`;
     } else {
         nav.innerHTML = `
             <a href="patient/login.html"    class="btn-nav btn-nav-outline">Sign In</a>
@@ -713,9 +483,7 @@ function renderNav() {
 
 async function handleLogout() {
     const s = getSession();
-    if (s.token) {
-        await callBMD('logout', { session_token: s.token });
-    }
+    if (s.token) await callBMD('logout', { session_token: s.token });
     localStorage.clear();
     renderNav();
     showToast('Logged out successfully');
@@ -726,17 +494,13 @@ async function handleLogout() {
 // ─────────────────────────────────────────────────────
 async function loadAnalytics() {
     const s    = getSession();
-    const data = await callBMD('get-analytics', {
-        session_token: s.token || ''
-    });
-
+    const data = await callBMD('get-analytics', { session_token: s.token || '' });
     if (data.status === 'SUCCESS') {
         document.getElementById('stat-doctors').textContent      = data.total_doctors      || '0';
         document.getElementById('stat-patients').textContent     = data.total_patients     || '0';
         document.getElementById('stat-appointments').textContent = data.total_appointments || '0';
         document.getElementById('stat-rating').textContent       = data.avg_rating
-            ? '⭐ ' + parseFloat(data.avg_rating).toFixed(1)
-            : '⭐ New';
+            ? '⭐ ' + parseFloat(data.avg_rating).toFixed(1) : '⭐ New';
     }
 }
 
@@ -745,159 +509,183 @@ async function loadAnalytics() {
 // ─────────────────────────────────────────────────────
 async function loadSpecializations() {
     const data = await callBMD('get-lookups', { lookup_type: 'BMD_SPECIALIZATION' });
-
     if (data.status === 'SUCCESS') {
-        const pills  = document.getElementById('spec-pills');
-        const select = document.getElementById('spec-filter');
-
+        const pills = document.getElementById('spec-pills');
         data.lookups.forEach(l => {
-            const pill       = document.createElement('div');
-            pill.className   = 'spec-pill';
+            const pill     = document.createElement('div');
+            pill.className = 'spec-pill';
             pill.textContent = l.meaning;
-            pill.onclick     = () => selectSpec(l.code, pill);
+            pill.onclick   = () => selectSpec(l.code, pill);
             pills.appendChild(pill);
-
-            const opt        = document.createElement('option');
-            opt.value        = l.code;
-            opt.textContent  = l.meaning;
-            select.appendChild(opt);
         });
     }
 }
 
 // ─────────────────────────────────────────────────────
-//  Load Doctors
+//  Load Hospitals
 // ─────────────────────────────────────────────────────
-async function loadDoctors() {
+async function loadHospitals() {
     const s    = getSession();
-    const data = await callBMD('get-doctors', {
-        session_token: s.token || ''
-    });
+    const data = await callBMD('get-hospitals', { session_token: s.token || '' });
 
     if (data.status === 'SUCCESS') {
-        allDoctors = data.doctors || [];
-        renderDoctors(allDoctors);
+        allHospitals = data.hospitals || [];
+        renderHospitals(allHospitals);
     } else {
-        document.getElementById('doctors-grid').innerHTML = `
+        document.getElementById('hospitals-grid').innerHTML = `
             <div class="empty-state" style="grid-column:1/-1;">
                 <div class="empty-state-icon">⚠️</div>
-                <div class="empty-state-title">Could not load doctors</div>
+                <div class="empty-state-title">Could not load hospitals</div>
                 <div class="empty-state-sub">${data.message}</div>
             </div>`;
     }
 }
 
 // ─────────────────────────────────────────────────────
-//  Render Doctor Cards
+//  Check if hospital is open now
 // ─────────────────────────────────────────────────────
-function renderDoctors(doctors) {
-    const grid  = document.getElementById('doctors-grid');
+function isOpen(openTime, closeTime) {
+    try {
+        const now   = new Date();
+        const [oh, om] = openTime.split(':').map(Number);
+        const [ch, cm] = closeTime.split(':').map(Number);
+        const nowMins   = now.getHours() * 60 + now.getMinutes();
+        const openMins  = oh * 60 + om;
+        const closeMins = ch * 60 + cm;
+        return nowMins >= openMins && nowMins <= closeMins;
+    } catch(e) { return true; }
+}
+
+// ─────────────────────────────────────────────────────
+//  Render Hospital Cards
+// ─────────────────────────────────────────────────────
+function renderHospitals(hospitals) {
+    const grid  = document.getElementById('hospitals-grid');
     const count = document.getElementById('results-count');
 
-    count.innerHTML = `Showing <strong>${doctors.length}</strong> doctor${doctors.length !== 1 ? 's' : ''}`;
+    count.innerHTML = `Showing <strong>${hospitals.length}</strong> hospital${hospitals.length !== 1 ? 's' : ''}`;
 
-    if (doctors.length === 0) {
+    if (hospitals.length === 0) {
         grid.innerHTML = `
             <div class="empty-state" style="grid-column:1/-1;">
                 <div class="empty-state-icon">🔍</div>
-                <div class="empty-state-title">No doctors found</div>
-                <div class="empty-state-sub">Try a different search or specialization.</div>
+                <div class="empty-state-title">No hospitals found</div>
+                <div class="empty-state-sub">Try a different search term.</div>
             </div>`;
         return;
     }
 
-    grid.innerHTML = doctors.map(d => `
-        <div class="doctor-card" onclick="goToDoctor(${d.doctor_id})">
-            <div class="doctor-card-top">
-                <div class="doctor-avatar">👨‍⚕️</div>
-                <div class="doctor-info">
-                    <div class="doctor-name">${d.full_name}</div>
-                    <div class="doctor-spec">${d.specialization}</div>
-                    <div class="doctor-qual">${d.qualification || ''}</div>
-                </div>
+    grid.innerHTML = hospitals.map(h => {
+        const open       = isOpen(h.open_time || '08:00', h.close_time || '20:00');
+        const nabh       = h.nabh_certified === 'Y';
+        const rating     = parseFloat(h.avg_rating || 0);
+        const insurance  = (h.insurance || []).slice(0,3);
+
+        return `
+        <div class="hospital-card" onclick="goToHospital(${h.hospital_id})">
+
+            <div class="hospital-card-header">
                 <div>
-                    <div class="doctor-rating">
-                        ⭐ ${parseFloat(d.avg_rating || 0).toFixed(1)}
-                        <span>(${d.total_reviews || 0})</span>
+                    <div class="hospital-name">🏥 ${h.hospital_name}</div>
+                    <div class="hospital-type">${h.hospital_type || 'Multi-Specialty'}</div>
+                </div>
+                <div class="hospital-badges">
+                    ${nabh ? `<span class="nabh-badge">NABH ✓</span>` : ''}
+                    <span class="open-badge ${open ? 'open' : 'closed'}">
+                        ${open ? '● Open' : '● Closed'}
+                    </span>
+                </div>
+            </div>
+
+            <div class="hospital-card-body">
+
+                <div class="hospital-meta">
+                    <div class="hospital-tag">📍 ${h.city || 'Hyderabad'}</div>
+                    <div class="hospital-tag">🕐 ${h.open_time || '08:00'} – ${h.close_time || '20:00'}</div>
+                    ${rating > 0
+                        ? `<div class="hospital-tag">⭐ ${rating.toFixed(1)}</div>`
+                        : `<div class="hospital-tag">⭐ New</div>`}
+                </div>
+
+                <div class="hospital-stats">
+                    <div class="h-stat">
+                        <div class="h-stat-num">${h.doctor_count || 0}</div>
+                        <div class="h-stat-label">Doctors</div>
+                    </div>
+                    <div class="h-stat">
+                        <div class="h-stat-num">${h.dept_count || 0}</div>
+                        <div class="h-stat-label">Departments</div>
+                    </div>
+                    <div class="h-stat">
+                        <div class="h-stat-num">${h.avg_wait_mins || 15} min</div>
+                        <div class="h-stat-label">Avg Wait</div>
                     </div>
                 </div>
-            </div>
-            <div class="doctor-card-mid">
-                <div class="doctor-tag">🏥 ${d.hospital_name || ''}</div>
-                <div class="doctor-tag">🏬 ${d.dept_name || ''}</div>
-                ${d.experience_years ? `<div class="doctor-tag">📅 ${d.experience_years} yrs exp</div>` : ''}
-                <span class="avail-badge ${d.is_available_today === 'Y' ? 'yes' : 'no'}">
-                    ${d.is_available_today === 'Y' ? '🟢 Available Today' : '🔴 Not Today'}
-                </span>
-            </div>
-            <div class="doctor-card-bot">
-                <div class="doctor-fee">
-                    ₹${d.consultation_fee || 0}
-                    <small>/ visit</small>
+
+                ${insurance.length > 0 ? `
+                <div class="insurance-row">
+                    ${insurance.map(i => `<span class="insurance-tag">✓ ${i}</span>`).join('')}
+                    ${(h.insurance||[]).length > 3 ? `<span class="insurance-tag">+${h.insurance.length-3} more</span>` : ''}
+                </div>` : ''}
+
+                <div class="hospital-card-footer">
+                    <div class="wait-info">
+                        📞 ${h.contact_phone || '—'}
+                    </div>
+                    <button class="btn-view"
+                        onclick="event.stopPropagation(); goToHospital(${h.hospital_id})">
+                        View Doctors →
+                    </button>
                 </div>
-                <button class="btn-book" onclick="event.stopPropagation(); bookDoctor(${d.doctor_id}, '${d.full_name}')">
-                    Book Now
-                </button>
+
             </div>
-        </div>
-    `).join('');
+        </div>`;
+    }).join('');
 }
 
 // ─────────────────────────────────────────────────────
-//  Filter Doctors
+//  Filter Hospitals
 // ─────────────────────────────────────────────────────
-function filterDoctors() {
+function filterHospitals() {
     const search = document.getElementById('search-input').value.trim().toLowerCase();
-    const spec   = document.getElementById('spec-filter').value;
 
-    selectedSpec = spec;
-    document.querySelectorAll('.spec-pill').forEach(p => {
-        p.classList.remove('active');
-        if (!spec && p.textContent === 'All') p.classList.add('active');
+    const filtered = allHospitals.filter(h => {
+        return !search ||
+            (h.hospital_name  || '').toLowerCase().includes(search) ||
+            (h.city           || '').toLowerCase().includes(search) ||
+            (h.hospital_type  || '').toLowerCase().includes(search) ||
+            (h.insurance || []).some(i => i.toLowerCase().includes(search));
     });
 
-    const filtered = allDoctors.filter(d => {
-        const matchSearch = !search ||
-            d.full_name.toLowerCase().includes(search) ||
-            (d.specialization || '').toLowerCase().includes(search) ||
-            (d.hospital_name  || '').toLowerCase().includes(search);
-        const matchSpec = !spec || d.specialization === spec;
-        return matchSearch && matchSpec;
-    });
-
-    renderDoctors(filtered);
+    renderHospitals(filtered);
 }
 
 // ─────────────────────────────────────────────────────
-//  Select Specialization Pill
+//  Specialization pill — filter by spec
+//  (shows hospitals that have doctors in that spec)
 // ─────────────────────────────────────────────────────
 function selectSpec(code, pillEl) {
     selectedSpec = code;
     document.querySelectorAll('.spec-pill').forEach(p => p.classList.remove('active'));
-    if (pillEl) {
-        pillEl.classList.add('active');
-    } else {
-        document.querySelector('.spec-pill').classList.add('active');
+    if (pillEl) pillEl.classList.add('active');
+
+    if (!code) {
+        renderHospitals(allHospitals);
+        return;
     }
-    document.getElementById('spec-filter').value = code;
-    filterDoctors();
+
+    // Filter hospitals by specialization (from doctors inside)
+    // For now show all hospitals and note on search — doctors page will filter
+    renderHospitals(allHospitals);
+    document.getElementById('search-input').value = '';
+    showToast('Showing all hospitals — select a hospital to find ' + code + ' doctors');
 }
 
 // ─────────────────────────────────────────────────────
 //  Navigate
 // ─────────────────────────────────────────────────────
-function goToDoctor(doctor_id) {
-    window.location.href = 'patient/booking.html?doctor_id=' + doctor_id;
-}
-
-function bookDoctor(doctor_id, name) {
-    const s = getSession();
-    if (!s.token || s.user_type !== 'PATIENT') {
-        showToast('Please login as a patient to book', '#dc3545');
-        setTimeout(() => window.location.href = 'patient/login.html', 1500);
-        return;
-    }
-    window.location.href = 'patient/booking.html?doctor_id=' + doctor_id;
+function goToHospital(hospital_id) {
+    window.location.href = 'hospital.html?hospital_id=' + hospital_id;
 }
 
 // ─────────────────────────────────────────────────────
@@ -909,7 +697,7 @@ async function init() {
     await Promise.all([
         loadAnalytics(),
         loadSpecializations(),
-        loadDoctors()
+        loadHospitals()
     ]);
     hideLoader();
 }
