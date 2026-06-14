@@ -535,8 +535,9 @@ function renderSlots(slots, dateStr) {
     grid.innerHTML = `<div class="slot-grid">
         ${slots.map(s => {
             const past = isPast(dateStr, s.start_time);
-            const status = s.is_booked === 'Y' ? 'booked' : s.is_blocked === 'Y' ? 'blocked' : past ? 'past' : 'available';
-            const statusLabel = s.is_booked === 'Y' ? '👤 Booked' : s.is_blocked === 'Y' ? '🔒 Blocked' : past ? '⏰ Past' : '✓ Available';
+            const slotStatus = (s.status || '').toUpperCase();
+            const status = slotStatus === 'BOOKED' ? 'booked' : slotStatus === 'BLOCKED' ? 'blocked' : past ? 'past' : 'available';
+            const statusLabel = slotStatus === 'BOOKED' ? '👤 Booked' : slotStatus === 'BLOCKED' ? '🔒 Blocked' : past ? '⏰ Past' : '✓ Available';
             const clickable = !['booked','past'].includes(status);
 
             return `<div class="slot ${status}" ${clickable ? `onclick="toggleSlot(${s.slot_id},'${status}')"` : ''}>
@@ -550,9 +551,9 @@ function renderSlots(slots, dateStr) {
 // ── Render Summary ──
 function renderSummary(slots, dateStr) {
     const total     = slots.length;
-    const available = slots.filter(s => s.is_booked !== 'Y' && s.is_blocked !== 'Y' && !isPast(dateStr, s.start_time)).length;
-    const booked    = slots.filter(s => s.is_booked === 'Y').length;
-    const blocked   = slots.filter(s => s.is_blocked === 'Y').length;
+    const available = slots.filter(s => s.status === 'AVAILABLE' && !isPast(dateStr, s.start_time)).length;
+    const booked    = slots.filter(s => s.status === 'BOOKED').length;
+    const blocked   = slots.filter(s => s.status === 'BLOCKED').length;
 
     document.getElementById('day-summary').innerHTML = `
         <div class="summary-row"><span class="summary-label">Total Slots</span><span class="summary-value blue">${total}</span></div>
@@ -642,10 +643,8 @@ async function markLeave() {
         { weekday:'long', day:'numeric', month:'long' });
 
     // Check if there are booked appointments
-    const booked = allSlots.filter(sl => sl.is_booked === 'Y');
-    const available = allSlots.filter(sl =>
-        sl.is_booked !== 'Y' && sl.is_blocked !== 'Y'
-    );
+    const booked = allSlots.filter(sl => sl.status === 'BOOKED');
+    const available = allSlots.filter(sl => sl.status === 'AVAILABLE');
 
     if (allSlots.length === 0) {
         showToast('⚠️ No slots found for this date', '#fd7e14');
