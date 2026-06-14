@@ -604,7 +604,8 @@ async function generateSlots() {
     const data = await callBMD('generate-slots', {
         session_token   : s.token,
         doctor_id       : parseInt(s.userId),
-        slot_date       : date,
+        from_date       : date,
+        to_date         : date,
         start_time      : start,
         end_time        : end,
         slot_duration   : dur,
