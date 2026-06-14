@@ -199,11 +199,17 @@
     <div class="modal">
         <div class="modal-title">📅 Generate Slots</div>
         <div class="modal-sub">Create appointment slots for a date</div>
-        <div class="form-row">
+<div class="form-row">
             <div class="form-group">
-                <label class="form-label">Date</label>
+                <label class="form-label">From Date</label>
                 <input type="date" id="gen-date" class="form-input">
             </div>
+            <div class="form-group">
+                <label class="form-label">To Date</label>
+                <input type="date" id="gen-date-to" class="form-input">
+            </div>
+        </div>
+        <div class="form-row">
             <div class="form-group">
                 <label class="form-label">Slot Duration</label>
                 <select id="gen-duration" class="form-select">
@@ -591,6 +597,7 @@ function closeGenModal() {
 async function generateSlots() {
     const s       = getSession();
     const date    = document.getElementById('gen-date').value;
+    const dateTo  = document.getElementById('gen-date-to').value || date;
     const start   = document.getElementById('gen-start').value;
     const end     = document.getElementById('gen-end').value;
     const dur     = parseInt(document.getElementById('gen-duration').value);
@@ -605,7 +612,7 @@ async function generateSlots() {
         session_token   : s.token,
         doctor_id       : parseInt(s.userId),
         from_date       : date,
-        to_date         : date,
+        to_date         : dateTo,
         start_time      : start,
         end_time        : end,
         slot_duration   : dur,
