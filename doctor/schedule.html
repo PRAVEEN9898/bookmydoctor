@@ -683,14 +683,13 @@ async function markLeave() {
     }
 
     // Step 2 — Block all AVAILABLE slots
-    for (const sl of available) {
-        const data = await callBMD('block-slot', {
-            session_token : s.token,
-            slot_id       : sl.slot_id,
-            is_blocked    : 'Y'
-        });
-        if (data.status === 'SUCCESS') blockedCount++;
-    }
+for (const sl of available) {
+    const data = await callBMD('block-slot', {
+        session_token : s.token,
+        slot_id       : sl.slot_id
+    });
+    if (data.status === 'SUCCESS') blockedCount++;
+}
 
     hideLoader();
 
