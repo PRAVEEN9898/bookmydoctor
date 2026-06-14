@@ -503,7 +503,7 @@ async function loadSlots() {
 
     document.getElementById('slots-grid').innerHTML = `<div class="skeleton" style="height:120px;border-radius:8px;"></div>`;
 
-        const data = await callBMD('get-slots', {
+        const data = await callBMD('get-available-slots', {
             session_token : s.token,
             doctor_id     : parseInt(s.userId),
             slot_date     : dateStr,
