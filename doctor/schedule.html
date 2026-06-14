@@ -503,12 +503,13 @@ async function loadSlots() {
 
     document.getElementById('slots-grid').innerHTML = `<div class="skeleton" style="height:120px;border-radius:8px;"></div>`;
 
-    const data = await callBMD('get-slots', {
-        session_token : s.token,
-        doctor_id     : parseInt(s.userId),
-        slot_date     : dateStr
-    });
-
+        const data = await callBMD('get-slots', {
+            session_token : s.token,
+            doctor_id     : parseInt(s.userId),
+            slot_date     : dateStr,
+            from_date     : dateStr,
+            to_date       : dateStr
+        });
     if (data.status !== 'SUCCESS' || (data.slots || []).length === 0) {
         document.getElementById('slots-grid').innerHTML = `
             <div class="empty-state">
