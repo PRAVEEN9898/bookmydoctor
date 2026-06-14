@@ -601,7 +601,11 @@ async function loadDoctors() {
 
     if (data.status === 'SUCCESS') {
         // Filter to only this hospital's doctors
-        allDoctors = (data.doctors || []).filter(d => d.hospital_id == hospitalId);
+        allDoctors = (data.doctors || []).filter(d =>
+    hospitalData && 
+    (d.hospital_name || '').toLowerCase() === 
+    (hospitalData.hospital_name || '').toLowerCase()
+);
         renderDoctors(allDoctors);
     } else {
         document.getElementById('doctors-grid').innerHTML = `
