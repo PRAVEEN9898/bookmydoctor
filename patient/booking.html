@@ -608,10 +608,24 @@ async function loadSlots(dateStr) {
     const grid = document.createElement('div');
     grid.className = 'slots-grid';
 
-    slots.forEach(slot => {
-        const chip        = document.createElement('div');
-        const isAvailable = slot.status === 'AVAILABLE';
-        chip.className    = 'slot-chip' + (!isAvailable ? ' booked' : '');
+// Check if slot is in the past (only for today)
+const now     = new Date();
+const today   = now.toISOString().split('T')[0];
+const isToday = selectedDate === today;
+
+slots.forEach(slot => {
+    const chip        = document.createElement('div');
+    let   isAvailable = slot.status === 'AVAILABLE';
+
+    // Disable past slots for today
+    if (isToday && isAvailable) {
+        const [h, m]  = slot.start_time.split(':');
+        const slotTime = new Date();
+        slotTime.setHours(parseInt(h), parseInt(m), 0, 0);
+        if (slotTime <= now) isAvailable = false;
+    }
+
+    chip.className    = 'slot-chip' + (!isAvailable ? ' booked' : '');
         chip.textContent  = formatTime(slot.start_time);
         chip.title        = isAvailable ? `${formatTime(slot.start_time)} - ${formatTime(slot.end_time)}` : 'Not available';
         if (isAvailable) chip.onclick = () => selectSlot(chip, slot);
