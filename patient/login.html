@@ -427,18 +427,24 @@ async function handleLogin(e) {
             return;
         }
 
-        // Save session
-        localStorage.setItem('bmd_token',      data.session_token);
-        localStorage.setItem('bmd_user_type',  data.user_type);
-        localStorage.setItem('bmd_user_id',    data.user_id);
-        localStorage.setItem('bmd_name',       data.full_name);
-        localStorage.setItem('bmd_admin_role', data.admin_role || '');
+       // Save session
+        localStorage.setItem('bmd_token',            data.session_token);
+        localStorage.setItem('bmd_user_type',        data.user_type);
+        localStorage.setItem('bmd_user_id',          data.user_id);
+        localStorage.setItem('bmd_name',             data.full_name);
+        localStorage.setItem('bmd_admin_role',       data.admin_role       || '');
+        localStorage.setItem('bmd_approved_flag',    data.approved_flag    || '');
+        localStorage.setItem('bmd_is_hosp_admin',    data.is_hospital_admin|| 'N');
 
         // Redirect based on user type
         if (data.user_type === 'PATIENT') {
             window.location.href = '../index.html';
         } else if (data.user_type === 'DOCTOR') {
-            window.location.href = '../doctor/dashboard.html';
+            if (data.is_hospital_admin === 'Y') {
+                window.location.href = '../hospital/dashboard.html';
+            } else {
+                window.location.href = '../doctor/dashboard.html';
+            }
         } else if (data.user_type === 'ADMIN') {
             window.location.href = '../admin/dashboard.html';
         }
