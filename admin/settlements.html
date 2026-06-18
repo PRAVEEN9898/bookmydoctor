@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settlements — BookMyDoctor Admin</title>
+    <style>
+        :root {
+            --green-dark  : #1a6b3c;
+            --green-mid   : #2d9e5f;
+            --green-light : #e8f5ee;
+            --purple-dark : #3c3489;
+            --purple-mid  : #534ab7;
+            --purple-light: #eeedfe;
+            --white       : #ffffff;
+            --gray-100    : #f8f9fa;
+            --gray-200    : #e9ecef;
+            --gray-600    : #6c757d;
+            --gray-800    : #343a40;
+            --red         : #dc3545;
+            --orange      : #fd7e14;
+            --shadow-sm   : 0 2px 8px rgba(0,0,0,0.08);
+            --shadow-md   : 0 4px 20px rgba(0,0,0,0.12);
+            --radius      : 12px;
+            --radius-sm   : 8px;
+            --font        : 'Segoe UI', Arial, sans-serif;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: var(--font); background: var(--gray-100); color: var(--gray-800); }
+
+        /* ── Navbar ── */
+        .navbar { background: var(--white); padding: 0 24px; height: 60px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 1px 4px rgba(0,0,0,0.08); position: sticky; top: 0; z-index: 100; }
+        .nav-brand { display: flex; align-items: center; gap: 9px; text-decoration: none; }
+        .nav-brand-icon { width: 34px; height: 34px; background: var(--purple-mid); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+        .nav-brand-name { font-size: 18px; font-weight: 700; color: var(--purple-dark); }
+        .nav-right { display: flex; align-items: center; gap: 10px; }
+        .nav-links { display: flex; align-items: center; gap: 6px; }
+        .btn-nav { padding: 7px 14px; border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: var(--font); text-decoration: none; border: none; transition: all 0.2s; white-space: nowrap; }
+        .btn-nav-outline { background: var(--white); color: var(--purple-dark); border: 1.5px solid var(--purple-mid) !important; }
+        .btn-nav-outline:hover { background: var(--purple-light); }
+        .btn-nav-solid { background: var(--purple-mid); color: var(--white); }
+        .btn-nav-solid:hover { background: var(--purple-dark); }
+        .role-badge { display: flex; align-items: center; gap: 8px; background: var(--purple-light); border-radius: 20px; padding: 5px 14px 5px 5px; }
+        .role-pill { font-size: 10px; font-weight: 700; color: var(--white); background: var(--purple-mid); padding: 3px 9px; border-radius: 12px; text-transform: uppercase; }
+        .role-name { font-size: 13px; font-weight: 600; color: var(--purple-dark); }
+
+        /* ── Hero ── */
+        .page-hero { background: linear-gradient(135deg, var(--purple-dark), var(--purple-mid)); padding: 28px 24px 52px; }
+        .page-hero-inner { max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
+        .hero-title { font-size: 22px; font-weight: 800; color: var(--white); margin-bottom: 4px; }
+        .hero-sub   { font-size: 13px; color: rgba(255,255,255,0.75); }
+        .hero-total {
+            background: rgba(255,255,255,0.15); border-radius: var(--radius);
+            padding: 14px 24px; text-align: center; border: 1.5px solid rgba(255,255,255,0.2);
+        }
+        .hero-total-label  { font-size: 12px; color: rgba(255,255,255,0.75); margin-bottom: 4px; }
+        .hero-total-amount { font-size: 28px; font-weight: 800; color: var(--white); }
+        .hero-total-sub    { font-size: 11px; color: rgba(255,255,255,0.6); margin-top: 3px; }
+
+        /* ── Page ── */
+        .page-wrap { max-width: 1100px; margin: -24px auto 48px; padding: 0 24px; }
+
+        /* ── Stats ── */
+        .stats-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; margin-bottom: 24px; }
+        .stat-card { background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow-sm); padding: 16px 20px; display: flex; align-items: center; gap: 14px; position: relative; overflow: hidden; }
+        .stat-card::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; border-radius: 4px 0 0 4px; }
+        .stat-card.green::before  { background: var(--green-mid); }
+        .stat-card.purple::before { background: var(--purple-mid); }
+        .stat-card.orange::before { background: var(--orange); }
+        .stat-card.red::before    { background: var(--red); }
+        .stat-icon { width: 42px; height: 42px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+        .stat-icon.green  { background: var(--green-light); }
+        .stat-icon.purple { background: var(--purple-light); }
+        .stat-icon.orange { background: #fff3e0; }
+        .stat-icon.red    { background: #fdecea; }
+        .stat-num   { font-size: 22px; font-weight: 800; color: var(--gray-800); line-height: 1; }
+        .stat-label { font-size: 11px; color: var(--gray-600); margin-top: 3px; }
+
+        /* ── Card ── */
+        .card { background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow-sm); overflow: hidden; margin-bottom: 20px; }
+        .card-head { padding: 16px 20px; border-bottom: 1px solid var(--gray-200); display: flex; align-items: center; justify-content: space-between; }
+        .card-head-left { display: flex; align-items: center; gap: 10px; }
+        .card-head-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+        .card-head-icon.green  { background: var(--green-light); }
+        .card-head-icon.purple { background: var(--purple-light); }
+        .card-head-icon.orange { background: #fff3e0; }
+        .card-head-title { font-size: 15px; font-weight: 700; color: var(--gray-800); }
+        .card-body { padding: 0; }
+
+        /* ── Filter row ── */
+        .filter-row { display: flex; gap: 8px; padding: 14px 20px; border-bottom: 1px solid var(--gray-200); flex-wrap: wrap; align-items: center; }
+        .filter-btn { padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer; border: 1.5px solid var(--gray-200); background: var(--white); color: var(--gray-600); font-family: var(--font); transition: all 0.2s; }
+        .filter-btn.active { background: var(--purple-mid); color: var(--white); border-color: var(--purple-mid); }
+        .search-wrap { flex: 1; position: relative; min-width: 180px; }
+        .search-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 14px; }
+        .search-input { width: 100%; padding: 7px 10px 7px 30px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-sm); font-size: 13px; font-family: var(--font); outline: none; }
+        .search-input:focus { border-color: var(--purple-mid); }
+
+        /* ── Settlement Row ── */
+        .settlement-row { display: flex; align-items: center; gap: 14px; padding: 14px 20px; border-bottom: 1px solid var(--gray-200); transition: background 0.2s; }
+        .settlement-row:last-child { border-bottom: none; }
+        .settlement-row:hover { background: var(--purple-light); }
+
+        .s-avatar { width: 42px; height: 42px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+        .s-avatar.pending    { background: #fff3e0; }
+        .s-avatar.paid       { background: var(--green-light); }
+        .s-avatar.processing { background: #e6f1fb; }
+
+        .s-info { flex: 1; min-width: 0; }
+        .s-doctor   { font-size: 14px; font-weight: 600; color: var(--gray-800); margin-bottom: 2px; }
+        .s-patient  { font-size: 12px; color: var(--gray-600); }
+
+        .s-mid { text-align: center; min-width: 100px; flex-shrink: 0; }
+        .s-date { font-size: 12px; color: var(--gray-600); }
+        .s-ref  { font-size: 11px; color: var(--gray-400); font-family: monospace; }
+
+        .s-right { text-align: right; flex-shrink: 0; min-width: 120px; }
+        .s-gross  { font-size: 16px; font-weight: 700; color: var(--gray-800); }
+        .s-net    { font-size: 12px; color: var(--green-dark); margin-top: 2px; }
+        .s-chip   { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; margin-top: 4px; white-space: nowrap; }
+        .s-chip.pending    { background: #fff3e0; color: #e65100; }
+        .s-chip.paid       { background: var(--green-light); color: var(--green-dark); }
+        .s-chip.processing { background: #e6f1fb; color: #1565c0; }
+
+        .btn-pay { padding: 6px 14px; background: var(--green-mid); color: var(--white); border: none; border-radius: var(--radius-sm); font-size: 12px; font-weight: 600; cursor: pointer; font-family: var(--font); transition: all 0.2s; white-space: nowrap; margin-top: 4px; }
+        .btn-pay:hover { background: var(--green-dark); }
+
+        /* ── Modal ── */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 9000; align-items: center; justify-content: center; }
+        .modal-overlay.show { display: flex; }
+        .modal { background: var(--white); border-radius: var(--radius); padding: 28px; max-width: 420px; width: 90%; box-shadow: var(--shadow-md); }
+        .modal-title { font-size: 18px; font-weight: 700; color: var(--gray-800); margin-bottom: 6px; }
+        .modal-sub   { font-size: 13px; color: var(--gray-600); margin-bottom: 20px; }
+        .modal-info  { background: var(--gray-100); border-radius: var(--radius-sm); padding: 14px; margin-bottom: 16px; }
+        .modal-info-row { display: flex; justify-content: space-between; font-size: 13px; padding: 4px 0; }
+        .modal-info-label { color: var(--gray-600); }
+        .modal-info-value { font-weight: 600; color: var(--gray-800); }
+        .modal-info-value.green { color: var(--green-dark); font-size: 16px; }
+        .form-group  { margin-bottom: 14px; }
+        .form-label  { font-size: 12px; font-weight: 600; color: var(--gray-800); text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 5px; display: block; }
+        .form-input, .form-select { width: 100%; padding: 9px 12px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-sm); font-size: 14px; font-family: var(--font); outline: none; transition: border-color 0.2s; }
+        .form-input:focus, .form-select:focus { border-color: var(--green-mid); }
+        .modal-actions { display: flex; gap: 10px; margin-top: 20px; }
+        .btn-modal-cancel { flex: 1; padding: 11px; background: var(--gray-100); color: var(--gray-800); border: none; border-radius: var(--radius-sm); font-size: 14px; font-weight: 600; cursor: pointer; font-family: var(--font); }
+        .btn-modal-pay { flex: 2; padding: 11px; background: var(--green-mid); color: var(--white); border: none; border-radius: var(--radius-sm); font-size: 14px; font-weight: 600; cursor: pointer; font-family: var(--font); }
+        .btn-modal-pay:hover { background: var(--green-dark); }
+        .btn-modal-pay:disabled { opacity: 0.6; cursor: not-allowed; }
+
+        /* ── Empty ── */
+        .empty-state { text-align: center; padding: 40px 20px; color: var(--gray-600); }
+        .empty-icon  { font-size: 40px; margin-bottom: 12px; }
+        .empty-title { font-size: 15px; font-weight: 600; color: var(--gray-800); margin-bottom: 6px; }
+
+        /* ── Skeleton ── */
+        .skeleton { background: linear-gradient(90deg, var(--gray-200) 25%, var(--gray-100) 50%, var(--gray-200) 75%); background-size: 200% 100%; animation: shimmer 1.2s infinite; border-radius: 6px; }
+        @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+
+        /* ── Loader ── */
+        #bmd-loader { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.75); z-index: 9999; align-items: center; justify-content: center; flex-direction: column; gap: 12px; }
+        .spinner { width: 40px; height: 40px; border: 4px solid var(--gray-200); border-top: 4px solid var(--purple-mid); border-radius: 50%; animation: spin 0.8s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        #bmd-toast { position: fixed; bottom: 24px; right: 24px; padding: 12px 20px; border-radius: 8px; font-size: 14px; font-family: var(--font); color: var(--white); box-shadow: var(--shadow-md); z-index: 99999; display: none; max-width: 320px; }
+
+        @media (max-width: 768px) { .stats-grid { grid-template-columns: repeat(2,1fr); } .s-mid { display: none; } }
+    </style>
+</head>
+<body>
+
+<div id="bmd-loader"><div class="spinner"></div><span style="color:var(--purple-mid);font-size:14px;">Loading settlements...</span></div>
+<div id="bmd-toast"></div>
+
+<!-- Pay Modal -->
+<div class="modal-overlay" id="pay-modal">
+    <div class="modal">
+        <div class="modal-title">💰 Process Payment</div>
+        <div class="modal-sub" id="pay-modal-sub">Pay doctor for completed consultations</div>
+        <div class="modal-info" id="pay-modal-info"></div>
+        <div class="form-group">
+            <label class="form-label">Payment Mode</label>
+            <select id="pay-mode" class="form-select">
+                <option value="NEFT">NEFT</option>
+                <option value="IMPS">IMPS</option>
+                <option value="UPI">UPI</option>
+                <option value="CHEQUE">Cheque</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label class="form-label">Transaction Reference</label>
+            <input type="text" id="pay-ref" class="form-input" placeholder="UTR / Transaction ID">
+        </div>
+        <div class="form-group">
+            <label class="form-label">Notes (Optional)</label>
+            <input type="text" id="pay-notes" class="form-input" placeholder="Any additional notes">
+        </div>
+        <div class="modal-actions">
+            <button class="btn-modal-cancel" onclick="closePayModal()">Cancel</button>
+            <button class="btn-modal-pay" id="pay-submit-btn" onclick="processPayment()">✓ Mark as Paid</button>
+        </div>
+    </div>
+</div>
+
+<!-- Navbar -->
+<nav class="navbar">
+    <a href="../index.html" class="nav-brand">
+        <div class="nav-brand-icon">🏥</div>
+        <span class="nav-brand-name">BookMyDoctor</span>
+    </a>
+    <div class="nav-right">
+        <div class="nav-links">
+            <a href="dashboard.html"    class="btn-nav btn-nav-outline">🏠 Dashboard</a>
+            <a href="doctors.html"      class="btn-nav btn-nav-outline">👨‍⚕️ Doctors</a>
+            <a href="hospitals.html"    class="btn-nav btn-nav-outline">🏥 Hospitals</a>
+            <a href="settlements.html"  class="btn-nav btn-nav-solid">💰 Settlements</a>
+        </div>
+        <div class="role-badge">
+            <span class="role-pill">ADMIN</span>
+            <span class="role-name" id="admin-name">—</span>
+        </div>
+        <button class="btn-nav btn-nav-outline" onclick="handleLogout()"
+            style="color:var(--red);border-color:var(--red) !important;">Logout</button>
+    </div>
+</nav>
+
+<!-- Hero -->
+<div class="page-hero">
+    <div class="page-hero-inner">
+        <div>
+            <div class="hero-title">💰 Settlements</div>
+            <div class="hero-sub">Manage doctor payments and track transactions</div>
+        </div>
+        <div class="hero-total">
+            <div class="hero-total-label">Total Platform Revenue</div>
+            <div class="hero-total-amount" id="platform-revenue">₹—</div>
+            <div class="hero-total-sub">10% of all consultations</div>
+        </div>
+    </div>
+</div>
+
+<!-- Page -->
+<div class="page-wrap">
+
+    <!-- Stats -->
+    <div class="stats-grid">
+        <div class="stat-card orange">
+            <div class="stat-icon orange">⏳</div>
+            <div><div class="stat-num" id="stat-pending">₹—</div><div class="stat-label">Pending Payments</div></div>
+        </div>
+        <div class="stat-card green">
+            <div class="stat-icon green">✅</div>
+            <div><div class="stat-num" id="stat-paid">₹—</div><div class="stat-label">Total Paid Out</div></div>
+        </div>
+        <div class="stat-card purple">
+            <div class="stat-icon purple">📋</div>
+            <div><div class="stat-num" id="stat-count">—</div><div class="stat-label">Total Settlements</div></div>
+        </div>
+        <div class="stat-card green">
+            <div class="stat-icon green">💵</div>
+            <div><div class="stat-num" id="stat-gross">₹—</div><div class="stat-label">Gross Revenue</div></div>
+        </div>
+    </div>
+
+    <!-- Settlements Table -->
+    <div class="card">
+        <div class="card-head">
+            <div class="card-head-left">
+                <div class="card-head-icon green">💰</div>
+                <div class="card-head-title">All Settlements</div>
+            </div>
+            <span id="result-count" style="font-size:12px;color:var(--gray-600);"></span>
+        </div>
+
+        <!-- Filters -->
+        <div class="filter-row">
+            <button class="filter-btn active" onclick="filterBy('ALL', this)">All</button>
+            <button class="filter-btn" onclick="filterBy('PENDING', this)">⏳ Pending</button>
+            <button class="filter-btn" onclick="filterBy('PAID', this)">✅ Paid</button>
+            <button class="filter-btn" onclick="filterBy('PROCESSING', this)">🔄 Processing</button>
+            <div class="search-wrap">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="search-input" class="search-input"
+                    placeholder="Search doctor or patient..."
+                    oninput="renderSettlements()">
+            </div>
+        </div>
+
+        <div class="card-body" id="settlements-list">
+            <div style="padding:20px;">
+                <div class="skeleton" style="height:65px;margin-bottom:10px;border-radius:8px;"></div>
+                <div class="skeleton" style="height:65px;margin-bottom:10px;border-radius:8px;"></div>
+                <div class="skeleton" style="height:65px;border-radius:8px;"></div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+const BASE_URL      = 'https://bookmydoctor-proxy.pulipraveenkumar08.workers.dev/';
+let allSettlements  = [];
+let currentFilter   = 'ALL';
+let currentSettlement = null;
+
+function showLoader() { document.getElementById('bmd-loader').style.display = 'flex'; }
+function hideLoader() { document.getElementById('bmd-loader').style.display = 'none'; }
+
+function showToast(msg, color) {
+    const t = document.getElementById('bmd-toast');
+    t.innerHTML = msg; t.style.background = color || '#534ab7';
+    t.style.display = 'block';
+    setTimeout(() => t.style.display = 'none', 4000);
+}
+
+function getSession() {
+    return {
+        token    : localStorage.getItem('bmd_token'),
+        userType : localStorage.getItem('bmd_user_type'),
+        name     : localStorage.getItem('bmd_name')
+    };
+}
+
+async function callBMD(endpoint, payload) {
+    try {
+        const res  = await fetch(BASE_URL + endpoint, {
+            method  : 'POST',
+            headers : { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+            body    : JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (data.p_message) return JSON.parse(data.p_message);
+        if (data.p_result)  return JSON.parse(data.p_result);
+        return data;
+    } catch (err) { return { status: 'ERROR', message: err.message }; }
+}
+
+async function handleLogout() {
+    const s = getSession();
+    if (s.token) await callBMD('logout', { session_token: s.token });
+    localStorage.clear();
+    window.location.href = '../patient/login.html';
+}
+
+function formatDate(d) {
+    if (!d) return '—';
+    return new Date(d).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' });
+}
+
+// ── Load Settlements ──
+async function loadSettlements() {
+    const s    = getSession();
+    const data = await callBMD('get-settlements', { session_token: s.token });
+
+    if (data.status !== 'SUCCESS') {
+        document.getElementById('settlements-list').innerHTML = `
+            <div class="empty-state">
+                <div class="empty-icon">💰</div>
+                <div class="empty-title">No settlements found</div>
+            </div>`;
+        document.getElementById('stat-pending').textContent  = '₹0';
+        document.getElementById('stat-paid').textContent     = '₹0';
+        document.getElementById('stat-count').textContent    = '0';
+        document.getElementById('stat-gross').textContent    = '₹0';
+        document.getElementById('platform-revenue').textContent = '₹0';
+        return;
+    }
+
+    allSettlements = data.settlements || [];
+
+    // Calculate totals
+    const gross    = allSettlements.reduce((a, s) => a + (s.gross_amount || s.amount || 0), 0);
+    const pending  = allSettlements.filter(s => (s.status||'').toUpperCase() === 'PENDING')
+                       .reduce((a, s) => a + (s.net_amount || Math.round((s.amount||0)*0.9)), 0);
+    const paid     = allSettlements.filter(s => (s.status||'').toUpperCase() === 'PAID')
+                       .reduce((a, s) => a + (s.net_amount || Math.round((s.amount||0)*0.9)), 0);
+    const platform = Math.round(gross * 0.10);
+
+    document.getElementById('stat-pending').textContent      = '₹' + pending.toLocaleString('en-IN');
+    document.getElementById('stat-paid').textContent         = '₹' + paid.toLocaleString('en-IN');
+    document.getElementById('stat-count').textContent        = allSettlements.length;
+    document.getElementById('stat-gross').textContent        = '₹' + gross.toLocaleString('en-IN');
+    document.getElementById('platform-revenue').textContent  = '₹' + platform.toLocaleString('en-IN');
+
+    renderSettlements();
+}
+
+// ── Render ──
+function renderSettlements() {
+    const list   = document.getElementById('settlements-list');
+    const search = document.getElementById('search-input').value.trim().toLowerCase();
+
+    let filtered = allSettlements.filter(s => {
+        const matchFilter = currentFilter === 'ALL' || (s.status||'').toUpperCase() === currentFilter;
+        const matchSearch = !search ||
+            (s.doctor_name  || '').toLowerCase().includes(search) ||
+            (s.patient_name || '').toLowerCase().includes(search) ||
+            (s.booking_reference || '').toLowerCase().includes(search);
+        return matchFilter && matchSearch;
+    });
+
+    document.getElementById('result-count').textContent = `${filtered.length} records`;
+
+    if (filtered.length === 0) {
+        list.innerHTML = `
+            <div class="empty-state">
+                <div class="empty-icon">💰</div>
+                <div class="empty-title">No settlements found</div>
+            </div>`;
+        return;
+    }
+
+    list.innerHTML = filtered.map(s => {
+        const status   = (s.status || 'PENDING').toUpperCase();
+        const gross    = s.gross_amount || s.amount || 0;
+        const net      = s.net_amount   || Math.round(gross * 0.9);
+        const platform = gross - net;
+        const cls      = status === 'PAID' ? 'paid' : status === 'PROCESSING' ? 'processing' : 'pending';
+        const icon     = status === 'PAID' ? '✅' : status === 'PROCESSING' ? '🔄' : '⏳';
+        const chipTxt  = status === 'PAID' ? '✅ Paid' : status === 'PROCESSING' ? '🔄 Processing' : '⏳ Pending';
+
+        return `
+        <div class="settlement-row">
+            <div class="s-avatar ${cls}">${icon}</div>
+            <div class="s-info">
+                <div class="s-doctor">👨‍⚕️ ${s.doctor_name || '—'}</div>
+                <div class="s-patient">Patient: ${s.patient_name || '—'} · ${s.hospital_name || '—'}</div>
+            </div>
+            <div class="s-mid">
+                <div class="s-date">${formatDate(s.appointment_date || s.created_date)}</div>
+                <div class="s-ref">${s.booking_reference || '—'}</div>
+            </div>
+            <div class="s-right">
+                <div class="s-gross">₹${gross.toLocaleString('en-IN')}</div>
+                <div class="s-net">Doctor gets: ₹${net.toLocaleString('en-IN')}</div>
+                <div>
+                    <span class="s-chip ${cls}">${chipTxt}</span>
+                </div>
+                ${status === 'PENDING' ? `
+                <button class="btn-pay" onclick="openPayModal(${JSON.stringify(s).replace(/"/g,'&quot;')})">
+                    💸 Pay Now
+                </button>` : ''}
+            </div>
+        </div>`;
+    }).join('');
+}
+
+// ── Filter ──
+function filterBy(filter, btn) {
+    currentFilter = filter;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderSettlements();
+}
+
+// ── Pay Modal ──
+function openPayModal(settlement) {
+    currentSettlement = settlement;
+    const gross = settlement.gross_amount || settlement.amount || 0;
+    const net   = settlement.net_amount   || Math.round(gross * 0.9);
+
+    document.getElementById('pay-modal-sub').textContent =
+        `Pay ${settlement.doctor_name || 'Doctor'} for consultation`;
+
+    document.getElementById('pay-modal-info').innerHTML = `
+        <div class="modal-info-row">
+            <span class="modal-info-label">Doctor</span>
+            <span class="modal-info-value">${settlement.doctor_name || '—'}</span>
+        </div>
+        <div class="modal-info-row">
+            <span class="modal-info-label">Patient</span>
+            <span class="modal-info-value">${settlement.patient_name || '—'}</span>
+        </div>
+        <div class="modal-info-row">
+            <span class="modal-info-label">Consultation Fee</span>
+            <span class="modal-info-value">₹${gross}</span>
+        </div>
+        <div class="modal-info-row">
+            <span class="modal-info-label">Platform Fee (10%)</span>
+            <span class="modal-info-value" style="color:var(--red);">- ₹${gross - net}</span>
+        </div>
+        <div class="modal-info-row" style="border-top:1px solid var(--gray-200);padding-top:8px;margin-top:4px;">
+            <span class="modal-info-label" style="font-weight:700;">Amount to Pay</span>
+            <span class="modal-info-value green">₹${net}</span>
+        </div>
+    `;
+
+    document.getElementById('pay-ref').value   = '';
+    document.getElementById('pay-notes').value = '';
+    document.getElementById('pay-modal').classList.add('show');
+}
+
+function closePayModal() {
+    document.getElementById('pay-modal').classList.remove('show');
+    currentSettlement = null;
+}
+
+async function processPayment() {
+    if (!currentSettlement) return;
+
+    const s      = getSession();
+    const ref    = document.getElementById('pay-ref').value.trim();
+    const mode   = document.getElementById('pay-mode').value;
+    const notes  = document.getElementById('pay-notes').value.trim();
+    const btn    = document.getElementById('pay-submit-btn');
+
+    if (!ref) { showToast('❌ Please enter transaction reference', '#dc3545'); return; }
+
+    btn.disabled = true; btn.textContent = 'Processing...';
+
+    const data = await callBMD('process-settlement', {
+        session_token  : s.token,
+        settlement_id  : currentSettlement.settlement_id,
+        payment_mode   : mode,
+        payment_ref    : ref,
+        notes          : notes || null
+    });
+
+    btn.disabled = false; btn.textContent = '✓ Mark as Paid';
+
+    if (data.status === 'SUCCESS') {
+        showToast('✅ Payment processed successfully!', '#2d9e5f');
+        closePayModal();
+        await loadSettlements();
+    } else {
+        showToast('❌ ' + (data.message || 'Payment failed'), '#dc3545');
+    }
+}
+
+// ── Init ──
+async function init() {
+    const s = getSession();
+    if (!s.token || s.userType !== 'ADMIN') {
+        window.location.href = '../patient/login.html';
+        return;
+    }
+    document.getElementById('admin-name').textContent = s.name ? s.name.split(' ')[0] : 'Admin';
+    showLoader();
+    await loadSettlements();
+    hideLoader();
+}
+
+init();
+</script>
+</body>
+</html>
