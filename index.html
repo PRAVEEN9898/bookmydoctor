@@ -36,22 +36,23 @@
             box-shadow: 0 1px 4px rgba(0,0,0,0.08); position: sticky; top: 0; z-index: 100;
         }
 
-        .nav-brand { display: flex; align-items: center; gap: 9px; text-decoration: none; }
+        .nav-brand { display: flex; align-items: center; gap: 9px; text-decoration: none; flex-shrink: 0; }
 
         .nav-brand-icon {
             width: 34px; height: 34px; background: var(--green-mid);
             border-radius: 8px; display: flex; align-items: center;
-            justify-content: center; font-size: 18px;
+            justify-content: center; font-size: 18px; flex-shrink: 0;
         }
 
         .nav-brand-name { font-size: 18px; font-weight: 700; color: var(--green-dark); }
 
-        .nav-links { display: flex; align-items: center; gap: 8px; }
+        .nav-links { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
 
         .btn-nav {
-            padding: 7px 16px; border-radius: 20px; font-size: 13px;
+            padding: 7px 14px; border-radius: 20px; font-size: 13px;
             font-weight: 600; cursor: pointer; font-family: var(--font);
             text-decoration: none; border: none; transition: all 0.2s;
+            white-space: nowrap;
         }
 
         .btn-nav-outline {
@@ -183,7 +184,6 @@
             border-color: var(--green-light);
         }
 
-        /* Card header band */
         .hospital-card-header {
             background: linear-gradient(135deg, var(--green-dark), var(--green-mid));
             padding: 18px 20px 14px;
@@ -209,7 +209,6 @@
         .open-badge.open   { background: #e8f5e9; color: #2e7d32; }
         .open-badge.closed { background: #fdecea; color: var(--red); }
 
-        /* Card body */
         .hospital-card-body { padding: 16px 20px; }
 
         .hospital-meta { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
@@ -220,7 +219,6 @@
             background: var(--gray-100); padding: 4px 10px; border-radius: 6px;
         }
 
-        /* Stats row */
         .hospital-stats {
             display: grid; grid-template-columns: repeat(3,1fr);
             gap: 8px; margin-bottom: 12px;
@@ -234,7 +232,6 @@
         .h-stat-num   { font-size: 16px; font-weight: 700; color: var(--green-dark); }
         .h-stat-label { font-size: 10px; color: var(--gray-600); margin-top: 1px; }
 
-        /* Insurance */
         .insurance-row {
             display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px;
         }
@@ -244,7 +241,6 @@
             padding: 3px 8px; border-radius: 10px; white-space: nowrap;
         }
 
-        /* Card footer */
         .hospital-card-footer {
             display: flex; align-items: center; justify-content: space-between;
             padding-top: 12px; border-top: 1px solid var(--gray-200);
@@ -262,13 +258,11 @@
 
         .btn-view:hover { background: var(--green-dark); }
 
-        /* ── Empty State ── */
         .empty-state { text-align: center; padding: 60px 20px; color: var(--gray-600); }
         .empty-state-icon  { font-size: 48px; margin-bottom: 16px; }
         .empty-state-title { font-size: 18px; font-weight: 600; margin-bottom: 8px; color: var(--gray-800); }
         .empty-state-sub   { font-size: 14px; }
 
-        /* ── Skeleton ── */
         .skeleton {
             background: linear-gradient(90deg, var(--gray-200) 25%, var(--gray-100) 50%, var(--gray-200) 75%);
             background-size: 200% 100%; animation: skeleton-shimmer 1.2s infinite; border-radius: 6px;
@@ -279,7 +273,6 @@
             100% { background-position: -200% 0; }
         }
 
-        /* ── Loader ── */
         #bmd-loader {
             display: none; position: fixed; top: 0; left: 0;
             width: 100%; height: 100%; background: rgba(255,255,255,0.75);
@@ -302,6 +295,7 @@
             box-shadow: var(--shadow-md); z-index: 99999; display: none;
         }
 
+        /* ── Mobile Responsive ── */
         @media (max-width: 600px) {
             .hero-title    { font-size: 28px; }
             .search-box    { flex-direction: column; }
@@ -309,6 +303,15 @@
             .stat-number   { font-size: 20px; }
             .hospitals-grid{ grid-template-columns: 1fr; }
             .filter-row    { flex-direction: column; align-items: flex-start; }
+        }
+
+        @media (max-width: 480px) {
+            .navbar { padding: 0 12px; height: 56px; }
+            .nav-brand-name { font-size: 15px; }
+            .nav-brand-icon { width: 28px; height: 28px; font-size: 15px; }
+            .btn-nav { padding: 5px 10px; font-size: 12px; }
+            .nav-links { gap: 6px; }
+            .btn-nav-hide-mobile { display: none; }
         }
     </style>
 </head>
@@ -388,7 +391,6 @@
             <div class="results-count" id="results-count"></div>
         </div>
         <div class="hospitals-grid" id="hospitals-grid">
-            <!-- Skeleton -->
             <div class="hospital-card">
                 <div style="background:var(--gray-200);height:80px;"></div>
                 <div style="padding:16px 20px;">
@@ -410,16 +412,10 @@
 </div>
 
 <script>
-// ─────────────────────────────────────────────────────
-//  Config
-// ─────────────────────────────────────────────────────
 const BASE_URL    = 'https://bookmydoctor-proxy.pulipraveenkumar08.workers.dev/';
 let allHospitals  = [];
 let selectedSpec  = '';
 
-// ─────────────────────────────────────────────────────
-//  Helpers
-// ─────────────────────────────────────────────────────
 function showLoader() { document.getElementById('bmd-loader').style.display = 'flex'; }
 function hideLoader() { document.getElementById('bmd-loader').style.display = 'none'; }
 
@@ -456,24 +452,21 @@ function getSession() {
     };
 }
 
-// ─────────────────────────────────────────────────────
-//  Navbar
-// ─────────────────────────────────────────────────────
 function renderNav() {
     const s   = getSession();
     const nav = document.getElementById('nav-links');
 
     if (s.token && s.user_type === 'PATIENT') {
         nav.innerHTML = `
-            <a href="patient/appointments.html" class="btn-nav btn-nav-outline">My Appointments</a>
+            <a href="patient/appointments.html" class="btn-nav btn-nav-outline btn-nav-hide-mobile">My Appointments</a>
             <a href="patient/profile.html"      class="btn-nav btn-nav-outline">👤 Profile</a>
             <button class="btn-nav btn-nav-solid" onclick="handleLogout()">Logout</button>`;
     } else if (s.token && s.user_type === 'DOCTOR') {
         nav.innerHTML = `
-            <a href="doctor/dashboard.html" class="btn-nav btn-nav-solid">Doctor Dashboard</a>`;
+            <a href="doctor/dashboard.html" class="btn-nav btn-nav-solid">Dashboard</a>`;
     } else if (s.token && s.user_type === 'ADMIN') {
         nav.innerHTML = `
-            <a href="admin/dashboard.html" class="btn-nav btn-nav-solid">Admin Dashboard</a>`;
+            <a href="admin/dashboard.html" class="btn-nav btn-nav-solid">Admin</a>`;
     } else {
         nav.innerHTML = `
             <a href="patient/login.html"    class="btn-nav btn-nav-outline">Sign In</a>
@@ -489,9 +482,6 @@ async function handleLogout() {
     showToast('Logged out successfully');
 }
 
-// ─────────────────────────────────────────────────────
-//  Load Analytics
-// ─────────────────────────────────────────────────────
 async function loadAnalytics() {
     const s    = getSession();
     const data = await callBMD('get-analytics', { session_token: s.token || '' });
@@ -504,9 +494,6 @@ async function loadAnalytics() {
     }
 }
 
-// ─────────────────────────────────────────────────────
-//  Load Specializations
-// ─────────────────────────────────────────────────────
 async function loadSpecializations() {
     const data = await callBMD('get-lookups', { lookup_type: 'BMD_SPECIALIZATION' });
     if (data.status === 'SUCCESS') {
@@ -521,9 +508,6 @@ async function loadSpecializations() {
     }
 }
 
-// ─────────────────────────────────────────────────────
-//  Load Hospitals
-// ─────────────────────────────────────────────────────
 async function loadHospitals() {
     const s    = getSession();
     const data = await callBMD('get-hospitals', { session_token: s.token || '' });
@@ -541,9 +525,6 @@ async function loadHospitals() {
     }
 }
 
-// ─────────────────────────────────────────────────────
-//  Check if hospital is open now
-// ─────────────────────────────────────────────────────
 function isOpen(openTime, closeTime) {
     try {
         const now   = new Date();
@@ -556,9 +537,6 @@ function isOpen(openTime, closeTime) {
     } catch(e) { return true; }
 }
 
-// ─────────────────────────────────────────────────────
-//  Render Hospital Cards
-// ─────────────────────────────────────────────────────
 function renderHospitals(hospitals) {
     const grid  = document.getElementById('hospitals-grid');
     const count = document.getElementById('results-count');
@@ -583,7 +561,6 @@ function renderHospitals(hospitals) {
 
         return `
         <div class="hospital-card" onclick="goToHospital(${h.hospital_id})">
-
             <div class="hospital-card-header">
                 <div>
                     <div class="hospital-name">🏥 ${h.hospital_name}</div>
@@ -596,9 +573,7 @@ function renderHospitals(hospitals) {
                     </span>
                 </div>
             </div>
-
             <div class="hospital-card-body">
-
                 <div class="hospital-meta">
                     <div class="hospital-tag">📍 ${h.city || 'Hyderabad'}</div>
                     <div class="hospital-tag">🕐 ${h.open_time || '08:00'} – ${h.close_time || '20:00'}</div>
@@ -606,7 +581,6 @@ function renderHospitals(hospitals) {
                         ? `<div class="hospital-tag">⭐ ${rating.toFixed(1)}</div>`
                         : `<div class="hospital-tag">⭐ New</div>`}
                 </div>
-
                 <div class="hospital-stats">
                     <div class="h-stat">
                         <div class="h-stat-num">${h.doctor_count || 0}</div>
@@ -621,34 +595,25 @@ function renderHospitals(hospitals) {
                         <div class="h-stat-label">Avg Wait</div>
                     </div>
                 </div>
-
                 ${insurance.length > 0 ? `
                 <div class="insurance-row">
                     ${insurance.map(i => `<span class="insurance-tag">✓ ${i}</span>`).join('')}
                     ${(h.insurance||[]).length > 3 ? `<span class="insurance-tag">+${h.insurance.length-3} more</span>` : ''}
                 </div>` : ''}
-
                 <div class="hospital-card-footer">
-                    <div class="wait-info">
-                        📞 ${h.contact_phone || '—'}
-                    </div>
+                    <div class="wait-info">📞 ${h.contact_phone || '—'}</div>
                     <button class="btn-view"
                         onclick="event.stopPropagation(); goToHospital(${h.hospital_id})">
                         View Doctors →
                     </button>
                 </div>
-
             </div>
         </div>`;
     }).join('');
 }
 
-// ─────────────────────────────────────────────────────
-//  Filter Hospitals
-// ─────────────────────────────────────────────────────
 function filterHospitals() {
     const search = document.getElementById('search-input').value.trim().toLowerCase();
-
     const filtered = allHospitals.filter(h => {
         return !search ||
             (h.hospital_name  || '').toLowerCase().includes(search) ||
@@ -656,29 +621,18 @@ function filterHospitals() {
             (h.hospital_type  || '').toLowerCase().includes(search) ||
             (h.insurance || []).some(i => i.toLowerCase().includes(search));
     });
-
     renderHospitals(filtered);
 }
 
-// ─────────────────────────────────────────────────────
-//  Specialization pill — filter by spec
-//  (shows hospitals that have doctors in that spec)
-// ─────────────────────────────────────────────────────
 function selectSpec(code, pillEl) {
     selectedSpec = code;
     document.querySelectorAll('.spec-pill').forEach(p => p.classList.remove('active'));
     if (pillEl) pillEl.classList.add('active');
 
-    if (!code) {
-        renderHospitals(allHospitals);
-        return;
-    }
+    if (!code) { renderHospitals(allHospitals); return; }
 
-    // Show only hospitals that have doctors with this specialization
     const filtered = allHospitals.filter(h =>
-        (h.specializations || []).some(s =>
-            s.toUpperCase() === code.toUpperCase()
-        )
+        (h.specializations || []).some(s => s.toUpperCase() === code.toUpperCase())
     );
 
     if (filtered.length === 0) {
@@ -688,16 +642,11 @@ function selectSpec(code, pillEl) {
         renderHospitals(filtered);
     }
 }
-// ─────────────────────────────────────────────────────
-//  Navigate
-// ─────────────────────────────────────────────────────
+
 function goToHospital(hospital_id) {
     window.location.href = 'hospital.html?hospital_id=' + hospital_id;
 }
 
-// ─────────────────────────────────────────────────────
-//  Init
-// ─────────────────────────────────────────────────────
 async function init() {
     showLoader();
     renderNav();
