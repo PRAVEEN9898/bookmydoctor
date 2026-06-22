@@ -27,35 +27,37 @@
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: var(--font); background: var(--gray-100); color: var(--gray-800); }
 
+        /* ── Navbar ── */
         .navbar {
             background: var(--white); padding: 0 24px; height: 60px;
             display: flex; align-items: center; justify-content: space-between;
             box-shadow: 0 1px 4px rgba(0,0,0,0.08); position: sticky; top: 0; z-index: 100;
         }
-        .nav-brand { display: flex; align-items: center; gap: 9px; text-decoration: none; }
+        .nav-brand { display: flex; align-items: center; gap: 9px; text-decoration: none; flex-shrink: 0; }
         .nav-brand-icon {
             width: 34px; height: 34px; background: var(--green-mid);
             border-radius: 8px; display: flex; align-items: center;
-            justify-content: center; font-size: 18px;
+            justify-content: center; font-size: 18px; flex-shrink: 0;
         }
         .nav-brand-name { font-size: 18px; font-weight: 700; color: var(--green-dark); }
-        .nav-links { display: flex; align-items: center; gap: 8px; }
-        .btn-nav {
-            padding: 7px 16px; border-radius: 20px; font-size: 13px;
-            font-weight: 600; cursor: pointer; font-family: var(--font);
-            text-decoration: none; border: none; transition: all 0.2s;
-        }
-        .btn-nav-outline { background: var(--white); color: var(--green-dark); border: 1.5px solid var(--green-mid) !important; }
-        .btn-nav-outline:hover { background: var(--green-light); }
-        .btn-nav-solid  { background: var(--green-mid); color: var(--white); }
-        .btn-nav-solid:hover { background: var(--green-dark); }
+        .nav-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
         .nav-back {
             display: flex; align-items: center; gap: 6px;
             font-size: 13px; color: var(--gray-600); text-decoration: none;
-            padding: 6px 12px; border-radius: 6px; transition: background 0.2s;
+            padding: 6px 12px; border-radius: 6px; transition: background 0.2s; white-space: nowrap;
         }
         .nav-back:hover { background: var(--gray-100); }
+        .btn-nav {
+            padding: 7px 14px; border-radius: 20px; font-size: 13px;
+            font-weight: 600; cursor: pointer; font-family: var(--font);
+            text-decoration: none; border: none; transition: all 0.2s; white-space: nowrap;
+        }
+        .btn-nav-outline { background: var(--white); color: var(--green-dark); border: 1.5px solid var(--green-mid) !important; }
+        .btn-nav-outline:hover { background: var(--green-light); }
+        .btn-nav-solid { background: var(--green-mid); color: var(--white); }
+        .btn-nav-solid:hover { background: var(--green-dark); }
 
+        /* ── Hero ── */
         .hospital-hero {
             background: linear-gradient(135deg, var(--green-dark), var(--green-mid));
             padding: 32px 24px 40px;
@@ -70,11 +72,12 @@
         .badge-open  { background: #e8f5e9; color: #2e7d32; }
         .badge-closed{ background: #fdecea; color: var(--red); }
         .badge-type  { background: rgba(255,255,255,0.15); color: var(--white); }
-        .hero-stats  { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 20px; }
-        .hero-stat   { background: rgba(255,255,255,0.15); border-radius: var(--radius-sm); padding: 12px 20px; text-align: center; min-width: 90px; }
-        .hero-stat-num   { font-size: 22px; font-weight: 800; color: var(--white); }
+        .hero-stats  { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 20px; }
+        .hero-stat   { background: rgba(255,255,255,0.15); border-radius: var(--radius-sm); padding: 12px 16px; text-align: center; min-width: 80px; }
+        .hero-stat-num   { font-size: 20px; font-weight: 800; color: var(--white); }
         .hero-stat-label { font-size: 11px; color: rgba(255,255,255,0.8); margin-top: 2px; }
 
+        /* ── Layout ── */
         .page-wrap {
             max-width: 1000px; margin: 0 auto;
             padding: 28px 24px 48px;
@@ -108,9 +111,8 @@
             cursor: pointer; display: flex; gap: 14px; align-items: flex-start;
         }
         .doctor-card:hover { border-color: var(--green-light); transform: translateY(-1px); }
-
         .doctor-avatar { width: 56px; height: 56px; border-radius: 12px; background: var(--green-light); display: flex; align-items: center; justify-content: center; font-size: 26px; flex-shrink: 0; }
-        .doctor-info   { flex: 1; }
+        .doctor-info   { flex: 1; min-width: 0; }
         .doctor-name   { font-size: 15px; font-weight: 700; color: var(--gray-800); margin-bottom: 3px; }
         .doctor-spec   { font-size: 12px; color: var(--green-mid); font-weight: 600; margin-bottom: 4px; }
         .doctor-qual   { font-size: 11px; color: var(--gray-600); margin-bottom: 8px; }
@@ -119,12 +121,10 @@
         .avail-badge   { font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 20px; }
         .avail-badge.yes { background: #e8f5e9; color: #2e7d32; }
         .avail-badge.no  { background: #fdecea; color: #c62828; }
-
         .doctor-right  { text-align: right; flex-shrink: 0; }
         .doctor-fee    { font-size: 18px; font-weight: 700; color: var(--green-dark); }
         .doctor-fee small { font-size: 11px; font-weight: 400; color: var(--gray-600); }
         .doctor-rating { font-size: 12px; color: #f59e0b; margin-bottom: 10px; }
-
         .btn-book { padding: 8px 18px; background: var(--green-mid); color: var(--white); border: none; border-radius: var(--radius-sm); font-size: 13px; font-weight: 600; cursor: pointer; font-family: var(--font); transition: background 0.2s; white-space: nowrap; }
         .btn-book:hover { background: var(--green-dark); }
 
@@ -148,11 +148,29 @@
         #bmd-loader { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.75); z-index: 9999; align-items: center; justify-content: center; flex-direction: column; gap: 12px; }
         .spinner { width: 40px; height: 40px; border: 4px solid var(--gray-200); border-top: 4px solid var(--green-mid); border-radius: 50%; animation: spin 0.8s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
-
         #bmd-toast { position: fixed; bottom: 24px; right: 24px; padding: 12px 20px; border-radius: 8px; font-size: 14px; font-family: var(--font); color: var(--white); box-shadow: var(--shadow-md); z-index: 99999; display: none; }
 
-        @media (max-width: 768px) { .page-wrap { grid-template-columns: 1fr; } .sidebar { position: static; } }
-        @media (max-width: 480px) { .hospital-hero-name { font-size: 22px; } .hero-stats { gap: 10px; } }
+        /* ── Mobile ── */
+        @media (max-width: 768px) {
+            .page-wrap { grid-template-columns: 1fr; }
+            .sidebar { position: static; }
+        }
+
+        @media (max-width: 480px) {
+            .navbar { padding: 0 12px; height: 56px; }
+            .nav-brand-name { font-size: 15px; }
+            .nav-brand-icon { width: 28px; height: 28px; font-size: 15px; }
+            .nav-back { font-size: 11px; padding: 4px 6px; }
+            .btn-nav { padding: 5px 10px; font-size: 12px; }
+            .btn-nav-hide-mobile { display: none; }
+            .hospital-hero-name { font-size: 20px; }
+            .hero-stats { gap: 8px; }
+            .hero-stat { padding: 10px 12px; min-width: 70px; }
+            .hero-stat-num { font-size: 17px; }
+            .doctor-card { flex-wrap: wrap; }
+            .doctor-right { width: 100%; display: flex; align-items: center; justify-content: space-between; text-align: left; margin-top: 8px; }
+            .page-wrap { padding: 16px; }
+        }
     </style>
 </head>
 <body>
@@ -161,7 +179,6 @@
     <div class="spinner"></div>
     <span style="color:var(--green-mid);font-size:14px;" id="loader-text">Loading...</span>
 </div>
-
 <div id="bmd-toast"></div>
 
 <nav class="navbar">
@@ -169,9 +186,9 @@
         <div class="nav-brand-icon">🏥</div>
         <span class="nav-brand-name">BookMyDoctor</span>
     </a>
-    <div style="display:flex;align-items:center;gap:12px;">
+    <div class="nav-right">
         <a href="index.html" class="nav-back">← Back to Hospitals</a>
-        <div class="nav-links" id="nav-links"></div>
+        <div id="nav-links"></div>
     </div>
 </nav>
 
@@ -234,7 +251,6 @@
                 <div class="skeleton" style="height:14px;width:70%;"></div>
             </div>
         </div>
-
         <div class="card" id="insurance-card" style="display:none;">
             <div class="card-head">
                 <div class="card-head-icon">🛡️</div>
@@ -295,17 +311,16 @@ function isOpen(openTime, closeTime) {
     } catch(e) { return true; }
 }
 
-// ── Navbar ──
 function renderNav() {
     const s   = getSession();
     const nav = document.getElementById('nav-links');
     if (s.token && s.userType === 'PATIENT') {
         nav.innerHTML = `
-            <a href="patient/appointments.html" class="btn-nav btn-nav-outline">My Appointments</a>
+            <a href="patient/appointments.html" class="btn-nav btn-nav-outline btn-nav-hide-mobile">My Appointments</a>
             <button class="btn-nav btn-nav-solid" onclick="handleLogout()">Logout</button>`;
     } else if (!s.token) {
         nav.innerHTML = `
-            <a href="patient/login.html"    class="btn-nav btn-nav-outline">Sign In</a>
+            <a href="patient/login.html"    class="btn-nav btn-nav-outline btn-nav-hide-mobile">Sign In</a>
             <a href="patient/register.html" class="btn-nav btn-nav-solid">Get Started</a>`;
     }
 }
@@ -317,7 +332,6 @@ async function handleLogout() {
     window.location.href = 'patient/login.html';
 }
 
-// ── Load Hospital ──
 async function loadHospital() {
     const s    = getSession();
     const data = await callBMD('get-hospitals', { session_token: s.token || '' });
@@ -361,24 +375,21 @@ async function loadHospital() {
     }
 }
 
-// ── Load Departments ──
 async function loadDepartments() {
     const s    = getSession();
     const data = await callBMD('get-departments', { session_token: s.token || '', hospital_id: hospitalId });
     if (data.status !== 'SUCCESS') return;
-
     const pills = document.getElementById('dept-pills');
     (data.departments || []).forEach(d => {
-        const pill           = document.createElement('div');
-        pill.className       = 'dept-pill';
+        const pill            = document.createElement('div');
+        pill.className        = 'dept-pill';
         pill.dataset.deptName = d.dept_name;
-        pill.innerHTML       = `${d.dept_name} <span class="dept-count">${d.doctor_count}</span>`;
-        pill.onclick         = () => filterByDept(d.dept_id, d.dept_name, pill);
+        pill.innerHTML        = `${d.dept_name} <span class="dept-count">${d.doctor_count}</span>`;
+        pill.onclick          = () => filterByDept(d.dept_id, d.dept_name, pill);
         pills.appendChild(pill);
     });
 }
 
-// ── Load Doctors ──
 async function loadDoctors() {
     const s    = getSession();
     const data = await callBMD('get-doctors', { session_token: s.token || '' });
@@ -386,36 +397,24 @@ async function loadDoctors() {
         document.getElementById('doctors-grid').innerHTML = `<div class="empty-state"><div class="empty-icon">⚠️</div><div class="empty-title">Could not load doctors</div></div>`;
         return;
     }
-
-    // Filter by hospital_name (hospital_id not in response)
     allDoctors = (data.doctors || []).filter(d =>
-        hospitalData &&
-        (d.hospital_name || '').toLowerCase() === (hospitalData.hospital_name || '').toLowerCase()
+        hospitalData && (d.hospital_name || '').toLowerCase() === (hospitalData.hospital_name || '').toLowerCase()
     );
-
     renderDoctors(allDoctors);
 }
 
-// ── Render Doctors ──
 function renderDoctors(doctors) {
     const grid  = document.getElementById('doctors-grid');
     const title = document.getElementById('doctors-title');
     title.textContent = `Available Doctors (${doctors.length})`;
 
     if (doctors.length === 0) {
-        grid.innerHTML = `
-            <div class="empty-state">
-                <div class="empty-icon">👨‍⚕️</div>
-                <div class="empty-title">No doctors found</div>
-                <div class="empty-sub">Try selecting a different department.</div>
-            </div>`;
+        grid.innerHTML = `<div class="empty-state"><div class="empty-icon">👨‍⚕️</div><div class="empty-title">No doctors found</div><div class="empty-sub">Try selecting a different department.</div></div>`;
         return;
     }
 
     grid.innerHTML = doctors.map(d => {
-        // Use gender from API response
         const icon = d.gender === 'F' ? '👩‍⚕️' : '👨‍⚕️';
-
         return `
         <div class="doctor-card" onclick="bookDoctor(${d.doctor_id})">
             <div class="doctor-avatar">${icon}</div>
@@ -441,19 +440,15 @@ function renderDoctors(doctors) {
     }).join('');
 }
 
-// ── Filter by Dept ──
 function filterByDept(deptId, deptName, pillEl) {
     document.querySelectorAll('.dept-pill').forEach(p => p.classList.remove('active'));
     if (pillEl) pillEl.classList.add('active');
-
     const filtered = deptName
         ? allDoctors.filter(d => (d.dept_name || '').toLowerCase() === deptName.toLowerCase())
         : allDoctors;
-
     renderDoctors(filtered);
 }
 
-// ── Book ──
 function bookDoctor(doctorId) {
     const s = getSession();
     if (!s.token || s.userType !== 'PATIENT') {
@@ -464,19 +459,14 @@ function bookDoctor(doctorId) {
     window.location.href = 'patient/booking.html?doctor_id=' + doctorId;
 }
 
-// ── Init ──
 async function init() {
     const params = new URLSearchParams(window.location.search);
     hospitalId   = params.get('hospital_id');
     if (!hospitalId) { window.location.href = 'index.html'; return; }
-
     renderNav();
     showLoader('Loading hospital...');
-
-    // Load hospital FIRST so hospitalData is set before filtering doctors
     await loadHospital();
     await Promise.all([loadDepartments(), loadDoctors()]);
-
     hideLoader();
 }
 
