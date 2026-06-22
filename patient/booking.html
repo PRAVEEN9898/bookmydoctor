@@ -45,7 +45,7 @@
             gap: 24px; align-items: start;
         }
 
-        .card { background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow-sm); overflow: hidden; margin-bottom: 20px; }
+        .card { background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow-sm); overflow: visible; margin-bottom: 20px; }
         .card-head { padding: 16px 20px; border-bottom: 1px solid var(--gray-200); display: flex; align-items: center; gap: 10px; }
         .card-head-icon { width: 32px; height: 32px; background: var(--green-light); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
         .card-head-title { font-size: 15px; font-weight: 700; color: var(--gray-800); }
@@ -74,7 +74,7 @@
         .date-chip-mon  { font-size: 10px; }
 
         /* Slots grid — wraps neatly on mobile */
-        .slots-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 8px; }
+       .slots-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)); gap: 8px; }
         .slot-chip { padding: 8px 4px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-sm); text-align: center; cursor: pointer; font-size: 12px; font-weight: 500; transition: all 0.2s; color: var(--gray-800); }
         .slot-chip:hover    { border-color: var(--green-mid); background: var(--green-pale); color: var(--green-dark); }
         .slot-chip.selected { border-color: var(--green-mid); background: var(--green-mid); color: var(--white); font-weight: 600; }
