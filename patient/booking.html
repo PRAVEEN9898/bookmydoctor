@@ -26,7 +26,6 @@
         }
 
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
         body { font-family: var(--font); background: var(--gray-100); color: var(--gray-800); }
 
         .navbar {
@@ -34,23 +33,10 @@
             display: flex; align-items: center; justify-content: space-between;
             box-shadow: 0 1px 4px rgba(0,0,0,0.08); position: sticky; top: 0; z-index: 100;
         }
-
-        .nav-brand { display: flex; align-items: center; gap: 9px; text-decoration: none; }
-
-        .nav-brand-icon {
-            width: 34px; height: 34px; background: var(--green-mid);
-            border-radius: 8px; display: flex; align-items: center;
-            justify-content: center; font-size: 18px;
-        }
-
+        .nav-brand { display: flex; align-items: center; gap: 9px; text-decoration: none; flex-shrink: 0; }
+        .nav-brand-icon { width: 34px; height: 34px; background: var(--green-mid); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
         .nav-brand-name { font-size: 18px; font-weight: 700; color: var(--green-dark); }
-
-        .nav-back {
-            display: flex; align-items: center; gap: 6px;
-            font-size: 13px; color: var(--gray-600); text-decoration: none;
-            padding: 6px 12px; border-radius: 6px; transition: background 0.2s;
-        }
-
+        .nav-back { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--gray-600); text-decoration: none; padding: 6px 12px; border-radius: 6px; transition: background 0.2s; white-space: nowrap; }
         .nav-back:hover { background: var(--gray-100); }
 
         .page-wrap {
@@ -60,77 +46,36 @@
         }
 
         .card { background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow-sm); overflow: hidden; margin-bottom: 20px; }
-
-        .card-head {
-            padding: 16px 20px; border-bottom: 1px solid var(--gray-200);
-            display: flex; align-items: center; gap: 10px;
-        }
-
-        .card-head-icon {
-            width: 32px; height: 32px; background: var(--green-light);
-            border-radius: 8px; display: flex; align-items: center;
-            justify-content: center; font-size: 16px;
-        }
-
+        .card-head { padding: 16px 20px; border-bottom: 1px solid var(--gray-200); display: flex; align-items: center; gap: 10px; }
+        .card-head-icon { width: 32px; height: 32px; background: var(--green-light); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
         .card-head-title { font-size: 15px; font-weight: 700; color: var(--gray-800); }
         .card-body { padding: 20px; }
 
         .doctor-profile { display: flex; gap: 16px; align-items: flex-start; }
+        .doctor-avatar { width: 72px; height: 72px; background: var(--green-light); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 34px; flex-shrink: 0; }
+        .doctor-details { flex: 1; min-width: 0; }
+        .doctor-name { font-size: 18px; font-weight: 700; color: var(--gray-800); margin-bottom: 4px; }
+        .doctor-spec { font-size: 13px; color: var(--green-mid); font-weight: 600; margin-bottom: 4px; }
+        .doctor-qual { font-size: 12px; color: var(--gray-600); margin-bottom: 10px; }
+        .doctor-tags { display: flex; gap: 8px; flex-wrap: wrap; }
+        .dtag { display: flex; align-items: center; gap: 4px; font-size: 12px; color: var(--gray-600); background: var(--gray-100); padding: 4px 10px; border-radius: 6px; }
+        .rating-badge { display: flex; align-items: center; gap: 4px; font-size: 13px; font-weight: 600; color: #f59e0b; padding: 4px 10px; background: #fff8e1; border-radius: 6px; }
+        .bio-text { font-size: 13px; color: var(--gray-600); line-height: 1.6; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--gray-200); }
 
-        .doctor-avatar {
-            width: 72px; height: 72px; background: var(--green-light);
-            border-radius: 14px; display: flex; align-items: center;
-            justify-content: center; font-size: 34px; flex-shrink: 0;
-        }
-
-        .doctor-details { flex: 1; }
-        .doctor-name    { font-size: 18px; font-weight: 700; color: var(--gray-800); margin-bottom: 4px; }
-        .doctor-spec    { font-size: 13px; color: var(--green-mid); font-weight: 600; margin-bottom: 4px; }
-        .doctor-qual    { font-size: 12px; color: var(--gray-600); margin-bottom: 10px; }
-        .doctor-tags    { display: flex; gap: 8px; flex-wrap: wrap; }
-
-        .dtag {
-            display: flex; align-items: center; gap: 4px;
-            font-size: 12px; color: var(--gray-600);
-            background: var(--gray-100); padding: 4px 10px; border-radius: 6px;
-        }
-
-        .rating-badge {
-            display: flex; align-items: center; gap: 4px;
-            font-size: 13px; font-weight: 600; color: #f59e0b;
-            padding: 4px 10px; background: #fff8e1; border-radius: 6px;
-        }
-
-        .bio-text {
-            font-size: 13px; color: var(--gray-600); line-height: 1.6;
-            margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--gray-200);
-        }
-
-        .date-strip { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: thin; }
+        /* Date strip — scrollable on mobile */
+        .date-strip { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: thin; -webkit-overflow-scrolling: touch; }
         .date-strip::-webkit-scrollbar { height: 3px; }
         .date-strip::-webkit-scrollbar-thumb { background: var(--gray-200); border-radius: 2px; }
-
-        .date-chip {
-            min-width: 64px; padding: 10px 8px; border: 1.5px solid var(--gray-200);
-            border-radius: var(--radius-sm); text-align: center; cursor: pointer;
-            transition: all 0.2s; flex-shrink: 0;
-        }
-
+        .date-chip { min-width: 60px; padding: 10px 6px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-sm); text-align: center; cursor: pointer; transition: all 0.2s; flex-shrink: 0; }
         .date-chip:hover  { border-color: var(--green-mid); background: var(--green-pale); }
         .date-chip.active { border-color: var(--green-mid); background: var(--green-mid); color: var(--white); }
-
         .date-chip-day  { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
-        .date-chip-date { font-size: 18px; font-weight: 700; line-height: 1.2; }
+        .date-chip-date { font-size: 17px; font-weight: 700; line-height: 1.2; }
         .date-chip-mon  { font-size: 10px; }
 
-        .slots-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 8px; }
-
-        .slot-chip {
-            padding: 8px 4px; border: 1.5px solid var(--gray-200);
-            border-radius: var(--radius-sm); text-align: center; cursor: pointer;
-            font-size: 13px; font-weight: 500; transition: all 0.2s; color: var(--gray-800);
-        }
-
+        /* Slots grid — wraps neatly on mobile */
+        .slots-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 8px; }
+        .slot-chip { padding: 8px 4px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-sm); text-align: center; cursor: pointer; font-size: 12px; font-weight: 500; transition: all 0.2s; color: var(--gray-800); }
         .slot-chip:hover    { border-color: var(--green-mid); background: var(--green-pale); color: var(--green-dark); }
         .slot-chip.selected { border-color: var(--green-mid); background: var(--green-mid); color: var(--white); font-weight: 600; }
         .slot-chip.booked   { background: var(--gray-100); color: var(--gray-400); cursor: not-allowed; text-decoration: line-through; }
@@ -139,69 +84,31 @@
         .slots-loading { text-align: center; padding: 28px; color: var(--gray-600); font-size: 14px; }
 
         .consult-options { display: flex; gap: 12px; }
-
-        .consult-option {
-            flex: 1; padding: 12px; border: 1.5px solid var(--gray-200);
-            border-radius: var(--radius-sm); cursor: pointer; text-align: center; transition: all 0.2s;
-        }
-
+        .consult-option { flex: 1; padding: 12px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-sm); cursor: pointer; text-align: center; transition: all 0.2s; }
         .consult-option:hover    { border-color: var(--green-mid); background: var(--green-pale); }
         .consult-option.selected { border-color: var(--green-mid); background: var(--green-light); }
-
         .consult-icon  { font-size: 22px; margin-bottom: 4px; }
         .consult-label { font-size: 13px; font-weight: 600; color: var(--gray-800); }
         .consult-sub   { font-size: 11px; color: var(--gray-600); }
 
-        .form-textarea {
-            width: 100%; padding: 10px 14px; border: 1.5px solid var(--gray-200);
-            border-radius: var(--radius-sm); font-size: 14px; color: var(--gray-800);
-            font-family: var(--font); outline: none; resize: vertical; min-height: 80px;
-            transition: border-color 0.2s;
-        }
-
+        .form-textarea { width: 100%; padding: 10px 14px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-sm); font-size: 14px; color: var(--gray-800); font-family: var(--font); outline: none; resize: vertical; min-height: 80px; transition: border-color 0.2s; }
         .form-textarea:focus { border-color: var(--green-mid); }
 
-        .summary-card {
-            background: var(--white); border-radius: var(--radius);
-            box-shadow: var(--shadow-sm); position: sticky; top: 80px;
-        }
-
-        .summary-head {
-            background: linear-gradient(135deg, var(--green-dark), var(--green-mid));
-            padding: 16px 20px; border-radius: var(--radius) var(--radius) 0 0;
-        }
-
+        .summary-card { background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow-sm); position: sticky; top: 80px; }
+        .summary-head { background: linear-gradient(135deg, var(--green-dark), var(--green-mid)); padding: 16px 20px; border-radius: var(--radius) var(--radius) 0 0; }
         .summary-head-title { font-size: 15px; font-weight: 700; color: var(--white); }
         .summary-body { padding: 20px; }
-
-        .summary-row {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 8px 0; font-size: 13px; border-bottom: 1px dashed var(--gray-200);
-        }
-
+        .summary-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; font-size: 13px; border-bottom: 1px dashed var(--gray-200); }
         .summary-row:last-child { border-bottom: none; }
         .summary-label { color: var(--gray-600); }
         .summary-value { font-weight: 600; color: var(--gray-800); }
-
-        .summary-total {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 14px 0 0; margin-top: 4px; border-top: 2px solid var(--green-light);
-        }
-
+        .summary-total { display: flex; justify-content: space-between; align-items: center; padding: 14px 0 0; margin-top: 4px; border-top: 2px solid var(--green-light); }
         .summary-total-label { font-size: 14px; font-weight: 700; color: var(--gray-800); }
         .summary-total-value { font-size: 22px; font-weight: 800; color: var(--green-dark); }
 
-        .btn-book-now {
-            width: 100%; padding: 14px;
-            background: linear-gradient(135deg, var(--green-dark), var(--green-mid));
-            color: var(--white); border: none; border-radius: var(--radius-sm);
-            font-size: 15px; font-weight: 700; cursor: pointer; font-family: var(--font);
-            margin-top: 20px; transition: opacity 0.2s; letter-spacing: 0.3px;
-        }
-
+        .btn-book-now { width: 100%; padding: 14px; background: linear-gradient(135deg, var(--green-dark), var(--green-mid)); color: var(--white); border: none; border-radius: var(--radius-sm); font-size: 15px; font-weight: 700; cursor: pointer; font-family: var(--font); margin-top: 20px; transition: opacity 0.2s; letter-spacing: 0.3px; }
         .btn-book-now:hover    { opacity: 0.92; }
         .btn-book-now:disabled { opacity: 0.5; cursor: not-allowed; }
-
         .secure-note { text-align: center; font-size: 11px; color: var(--gray-600); margin-top: 10px; }
 
         .review-item { padding: 14px 0; border-bottom: 1px solid var(--gray-200); }
@@ -213,53 +120,36 @@
         .review-text   { font-size: 13px; color: var(--gray-600); line-height: 1.5; }
         .review-tags   { font-size: 11px; color: var(--green-mid); margin-top: 4px; }
 
-        #bmd-loader {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(255,255,255,0.8); z-index: 9999;
-            align-items: center; justify-content: center; flex-direction: column; gap: 12px;
-        }
-
-        .spinner {
-            width: 40px; height: 40px; border: 4px solid var(--gray-200);
-            border-top: 4px solid var(--green-mid); border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }
-
+        #bmd-loader { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.8); z-index: 9999; align-items: center; justify-content: center; flex-direction: column; gap: 12px; }
+        .spinner { width: 40px; height: 40px; border: 4px solid var(--gray-200); border-top: 4px solid var(--green-mid); border-radius: 50%; animation: spin 0.8s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        #bmd-toast {
-            position: fixed; bottom: 24px; right: 24px;
-            padding: 12px 20px; border-radius: 8px; font-size: 14px;
-            font-family: var(--font); color: var(--white);
-            box-shadow: var(--shadow-md); z-index: 99999; display: none; max-width: 320px;
-        }
+        #bmd-toast { position: fixed; bottom: 24px; right: 24px; padding: 12px 20px; border-radius: 8px; font-size: 14px; font-family: var(--font); color: var(--white); box-shadow: var(--shadow-md); z-index: 99999; display: none; max-width: 320px; }
 
         .success-actions { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
-
-        .btn-action {
-            padding: 10px 24px; border-radius: var(--radius-sm);
-            font-size: 14px; font-weight: 600; cursor: pointer;
-            font-family: var(--font); text-decoration: none; border: none; transition: all 0.2s;
-        }
-
+        .btn-action { padding: 10px 24px; border-radius: var(--radius-sm); font-size: 14px; font-weight: 600; cursor: pointer; font-family: var(--font); text-decoration: none; border: none; transition: all 0.2s; }
         .btn-action-solid   { background: var(--green-mid); color: var(--white); }
         .btn-action-outline { background: var(--white); color: var(--green-dark); border: 1.5px solid var(--green-mid) !important; }
-        
-        @media (max-width: 480px) {
-            .navbar { padding: 0 12px; height: 56px; }
-            .nav-brand-name { font-size: 15px; }
-            .nav-brand-icon { width: 28px; height: 28px; font-size: 15px; }
-            .nav-back { font-size: 12px; padding: 5px 8px; }
-        }
 
+        /* ── Mobile ── */
         @media (max-width: 768px) {
             .page-wrap { grid-template-columns: 1fr; }
             .summary-card { position: static; }
         }
 
         @media (max-width: 480px) {
-            .page-wrap { padding: 16px; }
+            .navbar { padding: 0 12px; height: 56px; }
+            .nav-brand-name { font-size: 15px; }
+            .nav-brand-icon { width: 28px; height: 28px; font-size: 15px; }
+            .nav-back { font-size: 12px; padding: 5px 8px; }
+            .page-wrap { padding: 12px; gap: 16px; }
+            .card-body { padding: 14px; }
+            .slots-grid { grid-template-columns: repeat(3, 1fr); gap: 6px; }
+            .slot-chip { font-size: 11px; padding: 7px 2px; }
             .consult-options { flex-direction: column; }
+            .doctor-profile { flex-direction: column; align-items: flex-start; }
+            .doctor-avatar { width: 52px; height: 52px; font-size: 26px; }
+            .doctor-name { font-size: 16px; }
         }
     </style>
 </head>
@@ -269,7 +159,6 @@
     <div class="spinner"></div>
     <span style="color:var(--green-mid);font-size:14px;" id="loader-text">Loading...</span>
 </div>
-
 <div id="bmd-toast"></div>
 
 <nav class="navbar">
@@ -281,9 +170,7 @@
 </nav>
 
 <div class="page-wrap">
-
     <div id="main-content">
-
         <div class="card" id="doctor-card">
             <div class="card-head">
                 <div class="card-head-icon">👨‍⚕️</div>
@@ -349,8 +236,7 @@
                 <div class="card-head-title">Symptoms / Notes <span style="font-size:12px;font-weight:400;color:var(--gray-600);">(optional)</span></div>
             </div>
             <div class="card-body">
-                <textarea id="patient-notes" class="form-textarea"
-                    placeholder="Describe your symptoms or reason for visit..."></textarea>
+                <textarea id="patient-notes" class="form-textarea" placeholder="Describe your symptoms or reason for visit..."></textarea>
             </div>
         </div>
 
@@ -361,7 +247,6 @@
             </div>
             <div class="card-body" id="reviews-body"></div>
         </div>
-
     </div>
 
     <div>
@@ -370,42 +255,21 @@
                 <div class="summary-head-title">📋 Booking Summary</div>
             </div>
             <div class="summary-body">
-                <div class="summary-row">
-                    <span class="summary-label">Doctor</span>
-                    <span class="summary-value" id="sum-doctor"><span style="color:var(--gray-400);font-style:italic;">—</span></span>
-                </div>
-                <div class="summary-row">
-                    <span class="summary-label">Specialization</span>
-                    <span class="summary-value" id="sum-spec"><span style="color:var(--gray-400);font-style:italic;">—</span></span>
-                </div>
-                <div class="summary-row">
-                    <span class="summary-label">Hospital</span>
-                    <span class="summary-value" id="sum-hospital"><span style="color:var(--gray-400);font-style:italic;">—</span></span>
-                </div>
-                <div class="summary-row">
-                    <span class="summary-label">Date</span>
-                    <span class="summary-value" id="sum-date"><span style="color:var(--gray-400);font-style:italic;">Select date</span></span>
-                </div>
-                <div class="summary-row">
-                    <span class="summary-label">Time</span>
-                    <span class="summary-value" id="sum-time"><span style="color:var(--gray-400);font-style:italic;">Select slot</span></span>
-                </div>
-                <div class="summary-row">
-                    <span class="summary-label">Type</span>
-                    <span class="summary-value" id="sum-type">In Person</span>
-                </div>
+                <div class="summary-row"><span class="summary-label">Doctor</span><span class="summary-value" id="sum-doctor"><span style="color:var(--gray-400);font-style:italic;">—</span></span></div>
+                <div class="summary-row"><span class="summary-label">Specialization</span><span class="summary-value" id="sum-spec"><span style="color:var(--gray-400);font-style:italic;">—</span></span></div>
+                <div class="summary-row"><span class="summary-label">Hospital</span><span class="summary-value" id="sum-hospital"><span style="color:var(--gray-400);font-style:italic;">—</span></span></div>
+                <div class="summary-row"><span class="summary-label">Date</span><span class="summary-value" id="sum-date"><span style="color:var(--gray-400);font-style:italic;">Select date</span></span></div>
+                <div class="summary-row"><span class="summary-label">Time</span><span class="summary-value" id="sum-time"><span style="color:var(--gray-400);font-style:italic;">Select slot</span></span></div>
+                <div class="summary-row"><span class="summary-label">Type</span><span class="summary-value" id="sum-type">In Person</span></div>
                 <div class="summary-total">
                     <span class="summary-total-label">Consultation Fee</span>
                     <span class="summary-total-value" id="sum-fee">₹—</span>
                 </div>
-                <button class="btn-book-now" id="book-btn" disabled onclick="handleBooking()">
-                    🔒 Select Date & Slot
-                </button>
+                <button class="btn-book-now" id="book-btn" disabled onclick="handleBooking()">🔒 Select Date & Slot</button>
                 <div class="secure-note">🔐 Secured by Razorpay · 100% refund on cancellation</div>
             </div>
         </div>
     </div>
-
 </div>
 
 <!-- Success Overlay -->
@@ -424,99 +288,35 @@
 </div>
 
 <script>
-// ─────────────────────────────────────────────────────
-//  Config — Cloudflare proxy URL
-// ─────────────────────────────────────────────────────
 const BASE_URL     = 'https://bookmydoctor-proxy.pulipraveenkumar08.workers.dev/';
 const RAZORPAY_KEY = 'rzp_test_T0D2rGD0MsFXyZ';
 
-let doctorData     = null;
-let selectedDate   = null;
-let selectedSlot   = null;
-let selectedSlotId = null;
-let consultType    = 'IN_PERSON';
-let doctorId       = null;
+let doctorData = null, selectedDate = null, selectedSlot = null, selectedSlotId = null;
+let consultType = 'IN_PERSON', doctorId = null;
 
-// ─────────────────────────────────────────────────────
-//  Helpers
-// ─────────────────────────────────────────────────────
-function showLoader(msg) {
-    document.getElementById('loader-text').textContent = msg || 'Loading...';
-    document.getElementById('bmd-loader').style.display = 'flex';
-}
+function showLoader(msg) { document.getElementById('loader-text').textContent = msg || 'Loading...'; document.getElementById('bmd-loader').style.display = 'flex'; }
 function hideLoader() { document.getElementById('bmd-loader').style.display = 'none'; }
+function showToast(msg, color) { const t = document.getElementById('bmd-toast'); t.textContent = msg; t.style.background = color || '#2d9e5f'; t.style.display = 'block'; setTimeout(() => t.style.display = 'none', 4000); }
+function getSession() { return { token: localStorage.getItem('bmd_token'), userType: localStorage.getItem('bmd_user_type'), userId: localStorage.getItem('bmd_user_id'), name: localStorage.getItem('bmd_name') }; }
 
-function showToast(msg, color) {
-    const t = document.getElementById('bmd-toast');
-    t.textContent = msg; t.style.background = color || '#2d9e5f';
-    t.style.display = 'block';
-    setTimeout(() => t.style.display = 'none', 4000);
-}
-
-function getSession() {
-    return {
-        token   : localStorage.getItem('bmd_token'),
-        userType: localStorage.getItem('bmd_user_type'),
-        userId  : localStorage.getItem('bmd_user_id'),
-        name    : localStorage.getItem('bmd_name')
-    };
-}
-
-// ─────────────────────────────────────────────────────
-//  API helper — worker unwraps p_message already
-// ─────────────────────────────────────────────────────
 async function callBMD(endpoint, payload) {
     try {
-        const res  = await fetch(BASE_URL + endpoint, {
-            method  : 'POST',
-            headers : { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-            body    : JSON.stringify(payload)
-        });
+        const res  = await fetch(BASE_URL + endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: JSON.stringify(payload) });
         const data = await res.json();
         if (data.p_message) return JSON.parse(data.p_message);
         if (data.p_result)  return JSON.parse(data.p_result);
         return data;
-    } catch (err) {
-        console.error('API Error:', err);
-        return { status: 'ERROR', message: err.message };
-    }
+    } catch (err) { return { status: 'ERROR', message: err.message }; }
 }
 
-function formatTime(t) {
-    if (!t) return '';
-    const [h, m] = t.split(':');
-    const hr = parseInt(h);
-    return `${hr % 12 || 12}:${m} ${hr >= 12 ? 'PM' : 'AM'}`;
-}
+function formatTime(t) { if (!t) return ''; const [h, m] = t.split(':'); const hr = parseInt(h); return `${hr % 12 || 12}:${m} ${hr >= 12 ? 'PM' : 'AM'}`; }
+function checkLogin() { const s = getSession(); if (!s.token || s.userType !== 'PATIENT') { window.location.href = 'login.html'; return false; } return true; }
+function getDoctorIdFromURL() { return new URLSearchParams(window.location.search).get('doctor_id'); }
 
-function checkLogin() {
-    const s = getSession();
-    if (!s.token || s.userType !== 'PATIENT') {
-        window.location.href = 'login.html';
-        return false;
-    }
-    return true;
-}
-
-function getDoctorIdFromURL() {
-    return new URLSearchParams(window.location.search).get('doctor_id');
-}
-
-// ─────────────────────────────────────────────────────
-//  Load Doctor
-// ─────────────────────────────────────────────────────
 async function loadDoctor(id) {
     const s    = getSession();
-    const data = await callBMD('get-doctor', {
-        session_token : s.token,
-        doctor_id     : id
-    });
-
-    if (data.status !== 'SUCCESS' || !data.doctor) {
-        showToast('Doctor not found', '#dc3545');
-        return;
-    }
-
+    const data = await callBMD('get-doctor', { session_token: s.token, doctor_id: id });
+    if (data.status !== 'SUCCESS' || !data.doctor) { showToast('Doctor not found', '#dc3545'); return; }
     doctorData = data.doctor;
     renderDoctorProfile(doctorData);
     updateSummary();
@@ -537,114 +337,74 @@ function renderDoctorProfile(d) {
                 <span class="rating-badge">⭐ ${parseFloat(d.avg_rating || 0).toFixed(1)} (${d.total_reviews || 0} reviews)</span>
             </div>
             ${d.bio ? `<div class="bio-text">${d.bio}</div>` : ''}
-        </div>
-    `;
+        </div>`;
     document.title = `Book ${d.full_name} — BookMyDoctor`;
 }
 
-// ─────────────────────────────────────────────────────
-//  Date Strip
-// ─────────────────────────────────────────────────────
 function buildDateStrip() {
     const strip  = document.getElementById('date-strip');
     const days   = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
     const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
     strip.innerHTML = '';
-
     for (let i = 0; i < 14; i++) {
-        const d = new Date();
-        d.setDate(d.getDate() + i);
+        const d = new Date(); d.setDate(d.getDate() + i);
         const dateStr = d.toISOString().split('T')[0];
         const chip    = document.createElement('div');
         chip.className    = 'date-chip' + (i === 0 ? ' active' : '');
         chip.dataset.date = dateStr;
-        chip.innerHTML    = `
-            <div class="date-chip-day">${days[d.getDay()]}</div>
-            <div class="date-chip-date">${d.getDate()}</div>
-            <div class="date-chip-mon">${months[d.getMonth()]}</div>
-        `;
+        chip.innerHTML    = `<div class="date-chip-day">${days[d.getDay()]}</div><div class="date-chip-date">${d.getDate()}</div><div class="date-chip-mon">${months[d.getMonth()]}</div>`;
         chip.onclick = () => selectDate(chip, dateStr);
         strip.appendChild(chip);
     }
-
-    // Auto select today
     selectDate(strip.firstChild, new Date().toISOString().split('T')[0]);
 }
 
 function selectDate(chipEl, dateStr) {
     document.querySelectorAll('.date-chip').forEach(c => c.classList.remove('active'));
     chipEl.classList.add('active');
-    selectedDate   = dateStr;
-    selectedSlot   = null;
-    selectedSlotId = null;
-
-    const d      = new Date(dateStr + 'T00:00:00');
+    selectedDate = dateStr; selectedSlot = null; selectedSlotId = null;
+    const d = new Date(dateStr + 'T00:00:00');
     const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
     document.getElementById('sum-date').textContent = d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear();
     document.getElementById('sum-time').innerHTML   = '<span style="color:var(--gray-400);font-style:italic;">Select slot</span>';
-
     updateBookBtn();
     loadSlots(dateStr);
 }
 
-// ─────────────────────────────────────────────────────
-//  Load Slots
-// ─────────────────────────────────────────────────────
 async function loadSlots(dateStr) {
     document.getElementById('slots-container').innerHTML = '<div class="slots-loading">⏳ Loading slots...</div>';
-
     const s    = getSession();
-    const data = await callBMD('get-available-slots', {
-        session_token : s.token,
-        doctor_id     : doctorId,
-        slot_date     : dateStr
-    });
-
-    if (data.status !== 'SUCCESS') {
-        document.getElementById('slots-container').innerHTML = `<div class="slots-empty">⚠️ ${data.message}</div>`;
-        return;
-    }
-
+    const data = await callBMD('get-available-slots', { session_token: s.token, doctor_id: doctorId, slot_date: dateStr });
+    if (data.status !== 'SUCCESS') { document.getElementById('slots-container').innerHTML = `<div class="slots-empty">⚠️ ${data.message}</div>`; return; }
     const slots = data.slots || [];
-
-    if (slots.length === 0) {
-        document.getElementById('slots-container').innerHTML = '<div class="slots-empty">😔 No slots available on this date.<br>Please try another date.</div>';
-        return;
-    }
+    if (slots.length === 0) { document.getElementById('slots-container').innerHTML = '<div class="slots-empty">😔 No slots available on this date.<br>Please try another date.</div>'; return; }
 
     const grid = document.createElement('div');
     grid.className = 'slots-grid';
 
-// Check if slot is in the past (only for today)
-const now     = new Date();
-const today   = now.toISOString().split('T')[0];
-const isToday = selectedDate === today;
+    const now = new Date();
+    const today = now.toISOString().split('T')[0];
+    const isToday = selectedDate === today;
 
-slots.forEach(slot => {
-    const chip        = document.createElement('div');
-    let   isAvailable = slot.status === 'AVAILABLE';
-
-    // Disable past slots for today
-    if (isToday && isAvailable) {
-        const [h, m]  = slot.start_time.split(':');
-        const slotTime = new Date();
-        slotTime.setHours(parseInt(h), parseInt(m), 0, 0);
-        if (slotTime <= now) isAvailable = false;
-    }
-
-    chip.className    = 'slot-chip' + (!isAvailable ? ' booked' : '');
-        chip.textContent  = formatTime(slot.start_time);
-        chip.title        = isAvailable ? `${formatTime(slot.start_time)} - ${formatTime(slot.end_time)}` : 'Not available';
+    slots.forEach(slot => {
+        const chip = document.createElement('div');
+        let isAvailable = slot.status === 'AVAILABLE';
+        if (isToday && isAvailable) {
+            const [h, m] = slot.start_time.split(':');
+            const slotTime = new Date();
+            slotTime.setHours(parseInt(h), parseInt(m), 0, 0);
+            if (slotTime <= now) isAvailable = false;
+        }
+        chip.className   = 'slot-chip' + (!isAvailable ? ' booked' : '');
+        chip.textContent = formatTime(slot.start_time);
+        chip.title       = isAvailable ? `${formatTime(slot.start_time)} - ${formatTime(slot.end_time)}` : 'Not available';
         if (isAvailable) chip.onclick = () => selectSlot(chip, slot);
         grid.appendChild(chip);
     });
 
     const legend = document.createElement('div');
     legend.style.cssText = 'display:flex;gap:16px;margin-top:12px;font-size:11px;color:var(--gray-600);';
-    legend.innerHTML = `
-        <span>🟢 Available (${slots.filter(s=>s.status==='AVAILABLE').length})</span>
-        <span>🔴 Booked (${slots.filter(s=>s.status!=='AVAILABLE').length})</span>
-    `;
+    legend.innerHTML = `<span>🟢 Available (${slots.filter(s=>s.status==='AVAILABLE').length})</span><span>🔴 Booked (${slots.filter(s=>s.status!=='AVAILABLE').length})</span>`;
 
     document.getElementById('slots-container').innerHTML = '';
     document.getElementById('slots-container').appendChild(grid);
@@ -654,8 +414,7 @@ slots.forEach(slot => {
 function selectSlot(chipEl, slot) {
     document.querySelectorAll('.slot-chip').forEach(c => c.classList.remove('selected'));
     chipEl.classList.add('selected');
-    selectedSlot   = slot;
-    selectedSlotId = slot.slot_id;
+    selectedSlot = slot; selectedSlotId = slot.slot_id;
     document.getElementById('sum-time').textContent = formatTime(slot.start_time) + ' – ' + formatTime(slot.end_time);
     updateBookBtn();
 }
@@ -677,185 +436,72 @@ function updateSummary() {
 
 function updateBookBtn() {
     const btn = document.getElementById('book-btn');
-    if (selectedDate && selectedSlotId) {
-        btn.disabled    = false;
-        btn.textContent = '💳 Book & Pay ₹' + (doctorData?.consultation_fee || '—');
-    } else if (selectedDate) {
-        btn.disabled    = true;
-        btn.textContent = '⏰ Select a Time Slot';
-    } else {
-        btn.disabled    = true;
-        btn.textContent = '🔒 Select Date & Slot';
-    }
+    if (selectedDate && selectedSlotId) { btn.disabled = false; btn.textContent = '💳 Book & Pay ₹' + (doctorData?.consultation_fee || '—'); }
+    else if (selectedDate) { btn.disabled = true; btn.textContent = '⏰ Select a Time Slot'; }
+    else { btn.disabled = true; btn.textContent = '🔒 Select Date & Slot'; }
 }
 
-// ─────────────────────────────────────────────────────
-//  Load Reviews
-// ─────────────────────────────────────────────────────
 async function loadReviews(id) {
     const s    = getSession();
-    const data = await callBMD('get-doctor-reviews', {
-        session_token : s.token,
-        doctor_id     : id
-    });
-
+    const data = await callBMD('get-doctor-reviews', { session_token: s.token, doctor_id: id });
     if (data.status === 'SUCCESS' && data.reviews && data.reviews.length > 0) {
         document.getElementById('reviews-card').style.display = 'block';
         document.getElementById('reviews-body').innerHTML = `
             <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--gray-200);">
                 <div style="font-size:36px;font-weight:800;color:var(--green-dark);">${parseFloat(data.avg_rating || 0).toFixed(1)}</div>
-                <div>
-                    <div style="font-size:20px;color:#f59e0b;">${'⭐'.repeat(Math.round(data.avg_rating || 0))}</div>
-                    <div style="font-size:12px;color:var(--gray-600);">${data.total_reviews} review${data.total_reviews !== 1 ? 's' : ''}</div>
-                </div>
+                <div><div style="font-size:20px;color:#f59e0b;">${'⭐'.repeat(Math.round(data.avg_rating || 0))}</div><div style="font-size:12px;color:var(--gray-600);">${data.total_reviews} review${data.total_reviews !== 1 ? 's' : ''}</div></div>
             </div>
             ${data.reviews.slice(0,5).map(r => `
                 <div class="review-item">
-                    <div class="review-top">
-                        <span class="reviewer-name">👤 ${r.patient_name}</span>
-                        <span class="review-date">${r.review_date}</span>
-                    </div>
+                    <div class="review-top"><span class="reviewer-name">👤 ${r.patient_name}</span><span class="review-date">${r.review_date}</span></div>
                     <div class="review-stars">${'⭐'.repeat(r.star_rating)}</div>
                     ${r.review_text ? `<div class="review-text">${r.review_text}</div>` : ''}
                     ${r.tags ? `<div class="review-tags">🏷️ ${r.tags.split(',').join(' · ')}</div>` : ''}
-                </div>
-            `).join('')}
-        `;
+                </div>`).join('')}`;
     }
 }
 
-// ─────────────────────────────────────────────────────
-//  Handle Booking + Payment
-// ─────────────────────────────────────────────────────
 async function handleBooking() {
-    if (!selectedDate || !selectedSlotId) {
-        showToast('Please select a date and time slot', '#dc3545');
-        return;
-    }
-
-    const s     = getSession();
-    const notes = document.getElementById('patient-notes').value.trim();
-
+    if (!selectedDate || !selectedSlotId) { showToast('Please select a date and time slot', '#dc3545'); return; }
+    const s = getSession(); const notes = document.getElementById('patient-notes').value.trim();
     showLoader('Booking your appointment...');
-
-    const bookRes = await callBMD('book-appointment', {
-        session_token     : s.token,
-        doctor_id         : doctorId,
-        slot_id           : selectedSlotId,
-        hospital_id       : doctorData.hospital_id,
-        appointment_date  : selectedDate,
-        consultation_type : consultType,
-        patient_notes     : notes || null
-    });
-
+    const bookRes = await callBMD('book-appointment', { session_token: s.token, doctor_id: doctorId, slot_id: selectedSlotId, hospital_id: doctorData.hospital_id, appointment_date: selectedDate, consultation_type: consultType, patient_notes: notes || null });
     hideLoader();
-
-    if (bookRes.status !== 'SUCCESS') {
-        showToast(bookRes.message || 'Booking failed', '#dc3545');
-        return;
-    }
-
-    const appointmentId = bookRes.appointment_id;
-    const bookingRef    = bookRes.booking_reference;
-    const tokenDisplay  = bookRes.token_display;
-
+    if (bookRes.status !== 'SUCCESS') { showToast(bookRes.message || 'Booking failed', '#dc3545'); return; }
+    const appointmentId = bookRes.appointment_id, bookingRef = bookRes.booking_reference, tokenDisplay = bookRes.token_display;
     showLoader('Initialising payment...');
-
-    const payRes = await callBMD('create-payment', {
-        session_token  : s.token,
-        appointment_id : appointmentId,
-        payment_mode   : 'UPI',
-        gateway_name   : 'RAZORPAY'
-    });
-
+    const payRes = await callBMD('create-payment', { session_token: s.token, appointment_id: appointmentId, payment_mode: 'UPI', gateway_name: 'RAZORPAY' });
     hideLoader();
-
-    if (payRes.status !== 'SUCCESS') {
-        showBookingSuccess(bookingRef, tokenDisplay, appointmentId);
-        return;
-    }
-
-    const paymentId = payRes.payment_id;
-    const amount    = payRes.amount;
-
+    if (payRes.status !== 'SUCCESS') { showBookingSuccess(bookingRef, tokenDisplay, appointmentId); return; }
+    const paymentId = payRes.payment_id, amount = payRes.amount;
     const options = {
-        key         : RAZORPAY_KEY,
-        amount      : amount * 100,
-        currency    : 'INR',
-        name        : 'BookMyDoctor',
-        description : `Consultation with ${doctorData.full_name}`,
-        prefill     : { name: s.name },
-        theme       : { color: '#2d9e5f' },
-
-        handler : async function(response) {
+        key: RAZORPAY_KEY, amount: amount * 100, currency: 'INR', name: 'BookMyDoctor',
+        description: `Consultation with ${doctorData.full_name}`, prefill: { name: s.name }, theme: { color: '#2d9e5f' },
+        handler: async function(response) {
             showLoader('Confirming payment...');
-
-            await callBMD('update-payment-status', {
-                session_token  : s.token,
-                payment_id     : paymentId,
-                payment_status : 'SUCCESS',
-                gateway_txn_id : response.razorpay_payment_id,
-                payment_mode   : 'UPI'
-            });
-
-            await callBMD('create-settlement', {
-                session_token : s.token,
-                payment_id    : paymentId
-            });
-
-            await callBMD('send-booking-confirmation', {
-                session_token  : s.token,
-                appointment_id : appointmentId,
-                patient_id     : parseInt(s.userId),
-                doctor_id      : doctorId
-            });
-
-            hideLoader();
-            showBookingSuccess(bookingRef, tokenDisplay, appointmentId);
+            await callBMD('update-payment-status', { session_token: s.token, payment_id: paymentId, payment_status: 'SUCCESS', gateway_txn_id: response.razorpay_payment_id, payment_mode: 'UPI' });
+            await callBMD('create-settlement', { session_token: s.token, payment_id: paymentId });
+            await callBMD('send-booking-confirmation', { session_token: s.token, appointment_id: appointmentId, patient_id: parseInt(s.userId), doctor_id: doctorId });
+            hideLoader(); showBookingSuccess(bookingRef, tokenDisplay, appointmentId);
         },
-
-        modal : {
-            ondismiss : async function() {
-                await callBMD('update-payment-status', {
-                    session_token  : s.token,
-                    payment_id     : paymentId,
-                    payment_status : 'FAILED',
-                    gateway_txn_id : 'DISMISSED'
-                });
-                showToast('Payment cancelled. Appointment held for 30 mins.', '#fd7e14');
-            }
-        }
+        modal: { ondismiss: async function() { await callBMD('update-payment-status', { session_token: s.token, payment_id: paymentId, payment_status: 'FAILED', gateway_txn_id: 'DISMISSED' }); showToast('Payment cancelled. Appointment held for 30 mins.', '#fd7e14'); } }
     };
-
-    const rzp = new Razorpay(options);
-    rzp.open();
+    new Razorpay(options).open();
 }
 
 function showBookingSuccess(ref, token, apptId) {
-    const d      = new Date(selectedDate + 'T00:00:00');
+    const d = new Date(selectedDate + 'T00:00:00');
     const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-    const dateStr = d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear();
-
-    document.getElementById('success-details').innerHTML = `
-        Your appointment with <strong>${doctorData.full_name}</strong><br>
-        is confirmed for <strong>${dateStr}</strong> at <strong>${formatTime(selectedSlot?.start_time)}</strong>
-    `;
-    document.getElementById('success-ref').textContent   = ref;
-    document.getElementById('success-token').innerHTML   = `🎫 Queue Token: <strong>${token}</strong>`;
-
-    const overlay = document.getElementById('success-overlay');
-    overlay.style.display = 'flex';
+    document.getElementById('success-details').innerHTML = `Your appointment with <strong>${doctorData.full_name}</strong><br>is confirmed for <strong>${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}</strong> at <strong>${formatTime(selectedSlot?.start_time)}</strong>`;
+    document.getElementById('success-ref').textContent  = ref;
+    document.getElementById('success-token').innerHTML  = `🎫 Queue Token: <strong>${token}</strong>`;
+    document.getElementById('success-overlay').style.display = 'flex';
 }
 
-// ─────────────────────────────────────────────────────
-//  Init
-// ─────────────────────────────────────────────────────
 async function init() {
     if (!checkLogin()) return;
-
     doctorId = getDoctorIdFromURL();
     if (!doctorId) { window.location.href = '../index.html'; return; }
-
     showLoader('Loading doctor details...');
     buildDateStrip();
     await loadDoctor(doctorId);
@@ -864,6 +510,5 @@ async function init() {
 
 init();
 </script>
-
 </body>
 </html>
